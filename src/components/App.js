@@ -90,6 +90,9 @@ class App extends Component {
         console.log('WebMidi could not be enabled.', err);
       } else {
         console.log('WebMidi enabled!');
+        this.loadDevices();
+        this.addListeners(this.state.dawListener);
+        this.addListeners(this.state.midiDevice);
         this.forceUpdate();
       }
     });

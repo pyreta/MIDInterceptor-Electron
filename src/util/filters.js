@@ -12,6 +12,13 @@ export const octaveUp = {
   controlchange: (e, output) => output.sendControlChange(e.controller.name, e.value, 1)
 };
 
+export const tripleOctave = {
+  noteon: (e, output) => output.playNote([e.note.number-12, e.note.number, e.note.number+12], 1, {velocity: e.velocity}),
+  noteoff: (e, output) => output.stopNote([e.note.number-12, e.note.number, e.note.number+12], 1),
+  pitchbend: (e, output) => output.sendPitchBend(e.value, 1),
+  controlchange: (e, output) => output.sendControlChange(e.controller.name, e.value, 1)
+};
+
 export const octaveDown = {
   noteon: (e, output) => output.playNote(e.note.number-12, 1, {velocity: e.velocity}),
   noteoff: (e, output) => output.stopNote(e.note.number-12, 1),

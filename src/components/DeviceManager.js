@@ -1,5 +1,4 @@
 import React from 'react';
-import WebMidi from 'webmidi';
 
 const DeviceSelect = ({ text, updateDevice, device, devices, deviceType, type }) =>
   <div>
