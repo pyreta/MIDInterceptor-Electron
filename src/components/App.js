@@ -10,6 +10,7 @@ import ClockDisplay from './ClockDisplay';
 import DeviceManager from './DeviceManager';
 import FilterManager from './FilterManager';
 import * as filters from '../util/filters';
+import * as chainFilters from '../util/chainFilters';
 import logStateChange from '../util/logStateChange';
 import deleteKey from '../util/deleteKey';
 import { listeners, defaultdeviceIds } from '../constants';
@@ -34,7 +35,13 @@ const initialState = {
   breathcontrollercoarse: 0,
   recordedNotes: {
     '1.51.81': ['C3', 'E3', 'G3']
-  }
+  },
+  selectedFilters: [
+    chainFilters.passThrough,
+    // chainFilters.octaveDown,
+    // chainFilters.minorChord,
+    // chainFilters.tripleOctave
+  ]
 }
 
 class App extends Component {
@@ -51,7 +58,7 @@ class App extends Component {
   }
 
   dispatch(stateChangeObject, ignore) {
-    !ignore && logStateChange(stateChangeObject);
+    // !ignore && logStateChange(stateChangeObject);
     this.setState(stateChangeObject);
   }
 
@@ -76,12 +83,35 @@ class App extends Component {
   }
 
   addListeners(device) {
-    listeners.map(listener =>
-      device.addListener(listener, 1, e => this.state.currentFilter[listener](e, this.state.outputDevice))
-    );
+    // listeners.map(listener =>
+    //   device.addListener(listener, 1, e => this.state.currentFilter[listener](e, this.state.outputDevice))
+    // );
     device.addListener('noteon', 1, e => this.dispatch({ notes: this.notes.add(e.note) }));
     device.addListener('noteoff', 1, e => this.dispatch({ notes: this.notes.delete(e.note) }));
     this.syncClock(device);
+    // ----
+    device.addListener('noteon', 1, e => {
+      const filteredEvents = this.state.selectedFilters.reduce((accum, filter) => filter(accum), {
+        [e.note.number]: e
+      });
+      chainFilters.midiActions.noteon(filteredEvents, this.state.outputDevice);
+    });
+    // ----
+    device.addListener('noteoff', 1, e => {
+      const filteredEvents = this.state.selectedFilters.reduce((accum, filter) => filter(accum), {
+        [e.note.number]: e
+      });
+      chainFilters.midiActions.noteoff(filteredEvents, this.state.outputDevice);
+    });
+    // ----
+    device.addListener('pitchbend', 1, e => {
+      this.state.outputDevice.sendPitchBend(e.value, 1)
+    });
+    // ----
+    device.addListener('controlchange', 1, e => {
+      this.state.outputDevice.sendControlChange(e.controller.name, e.value, 1);
+    });
+    //TODO make sure to add pitchbend and control change listeners that are chainable. REFACTOR
   }
 
   setupWebMidiAPI() {
