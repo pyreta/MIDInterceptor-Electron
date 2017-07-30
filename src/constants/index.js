@@ -5,9 +5,7 @@ export const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#'
 //     'flat_eleven', 'eleven', 'sharp_eleven', 'fifth_octave_up','sharp_fifth_octave_up','thirteen', 'min_seven_up',
 //     'maj_seven_up','second_octave_up'];
 
-export const listeners = [
-  'noteon',
-  'noteoff',
+export const otherListeners = [
   'pitchbend',
   'controlchange'
 ];

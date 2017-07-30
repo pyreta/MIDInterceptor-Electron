@@ -13,7 +13,8 @@ import * as filters from '../util/filters';
 import * as chainFilters from '../util/chainFilters';
 import logStateChange from '../util/logStateChange';
 import deleteKey from '../util/deleteKey';
-import { listeners, defaultdeviceIds } from '../constants';
+import midiActions from '../util/midiActions';
+import { otherListeners, defaultdeviceIds } from '../constants';
 
 const noOpMidiDevice = {
   addListener: () => {},
@@ -38,9 +39,9 @@ const initialState = {
   },
   selectedFilters: [
     chainFilters.passThrough,
-    // chainFilters.octaveDown,
-    // chainFilters.minorChord,
-    // chainFilters.tripleOctave
+    chainFilters.octaveDown,
+    chainFilters.minorChord,
+    chainFilters.tripleOctave
   ]
 }
 
@@ -83,35 +84,23 @@ class App extends Component {
   }
 
   addListeners(device) {
-    // listeners.map(listener =>
-    //   device.addListener(listener, 1, e => this.state.currentFilter[listener](e, this.state.outputDevice))
-    // );
     device.addListener('noteon', 1, e => this.dispatch({ notes: this.notes.add(e.note) }));
     device.addListener('noteoff', 1, e => this.dispatch({ notes: this.notes.delete(e.note) }));
     this.syncClock(device);
-    // ----
-    device.addListener('noteon', 1, e => {
-      const filteredEvents = this.state.selectedFilters.reduce((accum, filter) => filter(accum), {
-        [e.note.number]: e
-      });
-      chainFilters.midiActions.noteon(filteredEvents, this.state.outputDevice);
-    });
-    // ----
-    device.addListener('noteoff', 1, e => {
-      const filteredEvents = this.state.selectedFilters.reduce((accum, filter) => filter(accum), {
-        [e.note.number]: e
-      });
-      chainFilters.midiActions.noteoff(filteredEvents, this.state.outputDevice);
-    });
-    // ----
-    device.addListener('pitchbend', 1, e => {
-      this.state.outputDevice.sendPitchBend(e.value, 1)
-    });
-    // ----
-    device.addListener('controlchange', 1, e => {
-      this.state.outputDevice.sendControlChange(e.controller.name, e.value, 1);
-    });
-    //TODO make sure to add pitchbend and control change listeners that are chainable. REFACTOR
+
+    // ---- Add Note Listeners
+    ['noteon', 'noteoff'].forEach(listener =>
+      device.addListener(listener, 1, e => {
+        const filteredEvents = this.state.selectedFilters.reduce((accum, filter) => filter(accum), {
+          [e.note.number]: e
+        });
+        midiActions[listener](filteredEvents, this.state.outputDevice);
+      }))
+
+    // ---- Add Other Listeners
+    otherListeners.forEach(listener =>
+      device.addListener(listener, 1, e => midiActions[listener](e, this.state.outputDevice)
+    ))
   }
 
   setupWebMidiAPI() {
