@@ -84,9 +84,9 @@ class App extends Component {
   }
 
   addListeners(device) {
+    // ---- Add and remove played notes
     device.addListener('noteon', 1, e => this.dispatch({ notes: this.notes.add(e.note) }));
     device.addListener('noteoff', 1, e => this.dispatch({ notes: this.notes.delete(e.note) }));
-    this.syncClock(device);
 
     // ---- Add Note Listeners
     ['noteon', 'noteoff'].forEach(listener =>
@@ -112,6 +112,7 @@ class App extends Component {
         this.loadDevices();
         this.addListeners(this.state.dawListener);
         this.addListeners(this.state.midiDevice);
+        this.syncClock(this.state.dawListener);
         this.forceUpdate();
       }
     });
