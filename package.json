@@ -12,6 +12,9 @@
     "react-dom": "^15.4.2",
     "webmidi": "^2.0.0-rc.5"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "homepage": "./",
   "main": "src/electron-starter.js",
   "scripts": {

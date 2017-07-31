@@ -3,45 +3,35 @@ import logo from './logo.svg';
 import WebMidi from 'webmidi';
 import './App.css';
 
+import listeners, { midiActions } from '../listeners';
 import ChordDisplay from './ChordDisplay';
 import Playback from './Playback';
 import Metronome from './Metronome';
 import ClockDisplay from './ClockDisplay';
 import DeviceManager from './DeviceManager';
 import FilterManager from './FilterManager';
-import * as filters from '../util/filters';
-import * as chainFilters from '../util/chainFilters';
-import logStateChange from '../util/logStateChange';
-import deleteKey from '../util/deleteKey';
-import midiActions from '../util/midiActions';
-import { otherListeners, defaultdeviceIds } from '../constants';
-
-const noOpMidiDevice = {
-  addListener: () => {},
-  removeListener: () => {},
-  playNote: () => {},
-  stopNote: () => {}
-};
+import * as chainableNoteFilters from '../util/chainableNoteFilters';
+import logStateChange from '../helpers/logStateChange';
+import deleteKey from '../helpers/deleteKey';
+import noOpMidiDevice from '../util/noOpMidiDevice';
+import { otherListenerTypes, defaultdeviceIds } from '../constants';
 
 const initialState = {
   WebMidi,
   midiDevice: noOpMidiDevice,
   dawListener: noOpMidiDevice,
   outputDevice: noOpMidiDevice,
-  currentFilter: filters.majorChord,
-  currentNote: '',
   notes: {},
+  breathcontrollercoarse: 0,
   programchange: 0,
   channelaftertouch: 0,
-  breathcontrollercoarse: 0,
-  recordedNotes: {
-    '1.51.81': ['C3', 'E3', 'G3']
-  },
+  recordedEvents: {},
+  recording: false,
   selectedFilters: [
-    chainFilters.passThrough,
-    chainFilters.octaveDown,
-    chainFilters.minorChord,
-    chainFilters.tripleOctave
+    chainableNoteFilters.passThrough,
+    chainableNoteFilters.octaveDown,
+    chainableNoteFilters.minorSeventhChord,
+    chainableNoteFilters.tripleOctave
   ]
 }
 
@@ -59,7 +49,7 @@ class App extends Component {
   }
 
   dispatch(stateChangeObject, ignore) {
-    // !ignore && logStateChange(stateChangeObject);
+    !ignore && logStateChange(stateChangeObject);
     this.setState(stateChangeObject);
   }
 
@@ -84,22 +74,14 @@ class App extends Component {
   }
 
   addListeners(device) {
-    // ---- Add and remove played notes
-    device.addListener('noteon', 1, e => this.dispatch({ notes: this.notes.add(e.note) }));
-    device.addListener('noteoff', 1, e => this.dispatch({ notes: this.notes.delete(e.note) }));
-
-    // ---- Add Note Listeners
-    ['noteon', 'noteoff'].forEach(listener =>
-      device.addListener(listener, 1, e => {
-        const filteredEvents = this.state.selectedFilters.reduce((accum, filter) => filter(accum), {
-          [e.note.number]: e
-        });
-        midiActions[listener](filteredEvents, this.state.outputDevice);
-      }))
-
+    // ---- Add Note on and Note off Listeners
+    ['noteon', 'noteoff'].forEach(listenerType =>
+      device.addListener(listenerType, 1, e => (
+        listeners.forEach(listener => listener[listenerType](e, this))
+      )));
     // ---- Add Other Listeners
-    otherListeners.forEach(listener =>
-      device.addListener(listener, 1, e => midiActions[listener](e, this.state.outputDevice)
+    otherListenerTypes.forEach(listenerType =>
+      device.addListener(listenerType, 1, e => midiActions[listenerType](e, this.state.outputDevice)
     ))
   }
 
@@ -149,23 +131,25 @@ class App extends Component {
         <p className="App-intro">
           Hello Electron!
         </p>
+
         <div>
-        <div onClick={() => console.log(this.state)}>Log State</div>
-        <div>{`${this.state.midiDevice.manufacturer} ${this.state.midiDevice.name} connected`}</div>
-        <DeviceManager
-          state={this.state}
-          inputss={WebMidi.inputs}
-          updateDevice={(id, device, type) => this.setDevice(id, device, type)}
-        />
-        <FilterManager
-          onFilterChange={filter => this.dispatch({currentFilter: filters[filter]})}
-          currentFilter={this.state.currentFilter}
-        />
-        <Playback state={this.state} />
-        <ClockDisplay state={this.state} />
-        <ChordDisplay notes={this.state.notes} />
-        <Metronome clicks={this.state.channelaftertouch} />
-      </div>
+          <div onClick={() => console.log(this.state)}>Log State</div>
+          <div>{`${this.state.midiDevice.manufacturer} ${this.state.midiDevice.name} connected`}</div>
+          <DeviceManager
+            state={this.state}
+            inputss={WebMidi.inputs}
+            updateDevice={(id, device, type) => this.setDevice(id, device, type)}
+          />
+          <FilterManager
+            state={this.state}
+            dispatch={this.dispatch.bind(this)}
+          />
+          <Playback state={this.state} />
+          <ClockDisplay state={this.state} />
+          <ChordDisplay notes={this.state.notes} />
+          <Metronome clicks={this.state.channelaftertouch} />
+        </div>
+
       </div>
     );
   }

@@ -1,13 +1,19 @@
 import React from 'react';
-import * as filters from '../util/filters';
+import * as chainableNoteFilters from '../util/chainableNoteFilters';
 
-const FilterManager = ({ onFilterChange, currentFilter }) => (
+const FilterManager = ({ state, dispatch }) => (
   <div>
-  { Object.keys(filters).map((filter, idx) =>
+  { Object.keys(chainableNoteFilters).map((filter, idx) =>
       <div
         key={idx}
-        onClick={() => onFilterChange(filter)}
-        style={{cursor: 'pointer', color: currentFilter === filters[filter] ? 'blue' : 'black'}}
+        onClick={() => {
+          const filterFn = chainableNoteFilters[filter];
+          const newFilters = state.selectedFilters.includes(filterFn) ?
+            state.selectedFilters.filter(item => filterFn !== item) :
+            [...state.selectedFilters, filterFn]
+          dispatch({selectedFilters: newFilters})
+        }}
+        style={{cursor: 'pointer', color: state.selectedFilters.includes(chainableNoteFilters[filter]) ? 'blue' : 'black'}}
       >
         {filter}
       </div>)}
