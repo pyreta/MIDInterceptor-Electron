@@ -6,12 +6,14 @@ import noOpMidiDevice from '../helpers/noOpMidiDevice';
 import { defaultdeviceIds } from '../constants';
 
 // components
+import Piano from './Piano';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 
 const components = [
+  Piano,
   ClockDisplay,
   FilterManager,
   DeviceManager,
