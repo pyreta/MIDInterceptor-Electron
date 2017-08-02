@@ -1,8 +1,4 @@
-const electron = require('electron');
-// Module to control application life.
-const app = electron.app;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+const { app, BrowserWindow } = require('electron');
 
 const path = require('path');
 const url = require('url');
@@ -13,7 +9,7 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1000, height: 900});
+    mainWindow = new BrowserWindow({width: 1000, height: 400, show: false});
 
     // and load the index.html of the app.
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -22,8 +18,13 @@ function createWindow() {
             slashes: true
         });
     mainWindow.loadURL(startUrl);
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+
+    mainWindow.on('ready-to-show', () => {
+      mainWindow.show();
+      // Open the DevTools.
+      mainWindow.webContents.openDevTools();
+    })
+
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
@@ -32,6 +33,7 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
     })
+
 }
 
 // This method will be called when Electron has finished
