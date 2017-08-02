@@ -26,7 +26,7 @@ export class ClockDisplay extends React.Component {
   bars() {
     const { channelaftertouch, programchange, breathcontrollercoarse } = this.props;
     const bars = channelaftertouch + ( 127 * (programchange - 1) ) + ( 16129 * (breathcontrollercoarse -1));
-    return bars < 0 ? 0 : `${Math.floor(bars/64) + 1}.${Math.floor((bars % 64)/4)}`;
+    return bars < 0 ? 0 : `${Math.floor(bars/64) + 1}.${Math.floor((bars % 64)/16)}`;
   }
 
   render() {
