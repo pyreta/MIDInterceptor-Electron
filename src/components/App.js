@@ -1,34 +1,25 @@
 import React, { Component } from 'react';
 import WebMidi from 'webmidi';
 import './App.css';
-import listeners, { midiActions } from '../listeners';
+import logStateChange from '../helpers/logStateChange';
+import noOpMidiDevice from '../helpers/noOpMidiDevice';
+import { defaultdeviceIds } from '../constants';
+
+// components
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
-import logStateChange from '../helpers/logStateChange';
-import deleteKey from '../helpers/deleteKey';
-import noOpMidiDevice from '../util/noOpMidiDevice';
-import { otherListenerTypes, defaultdeviceIds } from '../constants';
+import FilterManager from './FilterManager';
 
-const initialState = {
-  notes: {},
-  ready: false,
-  midiDevice: noOpMidiDevice,
-  dawListener: noOpMidiDevice,
-  outputDevice: noOpMidiDevice,
-  selectedFilters: []
-}
+const components = [
+  ClockDisplay,
+  FilterManager,
+  ChordDisplay
+]
 
 class App extends Component {
   constructor() {
     super();
-    this.state = initialState;
-  }
-
-  get notes() {
-    return ({
-      add: note => ({ ...this.state.notes, [note.number]: note }),
-      delete: note => deleteKey(this.state.notes, note.number)
-    })
+    this.state = { ready: false };
   }
 
   dispatch(stateChangeObject, ignore) {
@@ -44,18 +35,6 @@ class App extends Component {
     });
   }
 
-  addListeners(device) {
-    // ---- Add Note on and Note off Listeners
-    ['noteon', 'noteoff'].forEach(listenerType =>
-      device.addListener(listenerType, 1, e => (
-        listeners.forEach(listener => listener[listenerType](e, this))
-      )));
-    // ---- Add Other Listeners
-    otherListenerTypes.forEach(listenerType =>
-      device.addListener(listenerType, 1, e => midiActions[listenerType](e, this.state.outputDevice)
-    ))
-  }
-
   setupWebMidiAPI() {
     WebMidi.enable(err => {
       if (err) {
@@ -63,8 +42,6 @@ class App extends Component {
       } else {
         console.log('WebMidi enabled!');
         this.loadDevices();
-        this.addListeners(this.state.dawListener);
-        this.addListeners(this.state.midiDevice);
         this.dispatch({ ready: true })
       }
     });
@@ -94,16 +71,15 @@ class App extends Component {
   childProps() {
     return ({
       ...this.state,
-      dispatch: this.dispatch.bind(this)
+      dispatch: this.dispatch.bind(this),
     })
   }
 
   renderApp() {
     return (
       <div>
-        <div onClick={() => console.log(this.state)}>Log State</div>
-        <ClockDisplay {...this.childProps()} />
-        <ChordDisplay notes={this.state.notes} />
+        {components.map((Component, idx) =>
+            <Component key={idx} {...this.childProps()} />)}
       </div>
     )
   }
@@ -111,6 +87,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      <div onClick={() => console.log(this.state)}>Log State</div>
       {this.state.ready ?
         this.renderApp() :
         <div>Cannot enable Web Midi</div>}
