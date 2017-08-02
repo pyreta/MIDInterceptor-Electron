@@ -8,12 +8,6 @@ const changeNoteNumber = (e, difference) => ({
     }
   });
 
-export const passThrough = eventObject =>
-  Object.values(eventObject).reduce((accum, e) => ({
-    ...accum,
-    [e.note.number]: e,
-  }), {});
-
 export const octaveDown = eventObject =>
   Object.values(eventObject).reduce((accum, e) => (
     { ...accum, [e.note.number-12]: changeNoteNumber(e, -12) }

@@ -9,20 +9,23 @@ import { defaultdeviceIds } from '../constants';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
+import DeviceManager from './DeviceManager';
 
 const components = [
   ClockDisplay,
   FilterManager,
+  DeviceManager,
   ChordDisplay
 ]
 
 class App extends Component {
   constructor() {
     super();
-    this.state = { ready: false };
+    this.state = {};
+    this.registeredListeners = [];
   }
 
-  dispatch(stateChangeObject, ignore) {
+  dispatch(stateChangeObject, ignore = true) {
     !ignore && logStateChange(stateChangeObject);
     this.setState(stateChangeObject);
   }
@@ -51,27 +54,11 @@ class App extends Component {
     this.setupWebMidiAPI();
   }
 
-  getDevice(id, type) {
-    return WebMidi[`get${type[0].toUpperCase()}${type.slice(1)}ById`](id);
-  }
-
-  setDevice(id, device, type = 'input') {
-    const newDevice = this.getDevice(id, type);
-    if (type === 'input' ) {
-      type === 'input' && this.addListeners(newDevice);
-      this.state[device].removeListener();
-    }
-    const deviceIds = { ...defaultdeviceIds, [device]: id }
-    this.dispatch({
-      [device]: newDevice,
-      defaultdeviceIds: deviceIds
-    })
-  }
-
   childProps() {
     return ({
       ...this.state,
       dispatch: this.dispatch.bind(this),
+      registeredListeners: this.registeredListeners
     })
   }
 

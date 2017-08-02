@@ -5,15 +5,19 @@ import deleteKey from '../helpers/deleteKey';
 export class ChordDisplay extends React.Component {
 
   componentWillMount() {
+    [this.props.dawListener, this.props.midiDevice].forEach(
+      this.connectListener.bind(this)
+    );
+    this.props.registeredListeners.push(this.connectListener.bind(this));
+  }
+
+  connectListener(device) {
     ['noteon', 'noteoff'].forEach(listenerType => {
       const verb = { noteon: 'add', noteoff: 'delete' }[listenerType];
-
-      [this.props.dawListener, this.props.midiDevice].forEach(device => {
-        device.addListener(listenerType, 1, e => (
-          this.props.dispatch({ notes: this.notes[verb](e.note) })
-        ));
-      })
-    });
+      device.addListener(listenerType, 1, e => (
+        this.props.dispatch({ notes: this.notes[verb](e.note) })
+      ));
+    })
   }
 
   get notes() {

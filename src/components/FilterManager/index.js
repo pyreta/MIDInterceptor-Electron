@@ -7,20 +7,22 @@ export class FilterManager extends React.Component {
 
   componentWillMount() {
     this.props.dispatch({ selectedFilters: [] });
-    
-    [this.props.dawListener, this.props.midiDevice].forEach(device => {
-      ['noteon', 'noteoff'].forEach(listenerType => {
-          device.addListener(listenerType, 1, e => {
-            const filteredEvents = this.props.selectedFilters.reduce((accum, filter) => filter(accum), {
-              [e.note.number]: e
-            });
-            midiActions[listenerType](filteredEvents, this.props.outputDevice);
-          })
-        });
-      otherListenerTypes.forEach(listenerType =>
-          device.addListener(listenerType, 1, e => midiActions[listenerType](e, this.props.outputDevice))
-        )
-    });
+    this.props.registeredListeners.push(this.connectListener.bind(this));
+    [this.props.dawListener, this.props.midiDevice].forEach(this.connectListener.bind(this));
+  }
+
+  connectListener(device) {
+    ['noteon', 'noteoff'].forEach(listenerType => {
+        device.addListener(listenerType, 1, e => {
+          const filteredEvents = this.props.selectedFilters.reduce((accum, filter) => filter(accum), {
+            [e.note.number]: e
+          });
+          midiActions[listenerType](filteredEvents, this.props.outputDevice);
+        })
+      });
+    otherListenerTypes.forEach(listenerType =>
+        device.addListener(listenerType, 1, e => midiActions[listenerType](e, this.props.outputDevice))
+      )
   }
 
   render() {
