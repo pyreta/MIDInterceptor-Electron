@@ -1,8 +1,20 @@
 import React from 'react';
 import WebMidi from 'webmidi';
 import './Piano.css';
+import PianoKey from './PianoKey';
 
-export class Piano extends React.Component {
+const PianoOctave = () =>
+  <div style={{display: 'inline-flex'}}>
+    <PianoKey blackKey />
+    <PianoKey blackKey />
+    <PianoKey />
+    <PianoKey blackKey />
+    <PianoKey blackKey />
+    <PianoKey blackKey />
+    <PianoKey />
+  </div>
+
+class Piano extends React.Component {
 
   componentWillMount() {
 
@@ -12,8 +24,10 @@ export class Piano extends React.Component {
     console.log(`WebMidi:`, WebMidi)
     return (
       <div className="base">
-        <div className="key-container">
-        </div>
+        <PianoOctave />
+        <PianoOctave />
+        <PianoOctave />
+        <PianoOctave />
       </div>
     )
   }
