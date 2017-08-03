@@ -2,7 +2,7 @@ import React from 'react';
 import WebMidi from 'webmidi';
 import deleteKey from '../helpers/deleteKey';
 
-const Key = ({ type, note, octave, outputDevice, notes = {}, ...props }) => {
+const Key = ({ type, note, octave, outputDevice, notes = {}, filteredNotes = {}, ...props }) => {
   const noteString = `${note}${type==='black' ? '#' : ''}`;
   const noteNumber = WebMidi['_notes'].indexOf(noteString) + 12 * octave;
 

@@ -32,7 +32,7 @@ export class ChordDisplay extends React.Component {
     return (
       <div>
         <div style={{fontSize: '50px'}}>
-          {notes && Object.keys(notes).map(key => notes[key].name).join(' ')}
+          {notes && (Object.keys(notes).map(key => notes[key].name).join(' ') || '-')}
         </div>
       </div>
     )

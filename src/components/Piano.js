@@ -10,18 +10,13 @@ const PianoOctave = props =>
 
 class Piano extends React.Component {
 
-  onKeyClick(note, number) {
-    console.log(`note:`, note)
-    console.log(`number:`, number)
-  }
-
   render() {
     return (
       <div className="base">
-        <PianoOctave octave={3} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
-        <PianoOctave octave={4} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
-        <PianoOctave octave={5} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
-        <PianoOctave octave={6} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
+        <PianoOctave octave={3} {...this.props} />
+        <PianoOctave octave={4} {...this.props} />
+        <PianoOctave octave={5} {...this.props} />
+        <PianoOctave octave={6} {...this.props} />
       </div>
     )
   }

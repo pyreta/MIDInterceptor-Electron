@@ -76,10 +76,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <div onClick={() => console.log(this.state)}>Log State</div>
       {this.state.ready ?
         this.renderApp() :
         <div>Cannot enable Web Midi</div>}
+        <div onClick={() => console.log(this.state)}>Log State</div>
       </div>
     );
   }
