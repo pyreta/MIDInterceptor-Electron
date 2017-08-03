@@ -1,33 +1,25 @@
 import React from 'react';
-import WebMidi from 'webmidi';
 import './Piano.css';
 import PianoKey from './PianoKey';
 
-const PianoOctave = () =>
+const PianoOctave = props =>
   <div style={{display: 'inline-flex'}}>
-    <PianoKey blackKey />
-    <PianoKey blackKey />
-    <PianoKey />
-    <PianoKey blackKey />
-    <PianoKey blackKey />
-    <PianoKey blackKey />
-    <PianoKey />
+    {['C', 'D', 'E', 'F', 'G', 'A', 'B'].map((note, idx) =>
+      <PianoKey note={note} key={idx} {...props} />)}
   </div>
 
 class Piano extends React.Component {
 
-  componentWillMount() {
-
+  onKeyClick(note, number) {
+    console.log(`note:`, note)
+    console.log(`number:`, number)
   }
 
   render() {
-    console.log(`WebMidi:`, WebMidi)
     return (
       <div className="base">
-        <PianoOctave />
-        <PianoOctave />
-        <PianoOctave />
-        <PianoOctave />
+        <PianoOctave octave={1} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
+        <PianoOctave octave={2} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
       </div>
     )
   }
