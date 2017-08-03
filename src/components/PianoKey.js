@@ -9,7 +9,7 @@ const Key = ({ type, note, octave, onKeyClick, notes = {}, ...props }) => {
     <div
       className={`${type}-key key${notes[noteNumber] ? ' held' : ''}`}
       onClick={() => onKeyClick(`${noteString}${octave}`, noteNumber)}
-    />)
+    ><span className={`${type}-note`}>{noteString}</span></div>)
 }
 
 class PianoKey extends React.Component {

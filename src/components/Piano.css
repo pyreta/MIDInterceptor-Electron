@@ -21,6 +21,20 @@
   transition: all 0.3s ease;
 }
 
+.key {
+  justify-content: center;
+}
+
+.white-note {
+  font-size: 16px;
+  margin-top: 153px;
+}
+
+.black-note {
+  font-size: 10px;
+  margin-top: 99px;
+}
+
 .white-key {
   background-color: rgb(229, 192, 123);
   width: 30px;
@@ -31,6 +45,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  color: rgb(33, 37, 43);
 }
 
 .white-key:hover {
@@ -44,6 +59,7 @@
 
 .black-key {
   background-color: rgb(33, 37, 43);
+  display: inline-flex;
   width: 23px;
   top: -6px;
   left: 19px;
@@ -51,7 +67,8 @@
   border-radius: 5px;
   border: 2px solid rgb(222, 108, 117);
   position: absolute;
-  z-index: 2
+  z-index: 2;
+  color: rgb(229, 192, 123);
 }
 
 .held {
