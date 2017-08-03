@@ -18,8 +18,10 @@ class Piano extends React.Component {
   render() {
     return (
       <div className="base">
-        <PianoOctave octave={1} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
-        <PianoOctave octave={2} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
+        <PianoOctave octave={3} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
+        <PianoOctave octave={4} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
+        <PianoOctave octave={5} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
+        <PianoOctave octave={6} onKeyClick={this.onKeyClick.bind(this)} {...this.props} />
       </div>
     )
   }

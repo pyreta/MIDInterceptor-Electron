@@ -78,3 +78,8 @@
   transform: scale(0.97);
   transition: background-color 0.3s ease;
 }
+
+
+.held:hover {
+  background-color: red;
+}
