@@ -17,7 +17,7 @@ export class ChordDisplay extends React.Component {
       device.addListener(listenerType, 1, e => {
         // console.log(`this.xnotes[verb](e.note):`, this.xnotes[verb](e.note))
         this.props.setXnotes(this.xnotes[verb](e.note));
-        this.props.dispatch({ notes: this.notes[verb](e.note) });
+        // this.props.dispatch({ notes: this.notes[verb](e.note) });
       });
     })
   }

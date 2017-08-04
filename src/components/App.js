@@ -61,10 +61,15 @@ class App extends Component {
 
   setXnotes(thing) {
     this.xnotes = thing;
+    this.forceUpdate();
   }
 
   setXfilterednotes(thing) {
     this.xfilteredNotes = thing;
+  }
+
+  deleteNote(num) {
+    delete this.xfilteredNotes[num];
   }
 
   childProps() {
@@ -75,7 +80,8 @@ class App extends Component {
       xnotes: this.xnotes,
       setXnotes: this.setXnotes.bind(this),
       xfilteredNotes: this.xfilteredNotes,
-      setXfilterednotes: this.setXfilterednotes.bind(this)
+      setXfilterednotes: this.setXfilterednotes.bind(this),
+      deleteNote: this.deleteNote.bind(this)
     })
   }
 
@@ -94,7 +100,8 @@ class App extends Component {
       {this.state.ready ?
         this.renderApp() :
         <div>Cannot enable Web Midi</div>}
-        <div onClick={() => console.log(this.state)}>Log State</div>
+        <div onClick={() => console.log(this.state)}>Log State</div><br />
+        <div onClick={() => console.log(this.childProps())}>Log childProps</div>
       </div>
     );
   }
