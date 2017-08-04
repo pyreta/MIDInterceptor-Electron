@@ -6,14 +6,15 @@ import noOpMidiDevice from '../helpers/noOpMidiDevice';
 import { defaultdeviceIds } from '../constants';
 
 // components
-import Piano from './Piano';
+import { PianoIn, PianoOut } from './Piano';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 
 const components = [
-  Piano,
+  PianoIn,
+  PianoOut,
   ClockDisplay,
   FilterManager,
   DeviceManager,
@@ -25,6 +26,8 @@ class App extends Component {
     super();
     this.state = {};
     this.registeredListeners = [];
+    this.xnotes = {};
+    this.xfilteredNotes = {};
   }
 
   dispatch(stateChangeObject, ignore = true) {
@@ -56,11 +59,23 @@ class App extends Component {
     this.setupWebMidiAPI();
   }
 
+  setXnotes(thing) {
+    this.xnotes = thing;
+  }
+
+  setXfilterednotes(thing) {
+    this.xfilteredNotes = thing;
+  }
+
   childProps() {
     return ({
       ...this.state,
       dispatch: this.dispatch.bind(this),
-      registeredListeners: this.registeredListeners
+      registeredListeners: this.registeredListeners,
+      xnotes: this.xnotes,
+      setXnotes: this.setXnotes.bind(this),
+      xfilteredNotes: this.xfilteredNotes,
+      setXfilterednotes: this.setXfilterednotes.bind(this)
     })
   }
 

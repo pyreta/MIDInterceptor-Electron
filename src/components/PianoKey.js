@@ -5,10 +5,9 @@ import deleteKey from '../helpers/deleteKey';
 const Key = ({ type, note, octave, outputDevice, notes = {}, filteredNotes = {}, ...props }) => {
   const noteString = `${note}${type==='black' ? '#' : ''}`;
   const noteNumber = WebMidi['_notes'].indexOf(noteString) + 12 * octave;
-
   return (
     <div
-      className={`${type}-key key${notes[noteNumber] ? ' held' : ''}`}
+      className={`${type}-key key${props[props.notesKey][noteNumber] ? ' held' : ''}${props.notesKey === 'xfilteredNotes' ? ' filtered-piano' : ''}`}
       onMouseDown={() => {
         outputDevice.playNote(noteNumber, 1, { velocity: 0.35 });
         props.addNote({number: noteNumber, note: true});

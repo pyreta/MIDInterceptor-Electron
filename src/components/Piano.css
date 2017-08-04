@@ -5,6 +5,7 @@
   display: inline-block;
   padding: 20px;
   border: 2px solid #181a1f;
+  margin-top: 20px;
 }
 
 
@@ -32,7 +33,7 @@
 }
 
 .black-note {
-  font-size: 10px;
+  font-size: 11px;
   margin-top: 99px;
 }
 
@@ -53,6 +54,10 @@
   background-color: rgb(152, 195, 121);
 }
 
+.filtered-piano {
+  background-color: #98c379;
+}
+
 .black-key:hover {
   background-color: rgb(42, 65, 101);
   border-color: black;
@@ -70,6 +75,7 @@
   position: absolute;
   z-index: 2;
   color: rgb(229, 192, 123);
+  box-shadow: 1px 1px 8px black;
 }
 
 .held {

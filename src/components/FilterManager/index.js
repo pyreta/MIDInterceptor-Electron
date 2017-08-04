@@ -20,6 +20,10 @@ export class FilterManager extends React.Component {
           // this.props.dispatch({ filteredNotes: listenerType === 'noteon' ?
           //   { ...this.props.filteredNotes, ...filteredEvents} : {}
           // });
+          this.props.setXfilterednotes(listenerType === 'noteon' ?
+            { ...this.props.xfilteredNotes, ...filteredEvents} : {}
+
+        )
           midiActions[listenerType](filteredEvents, this.props.outputDevice);
         })
       });
