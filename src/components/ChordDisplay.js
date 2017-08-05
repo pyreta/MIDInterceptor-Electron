@@ -1,5 +1,6 @@
 import React from 'react';
 import deleteKey from '../helpers/deleteKey';
+import WebMidi from 'webmidi';
 
 
 export class ChordDisplay extends React.Component {
@@ -37,12 +38,14 @@ export class ChordDisplay extends React.Component {
   }
 
   render() {
-    // console.log(`this.props:`, this.props)
-    const { notes, xnotes } = this.props;
+    const { xnotes = {}, xfilteredNotes = {} } = this.props;
     return (
       <div>
-        <div style={{fontSize: '50px'}}>
-          {notes && (Object.keys(xnotes).map(key => notes[key].name).join(' ') || '-')}
+        <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
+          {(Object.keys(xnotes).map(key => xnotes[key].name).join(' ') || '-')}
+        </div>
+        <div style={{fontSize: '50px', color: '#98c379'}}>
+          {(Object.keys(xfilteredNotes).map(key => WebMidi['_notes'][xfilteredNotes[key].note.number % 12]).join(' ') || '-')}
         </div>
       </div>
     )

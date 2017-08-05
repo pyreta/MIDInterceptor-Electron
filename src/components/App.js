@@ -64,7 +64,7 @@ class App extends Component {
     this.forceUpdate();
   }
 
-  setXfilterednotes(thing) {
+  setFilteredNotes(thing) {
     this.xfilteredNotes = thing;
   }
 
@@ -80,8 +80,9 @@ class App extends Component {
       xnotes: this.xnotes,
       setXnotes: this.setXnotes.bind(this),
       xfilteredNotes: this.xfilteredNotes,
-      setXfilterednotes: this.setXfilterednotes.bind(this),
-      deleteNote: this.deleteNote.bind(this)
+      setFilteredNotes: this.setFilteredNotes.bind(this),
+      deleteNote: this.deleteNote.bind(this),
+      showNotes: true
     })
   }
 

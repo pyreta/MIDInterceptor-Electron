@@ -21,11 +21,11 @@ export class FilterManager extends React.Component {
           //   { ...this.props.filteredNotes, ...filteredEvents} : {}
           // });
           if (listenerType === 'noteon') {
-            this.props.setXfilterednotes({ ...this.props.xfilteredNotes, ...filteredEvents})
+            this.props.setFilteredNotes({ ...this.props.xfilteredNotes, ...filteredEvents})
           } else {
             Object.keys(filteredEvents).forEach(noteNumber =>
               this.props.deleteNote(noteNumber))
-            // this.props.setXfilterednotes({})
+            // this.props.setFilteredNotes({})
           }
           midiActions[listenerType](filteredEvents, this.props.outputDevice);
         })
