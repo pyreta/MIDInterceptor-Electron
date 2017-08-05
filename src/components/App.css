@@ -1,3 +1,7 @@
+canvas {
+	vertical-align: bottom;
+}
+
 .App {
   text-align: center;
   background-color: rgb(40, 44, 52);

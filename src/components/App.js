@@ -3,6 +3,7 @@ import WebMidi from 'webmidi';
 import './App.css';
 import logStateChange from '../helpers/logStateChange';
 import noOpMidiDevice from '../helpers/noOpMidiDevice';
+import CanvasPiano from '../canvas/CanvasPiano';
 import { defaultdeviceIds } from '../constants';
 
 // components
@@ -24,6 +25,23 @@ const components = [
 class App extends Component {
   constructor() {
     super();
+    this.canvas = document.getElementById('canvas');
+    this.canvas.width = 1160;
+    this.canvas.height = 300;
+    this.ctx = this.canvas.getContext('2d');
+    this.canvasPiano = new CanvasPiano(this.ctx, {
+      octaves: 4,
+      // keyBorderRadius: 0,
+      // keyBorderWidth: 1,
+      // whiteKeyWidth: 50,
+      // blackKeyWidth: 35,
+      // blackKeyHeight: 170,
+      // whiteKeyFontSize: 26,
+      // blackKeyFontSize: 10,
+      // font: 'Arial',
+      // whiteKeyHeight: 270,
+      // colors: { whiteKey: 'yellow', blackKey: 'blue', blackKeyBorder: 'black', keyHold: 'green' }
+    })
     this.state = {};
     this.registeredListeners = [];
     this.xnotes = {};
@@ -57,6 +75,11 @@ class App extends Component {
 
   componentWillMount() {
     this.setupWebMidiAPI();
+    this.canvasPiano.draw({
+      x: 35,
+      y: 20,
+      heldNotes: {'A1': true, 'G2': true, 'D#1': true, 'C#4': true, 'D4': true},
+    });
   }
 
   setXnotes(thing) {
