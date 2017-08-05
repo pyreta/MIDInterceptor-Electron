@@ -18,6 +18,18 @@ export class ChordDisplay extends React.Component {
       device.addListener(listenerType, 1, e => {
         // console.log(`this.xnotes[verb](e.note):`, this.xnotes[verb](e.note))
         this.props.setXnotes(this.xnotes[verb](e.note));
+        const heldNotes = Object.values(this.props.xnotes).reduce((accum, event) => {
+          // console.log(`event:`, event)
+          accum[`${event.name}${event.octave+2}`] = true;
+          return accum;
+        }, {});
+        // console.log(`this.props.xnotes:`, playedNotes);
+        this.props.canvasPiano.draw({
+          x: 35,
+          y: 20,
+          heldNotes,
+          // heldNotes: {'A1': true, 'G2': true, 'D#1': true, 'C#4': true, 'D4': true},
+        })
         // this.props.dispatch({ notes: this.notes[verb](e.note) });
       });
     })

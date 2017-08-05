@@ -137,7 +137,16 @@ class CanvasPiano {
     this.drawBlackKeys({ heldNotes, octave });
   }
 
+  pianoWidth() {
+    return this.octaves * 7 * this.whiteKeyWidth + this.basePaddingSide * 2;
+  }
+
+  pianoHeight() {
+    return this.whiteKeyHeight + this.basePaddingTop;
+  }
+
   draw({ x, y, heldNotes = {}}) {
+    this.ctx.clearRect(x, y, x + this.pianoWidth(), y + this.pianoHeight())
     this.x = x; this.y = y;
     this.drawBase();
     for (let i = 1; i <= this.octaves; i++) {
