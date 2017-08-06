@@ -3,7 +3,7 @@ import WebMidi from 'webmidi';
 import './App.css';
 import logStateChange from '../helpers/logStateChange';
 import noOpMidiDevice from '../helpers/noOpMidiDevice';
-import CanvasPiano from '../canvas/CanvasPiano';
+import DualCanvasPiano from '../canvas/DualCanvasPiano';
 import { defaultdeviceIds } from '../constants';
 
 // components
@@ -29,32 +29,7 @@ class App extends Component {
     this.canvas.width = 1160;
     this.canvas.height = 500;
     this.ctx = this.canvas.getContext('2d');
-    this.canvasPiano = new CanvasPiano(this.ctx, {
-      octaves: 4,
-      // keyBorderRadius: 0,
-      // keyBorderWidth: 1,
-      // whiteKeyWidth: 50,
-      // blackKeyWidth: 35,
-      // blackKeyHeight: 170,
-      // whiteKeyFontSize: 26,
-      // blackKeyFontSize: 10,
-      // font: 'Arial',
-      // whiteKeyHeight: 270,
-      // colors: { whiteKey: 'yellow', blackKey: 'blue', blackKeyBorder: 'black', keyHold: 'green' }
-    })
-    this.canvasPianoOut = new CanvasPiano(this.ctx, {
-      octaves: 4,
-      // keyBorderRadius: 0,
-      // keyBorderWidth: 1,
-      // whiteKeyWidth: 50,
-      // blackKeyWidth: 35,
-      // blackKeyHeight: 170,
-      // whiteKeyFontSize: 26,
-      // blackKeyFontSize: 10,
-      // font: 'Arial',
-      // whiteKeyHeight: 270,
-      colors: { whiteKey: '#98c379'}
-    })
+    this.dualCanvasPiano = new DualCanvasPiano(this.ctx, { octaves: 4, x: 20, y: 20 });
     this.state = {};
     this.registeredListeners = [];
     this.xnotes = {};
@@ -88,16 +63,9 @@ class App extends Component {
 
   componentWillMount() {
     this.setupWebMidiAPI();
-    this.canvasPiano.draw({
-      x: 35,
-      y: 20,
-      heldNotes: {},
-      // heldNotes: {'A1': true, 'G2': true, 'D#1': true, 'C#4': true, 'D4': true},
-    });
-    this.canvasPianoOut.draw({
-      x: 35,
-      y: 250,
-      heldNotes: {},
+    this.dualCanvasPiano.draw({
+      heldNotes: { 'C#1': true, 'D2': true },
+      heldFilterNotes: { 'C#2': true, 'D3': true, 'F3': true, 'F#3': true },
     });
   }
 
@@ -125,8 +93,6 @@ class App extends Component {
       setFilteredNotes: this.setFilteredNotes.bind(this),
       deleteNote: this.deleteNote.bind(this),
       showNotes: true,
-      canvasPiano: this.canvasPiano,
-      canvasPianoOut: this.canvasPianoOut
     })
   }
 
