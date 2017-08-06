@@ -7,7 +7,7 @@ import CanvasPiano from '../canvas/CanvasPiano';
 import { defaultdeviceIds } from '../constants';
 
 // components
-import { PianoIn, PianoOut } from './Piano';
+// import { PianoIn, PianoOut } from './Piano';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
@@ -125,7 +125,8 @@ class App extends Component {
       setFilteredNotes: this.setFilteredNotes.bind(this),
       deleteNote: this.deleteNote.bind(this),
       showNotes: true,
-      canvasPiano: this.canvasPiano
+      canvasPiano: this.canvasPiano,
+      canvasPianoOut: this.canvasPianoOut
     })
   }
 

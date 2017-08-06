@@ -12,25 +12,39 @@ export class ChordDisplay extends React.Component {
     this.props.registeredListeners.push(this.connectListener.bind(this));
   }
 
+  findNoteFromNumber(number) {
+    // console.log(`jhgjhg`, `${WebMidi['_notes'][number % 12]}1`)
+    return `${WebMidi['_notes'][number % 12]}${Math.floor(number/12)-2}`;
+  }
+
   connectListener(device) {
     ['noteon', 'noteoff'].forEach(listenerType => {
       const verb = { noteon: 'add', noteoff: 'delete' }[listenerType];
       device.addListener(listenerType, 1, e => {
-        // console.log(`this.xnotes[verb](e.note):`, this.xnotes[verb](e.note))
         this.props.setXnotes(this.xnotes[verb](e.note));
-        const heldNotes = Object.values(this.props.xnotes).reduce((accum, event) => {
-          // console.log(`event:`, event)
-          accum[`${event.name}${event.octave+2}`] = true;
-          return accum;
-        }, {});
-        // console.log(`this.props.xnotes:`, playedNotes);
+
+        const heldNotes = { 'C#2': true, 'C#3': true, 'F3': true, 'C#1': true, 'C#4': true, 'F1': true}
+        // const heldNotes = Object.values(this.props.xnotes).reduce((accum, event) => {
+        //   accum[`${event.name}${event.octave+2}`] = true;
+        //   return accum;
+        // }, {});
         this.props.canvasPiano.draw({
           x: 35,
           y: 20,
           heldNotes,
-          // heldNotes: {'A1': true, 'G2': true, 'D#1': true, 'C#4': true, 'D4': true},
         })
-        // this.props.dispatch({ notes: this.notes[verb](e.note) });
+
+        // const heldFilteredNotes = Object.keys(this.props.xfilteredNotes).reduce((accum, noteNum) => {
+        //   accum[this.findNoteFromNumber(noteNum)] = true;
+        //   return accum;
+        // }, {});
+        // this.props.canvasPianoOut.draw({
+        //   x: 35,
+        //   y: 250,
+        //   heldNotes: heldFilteredNotes,
+        // })
+
+
       });
     })
   }
