@@ -13,7 +13,7 @@ import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 
 const components = [
-  PianoIn,
+  // PianoIn,
   PianoOut,
   ClockDisplay,
   FilterManager,
@@ -59,7 +59,7 @@ class App extends Component {
     this.setupWebMidiAPI();
   }
 
-  setXnotes(thing) {
+  setNotes(thing) {
     this.xnotes = thing;
     this.forceUpdate();
   }
@@ -78,7 +78,7 @@ class App extends Component {
       dispatch: this.dispatch.bind(this),
       registeredListeners: this.registeredListeners,
       xnotes: this.xnotes,
-      setXnotes: this.setXnotes.bind(this),
+      setNotes: this.setNotes.bind(this),
       xfilteredNotes: this.xfilteredNotes,
       setFilteredNotes: this.setFilteredNotes.bind(this),
       deleteNote: this.deleteNote.bind(this),
