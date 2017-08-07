@@ -29,14 +29,14 @@ export class ChordDisplay extends React.Component {
   }
 
   render() {
-    const { notes = {}, xfilteredNotes = {} } = this.props;
+    const { notes = {}, filteredNotes = {} } = this.props;
     return (
       <div>
         <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
           {(Object.keys(notes).map(key => notes[key].name).join(' ') || '-')}
         </div>
         <div style={{fontSize: '50px', color: '#98c379'}}>
-          {(Object.keys(xfilteredNotes).map(key => WebMidi['_notes'][xfilteredNotes[key].note.number % 12]).join(' ') || '-')}
+          {(Object.keys(filteredNotes).map(key => WebMidi['_notes'][filteredNotes[key].note.number % 12]).join(' ') || '-')}
         </div>
       </div>
     )

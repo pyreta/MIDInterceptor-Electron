@@ -13,8 +13,8 @@ import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 
 const components = [
-  // PianoIn,
-  PianoOut,
+  PianoIn,
+  // PianoOut,
   ClockDisplay,
   FilterManager,
   DeviceManager,
@@ -27,7 +27,7 @@ class App extends Component {
     this.state = {};
     this.registeredListeners = [];
     this.notes = {};
-    this.xfilteredNotes = {};
+    this.filteredNotes = {};
   }
 
   dispatch(stateChangeObject, ignore = true) {
@@ -65,11 +65,11 @@ class App extends Component {
   }
 
   setFilteredNotes(thing) {
-    this.xfilteredNotes = thing;
+    this.filteredNotes = thing;
   }
 
   deleteNote(num) {
-    delete this.xfilteredNotes[num];
+    delete this.filteredNotes[num];
   }
 
   childProps() {
@@ -79,7 +79,7 @@ class App extends Component {
       registeredListeners: this.registeredListeners,
       notes: this.notes,
       setNotes: this.setNotes.bind(this),
-      xfilteredNotes: this.xfilteredNotes,
+      filteredNotes: this.filteredNotes,
       setFilteredNotes: this.setFilteredNotes.bind(this),
       deleteNote: this.deleteNote.bind(this),
       showNotes: true

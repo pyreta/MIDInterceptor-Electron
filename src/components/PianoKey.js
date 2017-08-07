@@ -8,7 +8,7 @@ const Key = ({ type, note, octave, outputDevice, ...props }) => {
   const held = props[props.notesKey][noteNumber] ? ' held' : '';
   return (
     <div
-      className={`${type}-key key${held}${props.notesKey === 'xfilteredNotes' ? ' filtered-piano' : ''}`}
+      className={`${type}-key key${held}${props.notesKey === 'filteredNotes' ? ' filtered-piano' : ''}`}
       onMouseDown={() => {
         outputDevice.playNote(noteNumber, 1, { velocity: 0.35 });
         props.addNote({number: noteNumber, note: true});

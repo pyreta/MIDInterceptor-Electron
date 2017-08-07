@@ -19,7 +19,7 @@ export class FilterManager extends React.Component {
           });
 
           if (listenerType === 'noteon') {
-            this.props.setFilteredNotes({ ...this.props.xfilteredNotes, ...filteredEvents})
+            this.props.setFilteredNotes({ ...this.props.filteredNotes, ...filteredEvents})
           } else {
             Object.keys(filteredEvents).forEach(noteNumber =>
               this.props.deleteNote(noteNumber))
