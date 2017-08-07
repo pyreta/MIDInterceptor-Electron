@@ -38,3 +38,8 @@ export const tripleOctave = eventObject =>
     [e.note.number]: e,
     [e.note.number + 12]: changeNoteNumber(e, 12),
   }), {});
+
+export const logNotes = eventObject => {
+  console.log(eventObject);
+  return eventObject
+}

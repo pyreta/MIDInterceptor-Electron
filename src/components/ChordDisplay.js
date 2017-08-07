@@ -16,9 +16,7 @@ export class ChordDisplay extends React.Component {
     ['noteon', 'noteoff'].forEach(listenerType => {
       const verb = { noteon: 'add', noteoff: 'delete' }[listenerType];
       device.addListener(listenerType, 1, e => {
-        // console.log(`this.xnotes[verb](e.note):`, this.xnotes[verb](e.note))
-        this.props.setNotes(this.xnotes[verb](e.note));
-        // this.props.dispatch({ notes: this.notes[verb](e.note) });
+        this.props.setNotes(this.notes[verb](e.note));
       });
     })
   }
@@ -30,19 +28,12 @@ export class ChordDisplay extends React.Component {
     })
   }
 
-  get xnotes() {
-    return ({
-      add: note => ({ ...this.props.xnotes, [note.number]: note }),
-      delete: note => deleteKey(this.props.xnotes, note.number)
-    })
-  }
-
   render() {
-    const { xnotes = {}, xfilteredNotes = {} } = this.props;
+    const { notes = {}, xfilteredNotes = {} } = this.props;
     return (
       <div>
         <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
-          {(Object.keys(xnotes).map(key => xnotes[key].name).join(' ') || '-')}
+          {(Object.keys(notes).map(key => notes[key].name).join(' ') || '-')}
         </div>
         <div style={{fontSize: '50px', color: '#98c379'}}>
           {(Object.keys(xfilteredNotes).map(key => WebMidi['_notes'][xfilteredNotes[key].note.number % 12]).join(' ') || '-')}

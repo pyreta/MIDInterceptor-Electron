@@ -17,15 +17,12 @@ export class FilterManager extends React.Component {
           const filteredEvents = this.props.selectedFilters.reduce((accum, filter) => filter(accum), {
             [e.note.number]: e
           });
-          // this.props.dispatch({ filteredNotes: listenerType === 'noteon' ?
-          //   { ...this.props.filteredNotes, ...filteredEvents} : {}
-          // });
+
           if (listenerType === 'noteon') {
             this.props.setFilteredNotes({ ...this.props.xfilteredNotes, ...filteredEvents})
           } else {
             Object.keys(filteredEvents).forEach(noteNumber =>
               this.props.deleteNote(noteNumber))
-            // this.props.setFilteredNotes({})
           }
           midiActions[listenerType](filteredEvents, this.props.outputDevice);
         })

@@ -26,7 +26,7 @@ class App extends Component {
     super();
     this.state = {};
     this.registeredListeners = [];
-    this.xnotes = {};
+    this.notes = {};
     this.xfilteredNotes = {};
   }
 
@@ -60,7 +60,7 @@ class App extends Component {
   }
 
   setNotes(thing) {
-    this.xnotes = thing;
+    this.notes = thing;
     this.forceUpdate();
   }
 
@@ -77,7 +77,7 @@ class App extends Component {
       ...this.state,
       dispatch: this.dispatch.bind(this),
       registeredListeners: this.registeredListeners,
-      xnotes: this.xnotes,
+      notes: this.notes,
       setNotes: this.setNotes.bind(this),
       xfilteredNotes: this.xfilteredNotes,
       setFilteredNotes: this.setFilteredNotes.bind(this),

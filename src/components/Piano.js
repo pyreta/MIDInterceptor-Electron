@@ -23,7 +23,7 @@ class Piano extends React.Component {
 }
 
 export const PianoIn = props =>
-  <Piano {...props} notesKey="xnotes" />
+  <Piano {...props} notesKey="notes" />
 
 export const PianoOut = props =>
   <Piano {...props} notesKey="xfilteredNotes" />
