@@ -6,15 +6,15 @@ import noOpMidiDevice from '../helpers/noOpMidiDevice';
 import { defaultdeviceIds } from '../constants';
 
 // components
-import { PianoIn, PianoOut } from './Piano';
+import { PianoOut } from './Piano';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 
 const components = [
-  PianoIn,
-  // PianoOut,
+  // PianoIn,
+  PianoOut,
   ClockDisplay,
   FilterManager,
   DeviceManager,

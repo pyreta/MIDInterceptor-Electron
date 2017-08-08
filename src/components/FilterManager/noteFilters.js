@@ -1,12 +1,14 @@
+import { notes } from '../../constants';
 
-//TODO make other keys accurate, right now note letters dont remain accurate
-const changeNoteNumber = (e, difference) => ({
-    ...e,
-    note: {
-      ...e.note,
-      number: e.note.number + difference
-    }
-  });
+  const changeNoteNumber = (e, difference) =>
+    [e.note.number - difference]
+      .map(number => ({
+        ...e,
+        note: {
+          number,
+          name: notes[number % 12]
+        }
+      }))[0]
 
 export const octaveDown = eventObject =>
   Object.values(eventObject).reduce((accum, e) => (

@@ -1,6 +1,5 @@
 import React from 'react';
 import deleteKey from '../helpers/deleteKey';
-import WebMidi from 'webmidi';
 
 
 export class ChordDisplay extends React.Component {
@@ -16,15 +15,15 @@ export class ChordDisplay extends React.Component {
     ['noteon', 'noteoff'].forEach(listenerType => {
       const verb = { noteon: 'add', noteoff: 'delete' }[listenerType];
       device.addListener(listenerType, 1, e => {
-        this.props.setNotes(this.notes[verb](e.note));
+        this.props.setNotes(this.notes[verb](e));
       });
     })
   }
 
   get notes() {
     return ({
-      add: note => ({ ...this.props.notes, [note.number]: note }),
-      delete: note => deleteKey(this.props.notes, note.number)
+      add: e => ({ ...this.props.notes, [e.note.number]: e }),
+      delete: e => deleteKey(this.props.notes, e.note.number)
     })
   }
 
@@ -33,10 +32,10 @@ export class ChordDisplay extends React.Component {
     return (
       <div>
         <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
-          {(Object.keys(notes).map(key => notes[key].name).join(' ') || '-')}
+          {(Object.values(notes).map(e => e.note.name).join(' ') || '-')}
         </div>
         <div style={{fontSize: '50px', color: '#98c379'}}>
-          {(Object.keys(filteredNotes).map(key => WebMidi['_notes'][filteredNotes[key].note.number % 12]).join(' ') || '-')}
+          {(Object.values(filteredNotes).map(e => e.note.name).join(' ') || '-')}
         </div>
       </div>
     )
