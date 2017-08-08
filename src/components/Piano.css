@@ -58,6 +58,10 @@
   background-color: #98c379;
 }
 
+.filtered-piano:hover {
+  background-color: rgb(229, 192, 123);
+}
+
 .black-key:hover {
   background-color: rgb(42, 65, 101);
   border-color: black;

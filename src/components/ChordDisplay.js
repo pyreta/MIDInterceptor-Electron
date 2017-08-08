@@ -1,6 +1,6 @@
 import React from 'react';
 import deleteKey from '../helpers/deleteKey';
-
+import { PianoOut } from './Piano';
 
 export class ChordDisplay extends React.Component {
 
@@ -28,9 +28,10 @@ export class ChordDisplay extends React.Component {
   }
 
   render() {
-    const { notes = {}, filteredNotes = {} } = this.props;
+    const { notes, filteredNotes } = this.props;
     return (
       <div>
+        <PianoOut {...this.props} />
         <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
           {(Object.values(notes).map(e => e.note.name).join(' ') || '-')}
         </div>

@@ -6,19 +6,16 @@ import noOpMidiDevice from '../helpers/noOpMidiDevice';
 import { defaultdeviceIds } from '../constants';
 
 // components
-import { PianoOut } from './Piano';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 
 const components = [
-  // PianoIn,
-  PianoOut,
-  ClockDisplay,
   FilterManager,
-  DeviceManager,
-  ChordDisplay
+  ChordDisplay,
+  ClockDisplay,
+  DeviceManager
 ]
 
 class App extends Component {
@@ -59,13 +56,14 @@ class App extends Component {
     this.setupWebMidiAPI();
   }
 
-  setNotes(thing) {
-    this.notes = thing;
+  setNotes(notes, filtered) {
+    this.notes = notes;
+    filtered && this.setFilteredNotes(notes);
     this.forceUpdate();
   }
 
-  setFilteredNotes(thing) {
-    this.filteredNotes = thing;
+  setFilteredNotes(notes) {
+    this.filteredNotes = notes;
   }
 
   deleteNote(num) {
