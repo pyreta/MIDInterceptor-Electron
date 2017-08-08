@@ -12,10 +12,9 @@ const Key = ({ type, note, octave, outputDevice, ...props }) => {
       className={`${type}-key key${held}${props.notesKey === 'filteredNotes' ? ' filtered-piano' : ''}`}
       onMouseDown={() => {
         outputDevice.playNote(noteNumber, 1, { velocity: 0.35 });
-        props.setNotes({ ...props.notes,
-          [noteNumber]: { note: { number: noteNumber, name: notes[noteNumber % 12] } } }, 'filter');
-        props.setFilteredNotes({ ...props.filteredNotes,
-          [noteNumber]: { note: { number: noteNumber, name: notes[noteNumber % 12] } } });
+        const newNote = { note: { number: noteNumber, name: notes[noteNumber % 12] } };
+        props.setNotes({ ...props.notes, [noteNumber]: newNote });
+        props.setFilteredNotes({ ...props.filteredNotes, [noteNumber]: newNote });
       }}
       onMouseUp={() => {
         outputDevice.stopNote(noteNumber);
