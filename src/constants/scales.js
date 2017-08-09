@@ -208,7 +208,7 @@ const melodicMinorModes = [
 // 		self.major_seventh_octave_up = note+23
 // 		self.second_octave_up = note+24
 
-const mapMajor = {
+export const mapMajor = {
   to: {
     aeolian: { 4: 3, 11: 10 },
     harmonicMinor: { 4: 3 }
