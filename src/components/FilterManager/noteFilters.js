@@ -41,10 +41,18 @@ export const tripleOctave = eventObject =>
     [e.note.number + 12]: changeNoteNumber(e, 12),
   }), {});
 
-export const translateScale = (eventObject, scale = 'phrygianDominant', key = 'C') => {
-  console.log('no op just yet');
-  return eventObject
-}
+export const translateScale = (eventObject, scale = 'phrygianDominant', key = 'C') =>
+  Object.values(eventObject).reduce((accum, e) => {
+    const baseOctave = Math.floor(e.note.number/12)*12;
+    const map = {0: 0, 2:2, 4:3, 5: 5, 7: 7, 9: 9, 11: 10};
+    // const map = {0: 0, 2:2, 4:3, 5: 5, 7: 7, 9: 9, 11: 11};
+    const newNumber = map[e.note.number % 12]+baseOctave;
+    return {
+    ...accum,
+    // [e.note.number]: e,
+    [newNumber]: changeNoteNumber(e, e.note.number - newNumber),
+  }}, {});
+
 
 export const logNotes = eventObject => {
   console.log(eventObject);

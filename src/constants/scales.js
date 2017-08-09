@@ -215,7 +215,7 @@ const scales = {
   },
   harmonicMinor: {
     modes: harmonicMinorModes,
-    intervals: [0, 2, 4, 5, 7, 9, 11]
+    intervals: [0, 2, 3, 5, 7, 9, 11]
   },
   harmonicMajor: {
     modes: harmonicMajorModes
