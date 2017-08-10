@@ -10,18 +10,20 @@ import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
+import KeyManager from './KeyManager';
 
 const components = [
   FilterManager,
   ChordDisplay,
   ClockDisplay,
+  KeyManager,
   DeviceManager
 ]
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { currentKey: 'C', mode: 'ionian' };
     this.registeredListeners = [];
     this.notes = {};
     this.filteredNotes = {};
@@ -80,7 +82,6 @@ class App extends Component {
       filteredNotes: this.filteredNotes,
       setFilteredNotes: this.setFilteredNotes.bind(this),
       deleteNote: this.deleteNote.bind(this),
-      showNotes: true
     })
   }
 

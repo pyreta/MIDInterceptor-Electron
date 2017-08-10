@@ -210,8 +210,9 @@ const melodicMinorModes = [
 
 export const mapMajor = {
   to: {
+    ionian: {},
     aeolian: { 4: 3, 11: 10 },
-    harmonicMinor: { 4: 3 }
+    harmonicMinor: { 4: 3 },
   }
 }
 

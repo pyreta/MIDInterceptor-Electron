@@ -42,12 +42,12 @@ export const tripleOctave = eventObject =>
     [e.note.number + 12]: changeNoteNumber(e, 12),
   }), {});
 
-export const translateScale = (eventObject, scale = 'aeolian', key = 'D') =>
+export const whiteKeysToScale = (eventObject, { mode = 'ionian', currentKey = 'C' }) =>
   Object.values(eventObject).reduce((accum, e) => {
     const octaveAdder = Math.floor(e.note.number/12) * 12;
-    const transposeAdder = notes.indexOf(key);
+    const transposeAdder = notes.indexOf(currentKey);
     const noteIdx = e.note.number % 12;
-    const newNumber = (mapMajor.to[scale][noteIdx] || noteIdx) + octaveAdder + transposeAdder;
+    const newNumber = (mapMajor.to[mode][noteIdx] || noteIdx) + octaveAdder + transposeAdder;
     return { ...accum, [newNumber]: changeNoteNumber(e, e.note.number - newNumber) };
   }, {});
 
