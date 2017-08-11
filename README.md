@@ -1,3 +1,3 @@
-#MIDI plugin written in javascript
+### MIDI plugin written in javascript
 
 description TBD..
