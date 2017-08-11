@@ -10,19 +10,23 @@ import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
+import KeyManager from './KeyManager';
 
 const components = [
-  ClockDisplay,
   FilterManager,
-  DeviceManager,
-  ChordDisplay
+  ChordDisplay,
+  ClockDisplay,
+  KeyManager,
+  DeviceManager
 ]
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { currentKey: 'C', mode: 'ionian' };
     this.registeredListeners = [];
+    this.notes = {};
+    this.filteredNotes = {};
   }
 
   dispatch(stateChangeObject, ignore = true) {
@@ -54,11 +58,30 @@ class App extends Component {
     this.setupWebMidiAPI();
   }
 
+  setNotes(notes, filtered) {
+    this.notes = notes;
+    filtered && this.setFilteredNotes(notes);
+    this.forceUpdate();
+  }
+
+  setFilteredNotes(notes) {
+    this.filteredNotes = notes;
+  }
+
+  deleteNote(num) {
+    delete this.filteredNotes[num];
+  }
+
   childProps() {
     return ({
       ...this.state,
       dispatch: this.dispatch.bind(this),
-      registeredListeners: this.registeredListeners
+      registeredListeners: this.registeredListeners,
+      notes: this.notes,
+      setNotes: this.setNotes.bind(this),
+      filteredNotes: this.filteredNotes,
+      setFilteredNotes: this.setFilteredNotes.bind(this),
+      deleteNote: this.deleteNote.bind(this),
     })
   }
 
@@ -74,10 +97,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <div onClick={() => console.log(this.state)}>Log State</div>
       {this.state.ready ?
         this.renderApp() :
         <div>Cannot enable Web Midi</div>}
+        <div onClick={() => console.log(this.state)}>Log State</div><br />
+        <div onClick={() => console.log(this.childProps())}>Log childProps</div>
       </div>
     );
   }

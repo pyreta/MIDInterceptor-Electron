@@ -4,9 +4,8 @@ import { otherListenerTypes } from '../../constants';
 import * as noteFilters from './noteFilters';
 
 export class FilterManager extends React.Component {
-
   componentWillMount() {
-    this.props.dispatch({ selectedFilters: [] });
+    this.props.dispatch({ selectedFilters: [], filteredNotes: {} });
     this.props.registeredListeners.push(this.connectListener.bind(this));
     [this.props.dawListener, this.props.midiDevice].forEach(this.connectListener.bind(this));
   }
@@ -14,9 +13,19 @@ export class FilterManager extends React.Component {
   connectListener(device) {
     ['noteon', 'noteoff'].forEach(listenerType => {
         device.addListener(listenerType, 1, e => {
-          const filteredEvents = this.props.selectedFilters.reduce((accum, filter) => filter(accum), {
+          const filteredEvents = this.props.selectedFilters.reduce((accum, filter) => filter(accum, {
+            mode: this.props.mode,
+            currentKey: this.props.currentKey
+          }), {
             [e.note.number]: e
           });
+
+          if (listenerType === 'noteon') {
+            this.props.setFilteredNotes({ ...this.props.filteredNotes, ...filteredEvents})
+          } else {
+            Object.keys(filteredEvents).forEach(noteNumber =>
+              this.props.deleteNote(noteNumber))
+          }
           midiActions[listenerType](filteredEvents, this.props.outputDevice);
         })
       });

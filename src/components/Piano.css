@@ -1,0 +1,96 @@
+.base {
+  height: 150px;
+  background-color: rgb(33, 37, 43);
+  border-radius: 10px;
+  display: inline-block;
+  padding: 20px;
+  border: 2px solid #181a1f;
+  margin-top: 20px;
+}
+
+
+.key-container {
+  background-color: transparent;
+  width: 30px;
+  height: 175px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  display: inline-flex;
+  position: relative;
+}
+
+.key:hover{
+  transition: all 0.3s ease;
+}
+
+.key {
+  justify-content: center;
+}
+
+.white-note {
+  font-size: 16px;
+  margin-top: 153px;
+}
+
+.black-note {
+  font-size: 11px;
+  margin-top: 99px;
+}
+
+.white-key {
+  background-color: rgb(229, 192, 123);
+  width: 30px;
+  height: 175px;
+  border-radius: 5px;
+  border: 2px solid rgb(33, 37, 43);
+  display: inline-flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgb(33, 37, 43);
+}
+
+.white-key:hover {
+  background-color: rgb(152, 195, 121);
+}
+
+.filtered-piano {
+  background-color: #98c379;
+}
+
+.filtered-piano:hover {
+  background-color: rgb(229, 192, 123);
+}
+
+.black-key:hover {
+  background-color: rgb(42, 65, 101);
+  border-color: black;
+}
+
+.black-key {
+  background-color: rgb(33, 37, 43);
+  display: inline-flex;
+  width: 23px;
+  top: -6px;
+  left: 19px;
+  height: 115px;
+  border-radius: 5px;
+  border: 2px solid rgb(222, 108, 117);
+  position: absolute;
+  z-index: 2;
+  color: rgb(229, 192, 123);
+  box-shadow: 1px 1px 8px black;
+}
+
+.held {
+  background-color: red;
+  border-color: black;
+  box-shadow: inset 4px 4px 45px black;
+  transform: scale(0.97);
+  transition: box-shadow 0.3s ease;
+}
+
+
+.held:hover {
+  background-color: red;
+}

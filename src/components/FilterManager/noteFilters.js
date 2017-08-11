@@ -1,12 +1,15 @@
+import { notes } from '../../constants';
+import { mapMajor } from '../../constants/scales';
 
-//TODO make other keys accurate, right now note letters dont remain accurate
-const changeNoteNumber = (e, difference) => ({
-    ...e,
-    note: {
-      ...e.note,
-      number: e.note.number + difference
-    }
-  });
+  const changeNoteNumber = (e, difference) =>
+    [e.note.number - difference]
+      .map(number => ({
+        ...e,
+        note: {
+          number,
+          name: notes[number % 12]
+        }
+      }))[0]
 
 export const octaveDown = eventObject =>
   Object.values(eventObject).reduce((accum, e) => (
@@ -38,3 +41,18 @@ export const tripleOctave = eventObject =>
     [e.note.number]: e,
     [e.note.number + 12]: changeNoteNumber(e, 12),
   }), {});
+
+export const whiteKeysToScale = (eventObject, { mode = 'ionian', currentKey = 'C' }) =>
+  Object.values(eventObject).reduce((accum, e) => {
+    const octaveAdder = Math.floor(e.note.number/12) * 12;
+    const transposeAdder = notes.indexOf(currentKey);
+    const noteIdx = e.note.number % 12;
+    const newNumber = (mapMajor.to[mode][noteIdx] || noteIdx) + octaveAdder + transposeAdder;
+    return { ...accum, [newNumber]: changeNoteNumber(e, e.note.number - newNumber) };
+  }, {});
+
+
+export const logNotes = eventObject => {
+  console.log(eventObject);
+  return eventObject
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import deleteKey from '../helpers/deleteKey';
-
+import { PianoOut } from './Piano';
 
 export class ChordDisplay extends React.Component {
 
@@ -14,25 +14,29 @@ export class ChordDisplay extends React.Component {
   connectListener(device) {
     ['noteon', 'noteoff'].forEach(listenerType => {
       const verb = { noteon: 'add', noteoff: 'delete' }[listenerType];
-      device.addListener(listenerType, 1, e => (
-        this.props.dispatch({ notes: this.notes[verb](e.note) })
-      ));
+      device.addListener(listenerType, 1, e => {
+        this.props.setNotes(this.notes[verb](e));
+      });
     })
   }
 
   get notes() {
     return ({
-      add: note => ({ ...this.props.notes, [note.number]: note }),
-      delete: note => deleteKey(this.props.notes, note.number)
+      add: e => ({ ...this.props.notes, [e.note.number]: e }),
+      delete: e => deleteKey(this.props.notes, e.note.number)
     })
   }
 
   render() {
-    const { notes } = this.props;
+    const { notes, filteredNotes } = this.props;
     return (
       <div>
-        <div style={{fontSize: '50px'}}>
-          {notes && Object.keys(notes).map(key => notes[key].name).join(' ')}
+        <PianoOut {...this.props} />
+        <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
+          {(Object.values(notes).map(e => e.note.name).join(' ') || '-')}
+        </div>
+        <div style={{fontSize: '50px', color: '#98c379'}}>
+          {(Object.values(filteredNotes).map(e => e.note.name).join(' ') || '-')}
         </div>
       </div>
     )
