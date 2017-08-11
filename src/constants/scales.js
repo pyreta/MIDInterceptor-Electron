@@ -1,3 +1,20 @@
+
+export const mapMajor = {
+  to: {
+    ionian: {},
+    dorian: { 4: 3, 11: 10 },
+    phrygian: { 2: 1, 4: 3, 9: 8, 11: 10 },
+    lydian: { 5: 6 },
+    mixolydian: { 11: 10 },
+    aeolian: { 4: 3, 9: 8, 11: 10 },
+    locrian: { 2: 1, 4: 3, 7: 6, 9: 8, 11: 10 },
+    harmonicMinor: { 4: 3 },
+    locrianSharp6: { 2: 1, 4: 3, 7: 6, 11: 10 },
+    phrygianDominant: { 2: 1, 9: 8, 11: 10 },
+    ionianSharp5: { 7: 8 },
+  }
+}
+
 const majorModes = [
   'Ionian',
   'Dorian',
@@ -207,18 +224,6 @@ const melodicMinorModes = [
 // 		self.minor_seventh_octave_up = note+22
 // 		self.major_seventh_octave_up = note+23
 // 		self.second_octave_up = note+24
-
-export const mapMajor = {
-  to: {
-    ionian: {},
-    aeolian: { 4: 3, 9: 8, 11: 10 },
-    phrygian: { 2: 1, 4: 3, 9: 8, 11: 10 },
-    mixolydian: { 11: 10 },
-    dorian: { 4: 3, 11: 10 },
-    harmonicMinor: { 4: 3 },
-    locrian: { 2: 1, 4: 3, 7: 6, 9: 8, 11: 10 }
-  }
-}
 
 const scales = {
   major: {
