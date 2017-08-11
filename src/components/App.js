@@ -11,13 +11,15 @@ import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
 import DeviceManager from './DeviceManager';
 import KeyManager from './KeyManager';
+import ProgressionManager from './ProgressionManager';
 
 const components = [
   FilterManager,
   ChordDisplay,
   ClockDisplay,
   KeyManager,
-  DeviceManager
+  DeviceManager,
+  ProgressionManager
 ]
 
 class App extends Component {
