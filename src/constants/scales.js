@@ -216,6 +216,7 @@ export const mapMajor = {
     mixolydian: { 11: 10 },
     dorian: { 4: 3, 11: 10 },
     harmonicMinor: { 4: 3 },
+    locrian: { 2: 1, 4: 3, 7: 6, 9: 8, 11: 10 }
   }
 }
 
