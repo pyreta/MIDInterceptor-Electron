@@ -59,7 +59,7 @@ export const whiteKeysToScale = (eventObject, { mode = 'ionian', currentKey = 'C
 
 
 const majorIntervals = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24];
-const getMajorChord = (noteIdx, interval = 1) => {
+const getMajorChord = (noteIdx, interval = 0) => {
   const startIdx = majorIntervals.indexOf(noteIdx);
   return majorIntervals.slice(startIdx).filter((el, idx) => (idx + 2) % 2 === 0).slice(0, 4)
     .map((el, idx) => idx < interval ? el + 12 : el);

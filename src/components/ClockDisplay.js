@@ -32,10 +32,20 @@ export class ClockDisplay extends React.Component {
   render() {
     return (
       <div>
-        <div style={{fontSize: '40px'}}>{`bars: ${this.bars()}`}</div>
+        <div style={{fontSize: '40px'}}>{`breathcontrollercoarse: ${this.props.breathcontrollercoarse}`}</div>
+        <div style={{fontSize: '40px'}}>{`programchange: ${this.props.programchange}`}</div>
+        <div style={{fontSize: '40px'}}>{`channelaftertouch: ${this.props.channelaftertouch}`}</div>
       </div>
     )
   }
+  //
+  // render() {
+  //   return (
+  //     <div>
+  //       <div style={{fontSize: '40px'}}>{`bars: ${this.bars()}`}</div>
+  //     </div>
+  //   )
+  // }
 }
 
 export default ClockDisplay
