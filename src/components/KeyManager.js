@@ -30,7 +30,7 @@ export class KeyManager extends React.Component {
         <div>Song Key</div>
         <KeySelect currentKey={this.props.currentKey} updateKey={currentKey => this.props.dispatch({ currentKey })} />
         <div>Mode</div>
-        <ModeSelect currentMode={this.props.currentMode} updateMode={mode => this.props.dispatch({ mode })} />
+        <ModeSelect currentMode={this.props.mode} updateMode={mode => this.props.dispatch({ mode })} />
       </div>
     )
   }

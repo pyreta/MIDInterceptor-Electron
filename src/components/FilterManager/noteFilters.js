@@ -2,7 +2,7 @@ import { notes } from '../../constants';
 import { mapMajor } from '../../constants/scales';
 
   const changeNoteNumber = (e, difference) =>
-    [e.note.number - difference]
+    [e.note.number + difference]
       .map(number => ({
         ...e,
         note: {
@@ -42,13 +42,34 @@ export const tripleOctave = eventObject =>
     [e.note.number + 12]: changeNoteNumber(e, 12),
   }), {});
 
+const transposedEventObject = (noteIdxs, mode, currentKey, e) => {
+  const octaveAdder = Math.floor(e.note.number/12) * 12;
+  const transposeAdder = notes.indexOf(currentKey);
+  return noteIdxs.reduce((accum, noteIdx) => {
+    const newNumber = (mapMajor.to[mode][noteIdx] || noteIdx) + octaveAdder + transposeAdder;
+    return { ...accum, [newNumber]: changeNoteNumber(e, newNumber - e.note.number) };
+  }, {})
+}
+
 export const whiteKeysToScale = (eventObject, { mode = 'ionian', currentKey = 'C' }) =>
   Object.values(eventObject).reduce((accum, e) => {
-    const octaveAdder = Math.floor(e.note.number/12) * 12;
-    const transposeAdder = notes.indexOf(currentKey);
     const noteIdx = e.note.number % 12;
-    const newNumber = (mapMajor.to[mode][noteIdx] || noteIdx) + octaveAdder + transposeAdder;
-    return { ...accum, [newNumber]: changeNoteNumber(e, e.note.number - newNumber) };
+    return { ...accum, ...transposedEventObject([noteIdx], mode, currentKey, e) };
+  }, {});
+
+
+const majorIntervals = [0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24];
+const getMajorChord = (noteIdx, interval = 0) => {
+  const startIdx = majorIntervals.indexOf(noteIdx);
+  return majorIntervals.slice(startIdx).filter((el, idx) => (idx + 2) % 2 === 0).slice(0, 4)
+    .map((el, idx) => idx < interval ? el + 12 : el);
+}
+
+export const whiteKeysToChords = (eventObject, { mode = 'ionian', currentKey = 'C' }) =>
+  Object.values(eventObject).reduce((accum, e) => {
+    const noteIdx = e.note.number % 12;
+    const majorChord = transposedEventObject(getMajorChord(noteIdx), 'ionian', 'C', e);
+    return {...accum, ...whiteKeysToScale(majorChord, { mode, currentKey })};
   }, {});
 
 
