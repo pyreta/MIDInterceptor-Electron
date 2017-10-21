@@ -14,12 +14,12 @@ import KeyManager from './KeyManager';
 import ProgressionManager from './ProgressionManager';
 
 const components = [
+  ProgressionManager,
   FilterManager,
   ChordDisplay,
   ClockDisplay,
   KeyManager,
-  DeviceManager,
-  ProgressionManager
+  DeviceManager
 ]
 
 class App extends Component {
