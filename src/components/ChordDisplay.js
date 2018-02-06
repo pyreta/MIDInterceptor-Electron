@@ -32,11 +32,13 @@ export class ChordDisplay extends React.Component {
     return (
       <div>
         <PianoOut {...this.props} />
-        <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)'}}>
-          {(Object.values(notes).map(e => e.note.name).join(' ') || '-')}
-        </div>
-        <div style={{fontSize: '50px', color: '#98c379'}}>
-          {(Object.values(filteredNotes).map(e => e.note.name).join(' ') || '-')}
+        <div style={{display: 'flex'}}>
+          <div style={{fontSize: '50px', color: 'rgb(229, 192, 123)', flex: '100%'}}>
+            {(Object.values(notes).map(e => e.note.name).join(' ') || '-')}
+          </div>
+          <div style={{fontSize: '50px', color: '#98c379', flex: '100%'}}>
+            {(Object.values(filteredNotes).map(e => e.note.name).join(' ') || '-')}
+          </div>
         </div>
       </div>
     )

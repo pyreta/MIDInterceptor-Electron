@@ -31,10 +31,10 @@ export class ClockDisplay extends React.Component {
 
   render() {
     return (
-      <div>
-        <div style={{fontSize: '40px'}}>{`breathcontrollercoarse: ${this.props.breathcontrollercoarse}`}</div>
-        <div style={{fontSize: '40px'}}>{`programchange: ${this.props.programchange}`}</div>
-        <div style={{fontSize: '40px'}}>{`channelaftertouch: ${this.props.channelaftertouch}`}</div>
+      <div style={{display:'flex'}}>
+        <div style={{fontSize: '15px', flex: '100%'}}>{`breathcontrollercoarse: ${this.props.breathcontrollercoarse}`}</div>
+        <div style={{fontSize: '15px', flex: '100%'}}>{`programchange: ${this.props.programchange}`}</div>
+        <div style={{fontSize: '15px', flex: '100%'}}>{`channelaftertouch: ${this.props.channelaftertouch}`}</div>
       </div>
     )
   }

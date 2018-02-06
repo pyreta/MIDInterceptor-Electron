@@ -37,7 +37,7 @@ export class FilterManager extends React.Component {
   render() {
     const filters = this.props.selectedFilters || [];
     return (
-        <div>
+        <div style={{display: 'flex'}}>
         { Object.keys(noteFilters).map((filter, idx) =>
             <div
               key={idx}
@@ -48,7 +48,7 @@ export class FilterManager extends React.Component {
                   [...filters, filterFn]
                 this.props.dispatch({selectedFilters: newFilters})
               }}
-              style={{cursor: 'pointer', color: filters.includes(noteFilters[filter]) ? 'blue' : 'black'}}
+              style={{cursor: 'pointer', color: filters.includes(noteFilters[filter]) ? 'blue' : 'black', flex: '100%'}}
             >
               {filter}
             </div>)}

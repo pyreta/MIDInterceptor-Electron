@@ -2,7 +2,7 @@ import React from 'react';
 import WebMidi from 'webmidi';
 
 const DeviceSelect = ({ text, updateDevice, device, devices, deviceType, type }) =>
-  <div>
+  <div style={{flex: '100%'}}>
     <div>{text}</div>
     <select onChange={(e)=> updateDevice(e.target.value, deviceType, type)} value={device}>
     {devices.map((device, idx) =>
@@ -34,7 +34,7 @@ export class DeviceManager extends React.Component {
   render() {
     return (
       (
-      <div style={{padding: '20px'}}>
+      <div style={{padding: '20px', display: 'flex'}}>
         <DeviceSelect
           devices={WebMidi.inputs}
           deviceType='midiDevice'

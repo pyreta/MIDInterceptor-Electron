@@ -9,18 +9,20 @@ import { defaultdeviceIds } from '../constants';
 import ChordDisplay from './ChordDisplay';
 import ClockDisplay from './ClockDisplay';
 import FilterManager from './FilterManager';
+import ChordDragAndDrop from './ChordDragAndDrop';
 import DeviceManager from './DeviceManager';
 import KeyManager from './KeyManager';
 import ProgressionManager from './ProgressionManager';
 
 const components = [
+  ChordDragAndDrop,
   FilterManager,
   ChordDisplay,
   ClockDisplay,
   KeyManager,
   DeviceManager,
   ProgressionManager
-]
+];
 
 class App extends Component {
   constructor() {
