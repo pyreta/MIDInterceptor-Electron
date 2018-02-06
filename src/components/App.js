@@ -4,31 +4,15 @@ import './App.css';
 import logStateChange from '../helpers/logStateChange';
 import noOpMidiDevice from '../helpers/noOpMidiDevice';
 import { defaultdeviceIds } from '../constants';
-
-// components
-import ChordDisplay from './ChordDisplay';
-import ClockDisplay from './ClockDisplay';
-import FilterManager from './FilterManager';
-import DeviceManager from './DeviceManager';
-import KeyManager from './KeyManager';
 import ProgressionManager from './ProgressionManager';
-
-const components = [
-  ProgressionManager,
-  FilterManager,
-  ChordDisplay,
-  ClockDisplay,
-  KeyManager,
-  DeviceManager
-]
+import actions from '../actions';
+import { connect } from 'react-redux';
 
 class App extends Component {
   constructor() {
     super();
     this.state = { currentKey: 'C', mode: 'ionian' };
     this.registeredListeners = [];
-    this.notes = {};
-    this.filteredNotes = {};
   }
 
   dispatch(stateChangeObject, ignore = true) {
@@ -38,9 +22,12 @@ class App extends Component {
 
   loadDevices() {
     this.dispatch({
-      midiDevice: WebMidi.getInputById(defaultdeviceIds.midiDevice) || noOpMidiDevice,
-      dawListener: WebMidi.getInputById(defaultdeviceIds.dawListener) || noOpMidiDevice,
-      outputDevice: WebMidi.getOutputById(defaultdeviceIds.outputDevice) || noOpMidiDevice
+      midiDevice:
+        WebMidi.getInputById(defaultdeviceIds.midiDevice) || noOpMidiDevice,
+      dawListener:
+        WebMidi.getInputById(defaultdeviceIds.dawListener) || noOpMidiDevice,
+      outputDevice:
+        WebMidi.getOutputById(defaultdeviceIds.outputDevice) || noOpMidiDevice
     });
   }
 
@@ -51,7 +38,7 @@ class App extends Component {
       } else {
         console.log('WebMidi enabled!');
         this.loadDevices();
-        this.dispatch({ ready: true })
+        this.dispatch({ ready: true });
       }
     });
   }
@@ -60,53 +47,32 @@ class App extends Component {
     this.setupWebMidiAPI();
   }
 
-  setNotes(notes, filtered) {
-    this.notes = notes;
-    filtered && this.setFilteredNotes(notes);
-    this.forceUpdate();
-  }
-
-  setFilteredNotes(notes) {
-    this.filteredNotes = notes;
-  }
-
-  deleteNote(num) {
-    delete this.filteredNotes[num];
-  }
-
-  childProps() {
-    return ({
-      ...this.state,
-      dispatch: this.dispatch.bind(this),
-      registeredListeners: this.registeredListeners,
-      notes: this.notes,
-      setNotes: this.setNotes.bind(this),
-      filteredNotes: this.filteredNotes,
-      setFilteredNotes: this.setFilteredNotes.bind(this),
-      deleteNote: this.deleteNote.bind(this),
-    })
-  }
-
-  renderApp() {
-    return (
-      <div>
-        {components.map((Component, idx) =>
-            <Component key={idx} {...this.childProps()} />)}
-      </div>
-    )
-  }
-
   render() {
+    console.log(this.state);
     return (
       <div className="App">
-      {this.state.ready ?
-        this.renderApp() :
-        <div>Cannot enable Web Midi</div>}
-        <div onClick={() => console.log(this.state)}>Log State</div><br />
-        <div onClick={() => console.log(this.childProps())}>Log childProps</div>
+        {this.state.ready ? (
+          <div>
+            <ProgressionManager />
+            <div onClick={this.props.addChord}>addChord</div>
+            <div onClick={this.props.newChords}>newChords</div>
+          </div>
+        ) : (
+          <div>Cannot enable Web Midi</div>
+        )}
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = ({ progression, resolution }) => ({
+  progression,
+  resolution
+});
+
+const mapDispatchToProps = dispatch => ({
+  addChord: () => dispatch(actions.ADD_CHORD()),
+  newChords: () => dispatch(actions.NEW_CHORDS())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

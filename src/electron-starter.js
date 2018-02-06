@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require('electron');
+const loadDevtool = require('electron-load-devtool');
 
 const path = require('path');
 const url = require('url');
@@ -22,6 +23,8 @@ function createWindow() {
     mainWindow.on('ready-to-show', () => {
       mainWindow.show();
       // Open the DevTools.
+      loadDevtool(loadDevtool.REDUX_DEVTOOLS);
+      loadDevtool(loadDevtool.REACT_DEVELOPER_TOOLS);
       mainWindow.webContents.openDevTools();
     })
 

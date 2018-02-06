@@ -1,49 +1,43 @@
-
-export const mapMajor = {
-  to: {
-    ionian: {},
-    dorian: { 4: 3, 11: 10 },
-    phrygian: { 2: 1, 4: 3, 9: 8, 11: 10 },
-    lydian: { 5: 6 },
-    mixolydian: { 11: 10 },
-    aeolian: { 4: 3, 9: 8, 11: 10 },
-    locrian: { 2: 1, 4: 3, 7: 6, 9: 8, 11: 10 },
-    harmonicMinor: { 4: 3 },
-    locrianSharp6: { 2: 1, 4: 3, 7: 6, 11: 10 },
-    phrygianDominant: { 2: 1, 9: 8, 11: 10 },
-    ionianSharp5: { 7: 8 },
-  }
-}
-
 export const intervalTypes = [
-  'root',
-  'minor',
-  'major',
-  'minor',
-  'major',
-  'perfect',
-  'flat',
-  'perfect',
-  'sharp',
-  'diminished',
-  'minor',
-  'major',
-  'octave',
-  'flat',
-  'perfect',
-  'sharp',
-  'flat',
-  'perfect',
-  'sharp',
-  'perfect',
-  'flat',
-  'perfect',
-  'sharp',
+  { 0: 'root' },
+  { 2: 'minor' },
+  { 2: 'major' },
+  { 3: 'minor' },
+  { 3: 'major' },
+  { 4: 'perfect' },
+  { 5: 'flat', 4: 'sharp' },
+  { 5: 'perfect' },
+  { 5: 'sharp' },
+  { 7: 'diminished', 6: 'major' },
+  { 7: 'minor' },
+  { 7: 'major' },
+  { 8: 'octave' },
+  { 9: 'flat' },
+  { 9: 'perfect' },
+  { 9: 'sharp' },
+  { 11: 'flat' },
+  { 11: 'perfect' },
+  { 11: 'sharp' },
+  { 5: 'perfectOctave' },
+  { 13: 'flat' },
+  { 13: 'perfect' },
+  { 13: 'sharp' },
 ];
 
-export const romanNumerals = ['i','ii', 'iii', 'iv', 'v', 'vi', 'vii']
+let idx = 0
+export const intervals = intervalTypes.reduce((ints, intervalObject) => {
+  const namesForThisInterval = Object.keys(intervalObject).reduce((smallInts, intKey) => {
+    const key = `${intervalObject[intKey]}${intKey}`;
+    return { ...smallInts, [key]: idx };
+  }, {})
+  idx++;
+  return { ...ints, ...namesForThisInterval };
+}, {})
 
-const scales = {
+export const romanNumerals = ['i','ii', 'iii', 'iv', 'v', 'vi', 'vii']
+export const notes = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+
+export const scales = {
   major: {
     name: 'Major',
     intervals: [2, 2, 1, 2, 2, 2, 1],
@@ -110,5 +104,3 @@ const scales = {
     ],
   },
 };
-
-export default scales;
