@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Chord from './Chord';
 import MidiDeviceSetup from './MidiDeviceSetup';
 
-const ChordContainer = styled.div`display: flex;`;
+const ScaleContainer = styled.div`display: flex;`;
 
 export class ApiUi extends React.Component {
   modes() {
@@ -43,13 +43,111 @@ export class ApiUi extends React.Component {
           ))}
         </select>
         <br />
-        <ChordContainer>
+
+        <ScaleContainer>
           {this.props.progression
             .chords()
             .map((c, i) => (
-              <Chord key={i} chord={c} i={i} onClick={this.props.playChord} onStop={this.props.stopChord}/>
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
             ))}
-        </ChordContainer>
+        </ScaleContainer>
+
+        <ScaleContainer>
+          {this.props.progression
+            .setMode(2)
+            .chords()
+            .map((c, i) => (
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
+            ))}
+        </ScaleContainer>
+
+        <ScaleContainer>
+          {this.props.progression
+            .setMode(3)
+            .chords()
+            .map((c, i) => (
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
+            ))}
+        </ScaleContainer>
+
+        <ScaleContainer>
+          {this.props.progression
+            .setMode(4)
+            .chords()
+            .map((c, i) => (
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
+            ))}
+        </ScaleContainer>
+
+        <ScaleContainer>
+          {this.props.progression
+            .setMode(5)
+            .chords()
+            .map((c, i) => (
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
+            ))}
+        </ScaleContainer>
+
+        <ScaleContainer>
+          {this.props.progression
+            .setMode(6)
+            .chords()
+            .map((c, i) => (
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
+            ))}
+        </ScaleContainer>
+
+        <ScaleContainer>
+          {this.props.progression
+            .setMode(7)
+            .chords()
+            .map((c, i) => (
+              <Chord
+                key={i}
+                chord={c}
+                i={i}
+                onClick={this.props.playChord}
+                onStop={this.props.stopChord}
+              />
+            ))}
+        </ScaleContainer>
+
       </div>
     );
   }
@@ -58,7 +156,7 @@ export class ApiUi extends React.Component {
 const mapStateToProps = ({ progression, devices: { outputDevice } }) => ({
   progression: new Progression(progression),
   playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
-  stopChord: chord => outputDevice.stopNote(chord, 1)
+  stopChord: chord => outputDevice.stopNote(chord, 1),
 });
 
 const mapDispatchToProps = dispatch => ({

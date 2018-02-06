@@ -15,6 +15,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   border-left: 0;
+  border-bottom: 0;
   color: rgb(33, 37, 43);
   transition: all 0.2s ease;
   &:hover {
