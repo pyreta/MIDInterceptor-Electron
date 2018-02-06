@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Progression from '../../models/Progression';
-import scales from '../../constants/scales';
-import { notes } from '../../constants/theory';
-import styled from 'styled-components';
-import Chord from './Chord';
 import MidiDeviceSetup from './MidiDeviceSetup';
+import Dropdowns from './Dropdowns';
+import ModeRows from './ModeRows';
 
-const ScaleContainer = styled.div`display: flex;`;
 
 export class ApiUi extends React.Component {
   modes() {
@@ -17,137 +14,11 @@ export class ApiUi extends React.Component {
       .get('modes');
   }
   render() {
-    const { key, mode, scale } = this.props.progression.last().data();
     return (
       <div>
         <MidiDeviceSetup />
-        <select onChange={this.props.changeScale} value={scale}>
-          {Object.keys(scales).map(scale => (
-            <option value={scale} key={scale}>
-              {scales[scale].name}
-            </option>
-          ))}
-        </select>
-        <select onChange={this.props.changeKey} value={key}>
-          {notes.map((note, idx) => (
-            <option value={idx} key={idx}>
-              {note}
-            </option>
-          ))}
-        </select>
-        <select onChange={this.props.changeMode} value={mode}>
-          {this.modes().map((mode, idx) => (
-            <option value={idx + 1} key={idx}>
-              {mode}
-            </option>
-          ))}
-        </select>
-        <br />
-
-        <ScaleContainer>
-          {this.props.progression
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
-        <ScaleContainer>
-          {this.props.progression
-            .setMode(2)
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
-        <ScaleContainer>
-          {this.props.progression
-            .setMode(3)
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
-        <ScaleContainer>
-          {this.props.progression
-            .setMode(4)
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
-        <ScaleContainer>
-          {this.props.progression
-            .setMode(5)
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
-        <ScaleContainer>
-          {this.props.progression
-            .setMode(6)
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
-        <ScaleContainer>
-          {this.props.progression
-            .setMode(7)
-            .chords()
-            .map((c, i) => (
-              <Chord
-                key={i}
-                chord={c}
-                i={i}
-                onClick={this.props.playChord}
-                onStop={this.props.stopChord}
-              />
-            ))}
-        </ScaleContainer>
-
+        <Dropdowns {...this.props} />
+        <ModeRows {...this.props}/>
       </div>
     );
   }
