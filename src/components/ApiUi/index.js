@@ -57,7 +57,7 @@ export class ApiUi extends React.Component {
 
 const mapStateToProps = ({ progression, devices: { outputDevice } }) => ({
   progression: new Progression(progression),
-  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.35 })
+  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 })
 });
 
 const mapDispatchToProps = dispatch => ({

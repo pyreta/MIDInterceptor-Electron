@@ -24,9 +24,14 @@ const Container = styled.div`
     transform: scale(1.1);
     box-shadow: 3px 3px 20px 1px #ccc;
   }
+  &:active {
+    color: rgb(33, 37, 43);
+    border: 3px solid rgb(33, 37, 43);
+    background: rgb(216, 0, 0);
+  }
 `;
 const Chord = ({ chord, onClick, i }) => (
-  <Container onClick={() => onClick(chord.noteValues().map(x => x + 60))}>
+  <Container onMouseDown={() => onClick(chord.noteValues().map(x => x + 60))}>
     <RomanNumeral>
       {chord.romanNumeral()}
     </RomanNumeral>

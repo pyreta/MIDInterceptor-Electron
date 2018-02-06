@@ -1,9 +1,8 @@
 import Progression from '../models/Progression';
 import { handleActions } from 'redux-actions';
 
-const update = (progression, action) =>
-  Progression.wrap(progression)
-    .setKey(parseInt(action.payload, 10))
+const update = fn => (progression, action) =>
+  Progression.wrap(progression)[fn](parseInt(action.payload, 10))
     .unwrap();
 
 export default handleActions(
@@ -12,8 +11,8 @@ export default handleActions(
       Progression.wrap(progression)
         .setScale(action.payload)
         .unwrap(),
-    CHANGE_KEY: update,
-    CHANGE_MODE: update,
+    CHANGE_KEY: update('setKey'),
+    CHANGE_MODE: update('setMode'),
     ADJUST_CHORD: (progression, action) => {
       const { interval, value, on, idx } = action.payload;
       const i = parseInt(idx, 10);
