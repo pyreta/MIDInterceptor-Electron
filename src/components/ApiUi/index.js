@@ -47,7 +47,7 @@ export class ApiUi extends React.Component {
           {this.props.progression
             .chords()
             .map((c, i) => (
-              <Chord key={i} chord={c} i={i} onClick={this.props.playChord} />
+              <Chord key={i} chord={c} i={i} onClick={this.props.playChord} onStop={this.props.stopChord}/>
             ))}
         </ChordContainer>
       </div>
@@ -57,7 +57,8 @@ export class ApiUi extends React.Component {
 
 const mapStateToProps = ({ progression, devices: { outputDevice } }) => ({
   progression: new Progression(progression),
-  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 })
+  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
+  stopChord: chord => outputDevice.stopNote(chord, 1)
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -30,8 +30,8 @@ const Container = styled.div`
     background: rgb(216, 0, 0);
   }
 `;
-const Chord = ({ chord, onClick, i }) => (
-  <Container onMouseDown={() => onClick(chord.noteValues().map(x => x + 60))}>
+const Chord = ({ chord, onClick, onStop, i }) => (
+  <Container onMouseDown={() => onClick(chord.noteValues().map(x => x + 60))}  onMouseUp={() => onStop(chord.noteValues().map(x => x + 60))}>
     <RomanNumeral>
       {chord.romanNumeral()}
     </RomanNumeral>
