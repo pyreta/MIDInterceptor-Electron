@@ -18,17 +18,20 @@ export class ApiUi extends React.Component {
     document.addEventListener('keydown', e => {
       if (e.key === '7') this.props.addSeven();
       if (e.key === '4') this.props.addSus();
+      if (e.key === '6') this.props.addSix();
+      if (e.key === '9') this.props.addNine();
     })
     document.addEventListener('keyup', e => {
       if (e.key === '7') this.props.removeSeven();
       if (e.key === '4') this.props.removeSus();
+      if (e.key === '6') this.props.removeSeven();
+      if (e.key === '9') this.props.removeSeven();
     })
   }
 
   render() {
     return (
       <div>
-        <button onMouseDown={this.props.addSeven} onMouseUp={this.props.removeSeven}>Seven!</button>
         <MidiDeviceSetup />
         <Dropdowns {...this.props} tonic={this.props.tonic}/>
         <ModeRows {...this.props}/>
@@ -51,6 +54,8 @@ const mapDispatchToProps = dispatch => ({
   adjustChord: (interval, value, on, idx) =>
     dispatch({ type: 'ADJUST_CHORD', payload: { interval, value, on, idx } }),
   addSeven: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0, 7: 0} }),
+  addNine: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0, 7: 0, 9: 0} }),
+  addSix: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0, 6: 0} }),
   removeSeven: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0 } }),
   addSus: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 4: 0, 5: 0 } }),
   removeSus: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0 } }),

@@ -174,6 +174,16 @@ export default {
     abreviation: 'm9♭5',
     getRomanNumeral: n => `${n}⦰9`
   },
+  minor3flat5diminished7perfect9: {
+    name: ' diminished 9th',
+    abreviation: 'dim9',
+    getRomanNumeral: n => `${n}°9`
+  },
+  major3sharp5major7perfect9: {
+    name: ' augmented 9th',
+    abreviation: 'aug9',
+    getRomanNumeral: n => `${n}+9`
+  },
 
   // 6th chords
 
@@ -187,6 +197,18 @@ export default {
     name: ' Major 6th',
     abreviation: '6',
     getRomanNumeral: n => `${n}6`
+  },
+
+  minor3flat5major6: {
+    name: ' Dim 6th',
+    abreviation: 'dim6',
+    getRomanNumeral: n => `${n}°6`
+  },
+
+  major3sharp5major6: {
+    name: ' Aug 6th',
+    abreviation: 'aug6',
+    getRomanNumeral: n => `${n}6+`
   },
 
   //11th Chords
