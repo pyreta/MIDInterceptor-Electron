@@ -7,16 +7,14 @@ export const createActionsAndTypes = actionTypes => (
 )
 
 const actionsAndTypes = createActionsAndTypes([
-  // 'CHANGE_CHORD_ORDER',
-  // 'CHANGE_CHORDS',
-  // 'ADD_CHORD',
-  // 'DELETE_CHORD',
-  // 'NEW_CHORDS',
   'CHANGE_KEY',
   'ADD_SEVEN',
   'REMOVE_SEVEN',
   'ENABLE_WEB_MIDI',
-  'LOAD_MIDI_DEVICES'
+  'LOAD_MIDI_DEVICES',
+  'ADD_KEY_PRESS',
+  'REMOVE_KEY_PRESS',
+  'UPDATE_CHORD_BODY',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;

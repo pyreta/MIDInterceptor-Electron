@@ -47,12 +47,8 @@ const Chord = ({ chord, onClick, onStop, i }) => {
       onMouseDown={() => onClick(notes)}
       onMouseUp={() => onStop(notes)}
     >
-      <RomanNumeral>
-        {chord.romanNumeral()}
-      </RomanNumeral>
-      <Name>
-        {chord.name()}
-      </Name>
+      <RomanNumeral>{chord.romanNumeral()}</RomanNumeral>
+      <Name>{chord.name()}</Name>
     </Container>
   )
 };

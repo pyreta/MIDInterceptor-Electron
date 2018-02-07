@@ -1,8 +1,6 @@
 import rootReducer from './reducer';
 import { createStore } from 'redux';
 import noOpMidiDevice from './helpers/noOpMidiDevice';
-// import Progression from './models/Progression';
-// import Chord from './models/Chord';
 
 const devToolsEnhancer =
   typeof window !== 'undefined' &&
@@ -29,7 +27,7 @@ const initialState = {
   progression,
   tonic: 0,
   chordBody: { 1: 0, 3: 0, 5: 0 },
-  // progression: new Progression().unwrap()
+  keysPressed: {},
 };
 
 export default createStore(

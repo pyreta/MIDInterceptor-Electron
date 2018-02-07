@@ -219,6 +219,10 @@ class Chord {
       }, '');
   }
 
+  isValid() {
+    return !!chordDictionary[this.signature()];
+  }
+
   name(format = 'abreviation') {
     const sig = this.signature();
     if (chordDictionary[sig]) {

@@ -4,6 +4,7 @@ import Progression from '../../models/Progression';
 import MidiDeviceSetup from './MidiDeviceSetup';
 import Dropdowns from './Dropdowns';
 import ModeRows from './ModeRows';
+import actions from '../../actions';
 
 
 export class ApiUi extends React.Component {
@@ -16,16 +17,18 @@ export class ApiUi extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', e => {
-      if (e.key === '7') this.props.addSeven();
-      if (e.key === '4') this.props.addSus();
-      if (e.key === '6') this.props.addSix();
-      if (e.key === '9') this.props.addNine();
+      this.props.addKeyPress(e.keyCode);
+      if (e.key === '7') this.props.addNotes({1: 0, 3: 0, 5: 0, 7: 0});
+      if (e.key === '4') this.props.addNotes({1: 0, 4: 0, 5: 0 });
+      if (e.key === '2') this.props.addNotes({1: 0, 2: 0, 5: 0 });
+      if (e.key === '6') this.props.addNotes({1: 0, 3: 0, 5: 0, 6: 0});
+      if (e.key === '9') this.props.addNotes({1: 0, 3: 0, 5: 0, 7: 0, 9: 0});
+      if (e.key === '1') this.props.addNotes({1: 0, 3: 0, 5: 0, 7: 0, 11: 0});
+      if (e.key === '3') this.props.addNotes({1: 0, 3: 0, 5: 0, 7: 0, 13: 0});
     })
     document.addEventListener('keyup', e => {
-      if (e.key === '7') this.props.removeSeven();
-      if (e.key === '4') this.props.removeSus();
-      if (e.key === '6') this.props.removeSeven();
-      if (e.key === '9') this.props.removeSeven();
+      this.props.removeKeyPress(e.keyCode);
+      this.props.addNotes({1: 0, 3: 0, 5: 0 })
     })
   }
 
@@ -48,17 +51,10 @@ const mapStateToProps = ({ tonic, progression, devices: { outputDevice } }) => (
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeScale: e => dispatch({ type: 'CHANGE_SCALE', payload: e.target.value }),
-  changeKey: e => dispatch({ type: 'CHANGE_KEY', payload: parseInt(e.target.value, 10) }),
-  changeMode: e => dispatch({ type: 'CHANGE_MODE', payload: e.target.value }),
-  adjustChord: (interval, value, on, idx) =>
-    dispatch({ type: 'ADJUST_CHORD', payload: { interval, value, on, idx } }),
-  addSeven: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0, 7: 0} }),
-  addNine: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0, 7: 0, 9: 0} }),
-  addSix: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0, 6: 0} }),
-  removeSeven: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0 } }),
-  addSus: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 4: 0, 5: 0 } }),
-  removeSus: () => dispatch({ type: 'UPDATE_CHORD_BODY', payload: {1: 0, 3: 0, 5: 0 } }),
+  addKeyPress: k => dispatch(actions.ADD_KEY_PRESS(k)),
+  removeKeyPress: k => dispatch(actions.REMOVE_KEY_PRESS(k)),
+  changeKey: e => dispatch(actions.CHANGE_KEY(parseInt(e.target.value, 10))),
+  addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiUi);

@@ -1,13 +1,26 @@
 import _ from 'lodash';
 import Chord from './Chord';
 
+const defaultNotes = { 1: 0, 3: 0, 5: 0 };
+
 export default class Progression {
   static wrap(...args) {
     return new Progression(...args);
   }
   static allChords(args = {}) {
-    const { key, scale, mode, notes } = { key: 0, scale: 'major', mode: 1, notes: { 1: 0, 3: 0, 5: 0 }, ...args };
-    return new Progression([1,2,3,4,5,6,7].map(chord => ({ key, scale, mode, chord, notes })))
+    const { key, scale, mode, notes } = {
+      key: 0,
+      scale: 'major',
+      mode: 1,
+      notes: defaultNotes,
+      ...args,
+    };
+    const progression = [1, 2, 3, 4, 5, 6, 7].map(chord => {
+      return Chord.wrap({ key, scale, mode, chord, notes }).isValid()
+        ? { key, scale, mode, chord, notes }
+        : { key, scale, mode, chord, notes: defaultNotes };
+    });
+    return new Progression(progression);
   }
 
   constructor(progression) {
@@ -15,13 +28,13 @@ export default class Progression {
   }
 
   replace(chordNumber, fn = c => [c]) {
-    const left = this.progression.slice(0, chordNumber-1);
+    const left = this.progression.slice(0, chordNumber - 1);
     const right = this.progression.slice(chordNumber);
     return new Progression([
       ...left,
       ..._.flatten([fn(this.getChord(chordNumber))]).map(c => c.unwrap()),
       ...right,
-    ])
+    ]);
   }
 
   unwrap() {
@@ -39,7 +52,7 @@ export default class Progression {
   setChordAt(i, c) {
     const newP = [...this.progression];
     newP[i] = c;
-    return new Progression(newP)
+    return new Progression(newP);
   }
 
   last() {
