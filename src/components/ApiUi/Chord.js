@@ -15,6 +15,7 @@ const Container = styled.div`
   border: 1px solid rgb(33, 37, 43);
   padding: 13px;
   width: 50px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,15 +36,25 @@ const Container = styled.div`
     background: rgb(216, 0, 0);
   }
 `;
-const Chord = ({ chord, onClick, onStop, i }) => (
-  <Container onMouseDown={() => onClick(chord.noteValues().map(x => x + 60))}  onMouseUp={() => onStop(chord.noteValues().map(x => x + 60))}>
-    <RomanNumeral>
-      {chord.romanNumeral()}
-    </RomanNumeral>
-    <Name>
-      {chord.name()}
-    </Name>
-  </Container>
-);
+
+
+const Chord = ({ chord, onClick, onStop, i }) => {
+  const chordNotes = chord.noteValues();
+  const voicing = x => x + 48;
+  const notes = [chordNotes[0] + 36, ...chordNotes.map(voicing)];
+  return (
+    <Container
+      onMouseDown={() => onClick(notes)}
+      onMouseUp={() => onStop(notes)}
+    >
+      <RomanNumeral>
+        {chord.romanNumeral()}
+      </RomanNumeral>
+      <Name>
+        {chord.name()}
+      </Name>
+    </Container>
+  )
+};
 
 export default Chord;

@@ -26,7 +26,9 @@ const initialState = {
     dawListener: noOpMidiDevice,
     outputDevice: noOpMidiDevice,
   },
-  progression
+  progression,
+  tonic: 0,
+  chordBody: { 1: 0, 3: 0, 5: 0 },
   // progression: new Progression().unwrap()
 };
 

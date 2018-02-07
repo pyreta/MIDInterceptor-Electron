@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import Chord from './Chord';
 import Progression from '../../models/Progression';
 import { scales } from '../../constants/theory'
@@ -17,18 +18,12 @@ const Container = styled.div`
   border-bottom: 1px solid rgb(33, 37, 43);
   display: inline-block;
 `;
-const ModeRow = ({ playChord, stopChord, keyy, scale, mode }) => (
+const ModeRow = ({ playChord, stopChord, tonic, scale, mode, chordBody: notes }) => (
   <ScaleContainer>
   <ModeName>{scales[scale].modes[mode-1]}</ModeName>
-    {Progression.allChords({ key: keyy, scale, mode }).chords()
+    {Progression.allChords({ key: tonic, scale, mode, notes }).chords()
       .map((c, i) => (
-        <Chord
-          key={i}
-          chord={c}
-          i={i}
-          onClick={playChord}
-          onStop={stopChord}
-        />
+        <Chord key={i} chord={c} i={i} onClick={playChord} onStop={stopChord} />
       ))}
   </ScaleContainer>
 );
@@ -41,20 +36,22 @@ export class ModeRows extends React.Component {
           <ModeRow
             playChord={playChord}
             stopChord={stopChord}
-            keyy={0}
+            tonic={this.props.tonic}
             mode={mode}
             key={mode}
             scale={'major'}
+            chordBody={this.props.chordBody}
           />
         ))}
         {[1,5].map((mode) => (
           <ModeRow
             playChord={playChord}
             stopChord={stopChord}
-            keyy={0}
+            tonic={this.props.tonic}
             mode={mode}
             key={mode}
             scale={'harmonicMinor'}
+            chordBody={this.props.chordBody}
           />
         ))}
       </Container>
@@ -62,4 +59,9 @@ export class ModeRows extends React.Component {
   }
 }
 
-export default ModeRows;
+const mapStateToProps = state => ({
+  tonic: state.tonic,
+  chordBody: state.chordBody
+})
+
+export default connect(mapStateToProps)(ModeRows);

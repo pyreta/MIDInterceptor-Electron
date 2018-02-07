@@ -6,16 +6,8 @@ export default class Progression {
     return new Progression(...args);
   }
   static allChords(args = {}) {
-    const { key, scale, mode } = { key: 0, scale: 'major', mode: 1, ...args };
-    return new Progression([
-      { key, scale, mode, chord: 1, notes: { 1: 0, 3: 0, 5: 0 }},
-      { key, scale, mode, chord: 2, notes: { 1: 0, 3: 0, 5: 0 }},
-      { key, scale, mode, chord: 3, notes: { 1: 0, 3: 0, 5: 0 }},
-      { key, scale, mode, chord: 4, notes: { 1: 0, 3: 0, 5: 0 }},
-      { key, scale, mode, chord: 5, notes: { 1: 0, 3: 0, 5: 0 }},
-      { key, scale, mode, chord: 6, notes: { 1: 0, 3: 0, 5: 0 }},
-      { key, scale, mode, chord: 7, notes: { 1: 0, 3: 0, 5: 0 }},
-    ]);
+    const { key, scale, mode, notes } = { key: 0, scale: 'major', mode: 1, notes: { 1: 0, 3: 0, 5: 0 }, ...args };
+    return new Progression([1,2,3,4,5,6,7].map(chord => ({ key, scale, mode, chord, notes })))
   }
 
   constructor(progression) {

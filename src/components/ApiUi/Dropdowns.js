@@ -2,7 +2,7 @@ import React from 'react';
 import scales from '../../constants/scales';
 import { notes } from '../../constants/theory';
 
-const Dropdowns = ({ key, mode, scale, ...props }) => (
+const Dropdowns = ({ tonic, mode, scale, ...props }) => (
   <div>
     <select onChange={props.changeScale} value={scale}>
       {Object.keys(scales).map(scale => (
@@ -11,7 +11,7 @@ const Dropdowns = ({ key, mode, scale, ...props }) => (
         </option>
       ))}
     </select>
-    <select onChange={props.changeKey} value={key}>
+    <select onChange={props.changeKey} value={tonic}>
       {notes.map((note, idx) => (
         <option value={idx} key={idx}>
           {note}
