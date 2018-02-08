@@ -5,10 +5,14 @@ import Dropdowns from './Dropdowns';
 import ModeRows from './ModeRows';
 import actions from '../../actions';
 
+let held = false;
+
 export class ApiUi extends React.Component {
+
   componentDidMount() {
     document.addEventListener('keydown', e => {
       // this.props.addKeyPress(e.keyCode);
+      if (held) return;
       if (e.key === '7') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
       if (e.key === '4') this.props.addNotes({ 1: 0, 4: 0, 5: 0 });
       if (e.key === '2') this.props.addNotes({ 1: 0, 2: 0, 5: 0 });
@@ -16,8 +20,10 @@ export class ApiUi extends React.Component {
       if (e.key === '9') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 9: 0 });
       if (e.key === '1') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 11: 0 });
       if (e.key === '3') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 13: 0 });
+      held = true;
     });
     document.addEventListener('keyup', e => {
+      held = false;
       // this.props.removeKeyPress(e.keyCode);
       this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
     });
