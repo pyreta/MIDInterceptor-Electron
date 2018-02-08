@@ -3,55 +3,83 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Chord from './Chord';
 import Progression from '../../models/Progression';
-import { scales } from '../../constants/theory'
+import actions from '../../actions';
 
 const ScaleContainer = styled.div`display: flex;`;
 const ModeName = styled.div`
-  width: 80px;
+  width: 60px;
   display: flex;
   align-items: center;
   padding: 10px;
-  color: white;
-  background: rgb(33, 37, 43);
+  font-family: sans-serif;
+  color: rgba(141, 152, 169, 0.9);
+  background: rgb(33,37,43);
+  font-size: 13px;
 `;
 const Container = styled.div`
   border-bottom: 1px solid rgb(33, 37, 43);
   display: inline-block;
 `;
-const ModeRow = ({ playChord, stopChord, tonic, scale, mode, chordBody: notes }) => (
-  <ScaleContainer>
-  <ModeName>{scales[scale].modes[mode-1]}</ModeName>
-    {Progression.allChords({ key: tonic, scale, mode, notes }).chords()
-      .map((c, i) => (
-        <Chord key={i} chord={c} i={i} onClick={playChord} onStop={stopChord} />
-      ))}
-  </ScaleContainer>
-);
+const ModeRow = ({
+  playChord,
+  stopChord,
+  tonic,
+  scale,
+  mode,
+  chordBody: notes,
+}) => {
+  const progression = Progression.allChords({ key: tonic, scale, mode, notes });
+  return (
+    <ScaleContainer>
+      <ModeName>{progression.last().getMode().name()}</ModeName>
+      {progression
+        .chords()
+        .map((c, i) => (
+          <Chord
+            key={i}
+            chord={c}
+            i={i}
+            onClick={playChord}
+            onStop={stopChord}
+          />
+        ))}
+    </ScaleContainer>
+  );
+};
 export class ModeRows extends React.Component {
+  constructor() {
+    super();
+    this.playChord = this.playChord.bind(this);
+  }
+  playChord(notes, chord) {
+    this.props.playChord(notes);
+    this.props.registerChord(chord);
+  }
+
   render() {
-    const { playChord, stopChord } = this.props;
+    const { stopChord, tonic, chordBody } = this.props;
     return (
       <Container>
-        {[1,2,3,5,6].map((mode) => (
+        {[1, 6, 2, 3, 5, 7, 4].map(mode => (
           <ModeRow
-            playChord={playChord}
+            playChord={this.playChord}
             stopChord={stopChord}
-            tonic={this.props.tonic}
+            tonic={tonic}
             mode={mode}
             key={mode}
             scale={'major'}
-            chordBody={this.props.chordBody}
+            chordBody={chordBody}
           />
         ))}
-        {[1,5].map((mode) => (
+        {[1, 5].map(mode => (
           <ModeRow
-            playChord={playChord}
+            playChord={this.playChord}
             stopChord={stopChord}
-            tonic={this.props.tonic}
+            tonic={tonic}
             mode={mode}
             key={mode}
             scale={'harmonicMinor'}
-            chordBody={this.props.chordBody}
+            chordBody={chordBody}
           />
         ))}
       </Container>
@@ -59,9 +87,15 @@ export class ModeRows extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  tonic: state.tonic,
-  chordBody: state.chordBody
-})
+const mapStateToProps = ({ chordBody, devices: { outputDevice }, tonic }) => ({
+  tonic,
+  chordBody,
+  stopChord: chord => outputDevice.stopNote(chord, 1),
+  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
+});
 
-export default connect(mapStateToProps)(ModeRows);
+const mapDispatchToProps = dispatch => ({
+  registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModeRows);

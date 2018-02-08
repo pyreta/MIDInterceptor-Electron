@@ -18,6 +18,7 @@ const progression = [
 ];
 
 const initialState = {
+  lastPlayedChord: {},
   webMidiEnabled: false,
   devices: {
     midiDevice: noOpMidiDevice,

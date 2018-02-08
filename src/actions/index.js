@@ -15,6 +15,7 @@ const actionsAndTypes = createActionsAndTypes([
   'ADD_KEY_PRESS',
   'REMOVE_KEY_PRESS',
   'UPDATE_CHORD_BODY',
+  'PLAY_CHORD',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;

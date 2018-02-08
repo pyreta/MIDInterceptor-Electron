@@ -38,9 +38,9 @@ class MidiDeviceSetup extends Component {
     return (
       <div>
         {this.props.ready ? (
-          null
+          this.props.children
         ) : (
-          <div>Cannot enable Web Midi</div>
+          <div>...loading</div>
         )}
       </div>
     );

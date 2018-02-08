@@ -4,8 +4,10 @@ import devices from './devices';
 import webMidiEnabled from './webMidiEnabled';
 import tonic from './tonic';
 import keysPressed from './keysPressed';
+import lastPlayedChord from './lastPlayedChord';
 
 export default combineReducers({
+  lastPlayedChord,
   keysPressed,
   tonic,
   chordBody: (state = {}, action) => {
