@@ -51,7 +51,7 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedNotes }) => {
     <Container
       onMouseDown={() => onClick(notes, chord.unwrap())}
       onMouseUp={() => onStop(notes)}
-      notesInCommon={notesInCommon * 3}
+      notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
       <RomanNumeral>{chord.romanNumeral()}</RomanNumeral>
       <Name>{chord.name()}</Name>
