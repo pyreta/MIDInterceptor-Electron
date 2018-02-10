@@ -27,8 +27,9 @@ const ModeRow = ({
   scale,
   mode,
   chordBody: notes,
+  secondaryDominants,
 }) => {
-  const progression = Progression.allChords({ key: tonic, scale, mode, notes });
+  const progression = Progression.allChords({ key: tonic, scale, mode, notes }, secondaryDominants);
   return (
     <ScaleContainer>
       <ModeName>{progression.last().getMode().name()}</ModeName>
@@ -57,7 +58,7 @@ export class ModeRows extends React.Component {
   }
 
   render() {
-    const { stopChord, tonic, chordBody } = this.props;
+    const { stopChord, tonic, chordBody, secondaryDominants } = this.props;
     return (
       <Container>
         {[1, 6, 2, 3, 5, 7, 4].map(mode => (
@@ -69,6 +70,7 @@ export class ModeRows extends React.Component {
             key={mode}
             scale={'major'}
             chordBody={chordBody}
+            secondaryDominants={secondaryDominants}
           />
         ))}
         {[1, 5].map(mode => (
@@ -80,6 +82,7 @@ export class ModeRows extends React.Component {
             key={mode}
             scale={'harmonicMinor'}
             chordBody={chordBody}
+            secondaryDominants={secondaryDominants}
           />
         ))}
       </Container>
@@ -87,11 +90,12 @@ export class ModeRows extends React.Component {
   }
 }
 
-const mapStateToProps = ({ chordBody, devices: { outputDevice }, tonic }) => ({
+const mapStateToProps = ({ keysPressed, chordBody, devices: { outputDevice }, tonic }) => ({
   tonic,
   chordBody,
   stopChord: chord => outputDevice.stopNote(chord, 1),
   playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
+  secondaryDominants: keysPressed["83"],
 });
 
 const mapDispatchToProps = dispatch => ({

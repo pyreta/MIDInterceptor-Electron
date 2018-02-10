@@ -159,4 +159,29 @@ describe('Chord', () => {
     expect(Chord.fromMinorScale(2).romanNumeral()).toEqual('ii°');
     expect(Chord.fromMinorScale(3).romanNumeral()).toEqual('III');
   });
+
+  it('has a voicing', () => {
+    const cChord = new Chord();
+    expect(cChord.get('voicing')).toEqual({ 1: [0], 3: [0], 5: [0] });
+    expect(cChord.voicing().noteValues()).toEqual([60, 64, 67]);
+    expect(cChord.voicing().noteNames()).toEqual(['C', 'E', 'G']);
+    expect(new Chord({voicing: { 1: [-2, 0], 3: [1], 5: [1, 2]} })
+      .voicing()
+      .noteValues())
+      .toEqual([36, 60, 76, 79, 91]);
+    expect(new Chord({voicing: { 1: [-2, 0], 3: [1, 2], 5: [1] }})
+      .voicing()
+      .noteNames())
+      .toEqual(['C', 'C', 'E', 'G', 'E']);
+  });
+
+  it('matches voicing to another chord', () => {
+    const Amin = new Chord({ chord: 6 });
+    const Cmaj = new Chord();
+    expect(Amin.name()).toEqual('Am');
+    expect(Amin.matchVoicingToChord(Cmaj)
+      .voicing()
+      .noteValues())
+      .toEqual([60, 64, 69]);
+    });
 });

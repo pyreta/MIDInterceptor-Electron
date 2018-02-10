@@ -11,8 +11,9 @@ export class ApiUi extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', e => {
-      // this.props.addKeyPress(e.keyCode);
+
       if (held) return;
+      if (e.key === 's') this.props.addKeyPress(e.keyCode);
       if (e.key === '7') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
       if (e.key === '4') this.props.addNotes({ 1: 0, 4: 0, 5: 0 });
       if (e.key === '2') this.props.addNotes({ 1: 0, 2: 0, 5: 0 });
@@ -24,7 +25,7 @@ export class ApiUi extends React.Component {
     });
     document.addEventListener('keyup', e => {
       held = false;
-      // this.props.removeKeyPress(e.keyCode);
+      if (e.key === 's') this.props.removeKeyPress(e.keyCode);
       this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
     });
   }

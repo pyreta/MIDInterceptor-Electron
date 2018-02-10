@@ -70,7 +70,7 @@ export const scales = {
     modes: [
       'Harmonic Minor',
       'Locrian #6',
-      'Ionian #5',
+      'Ionian Augmented',
       'Dorian #4',
       'Phrygian Dominant',
       'Lydian #2',
