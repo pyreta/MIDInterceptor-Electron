@@ -36,6 +36,9 @@ const Container = styled.div`
   }
   &:active {
     color: rgb(33, 37, 43);
+    width: 44px;
+    transform: scale(1.4);
+    height: 34px;
     border: 3px solid rgb(33, 37, 43);
     background: rgb(216, 0, 0);
   }
