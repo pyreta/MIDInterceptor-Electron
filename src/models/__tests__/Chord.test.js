@@ -183,5 +183,9 @@ describe('Chord', () => {
       .voicing()
       .noteValues())
       .toEqual([60, 64, 69]);
+    expect(Amin.matchVoicingToChord(Cmaj)
+      .voicing({ withRoot: 3})
+      .noteValues())
+      .toEqual([45, 60, 64, 69]);
     });
 });

@@ -45,10 +45,9 @@ const Container = styled.div`
 `;
 
 
-const Chord = ({ chord, onClick, onStop, i, lastPlayedNotes }) => {
-  const chordNotes = chord.noteValues();
-  const voicing = x => x + 48;
-  const notes = [chordNotes[0] + 36, ...chordNotes.map(voicing)];
+const Chord = ({ chord, onClick, onStop, i, lastPlayedChord }) => {
+  const lastPlayedNotes = lastPlayedChord.noteNames();
+  const notes = chord.matchVoicingToChord(lastPlayedChord).voicing({ withRoot: 3 }).noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
     <Container
@@ -63,7 +62,7 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedNotes }) => {
 };
 
 const mapStateToProps = ({ lastPlayedChord }) => ({
-  lastPlayedNotes: lastPlayedChord.notes ? new ChordModel(lastPlayedChord).noteNames() : ['C', 'E', 'G']
+  lastPlayedChord: lastPlayedChord.notes ? new ChordModel(lastPlayedChord) : new ChordModel(lastPlayedChord)
 })
 
 export default connect(mapStateToProps)(Chord);

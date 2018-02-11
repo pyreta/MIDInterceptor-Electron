@@ -24,6 +24,23 @@ const defaultChord = {
     5: [0],
   },
 };
+
+const findNearestNote = (note, vals) => {
+  let diff = 0;
+  while (true) {
+    if (vals.includes((note + diff) % 12)) {
+      break;
+    } else {
+      if (diff >= 0) {
+        diff++;
+      } else {
+        diff *= -1;
+      }
+    }
+  }
+  return note + diff;
+};
+
 class Chord {
   static newChordFromScale(chord, scale, progression) {
     return new Chord({ scale, chord }, progression);
@@ -291,27 +308,48 @@ class Chord {
     );
   }
 
-  voicing() {
+  voicing({ withRoot } = {}) {
     const voicing = this.get('voicing');
     const noteValues = this.noteValues();
-    const voicedValues = _.flatten(Object.keys(voicing)
-      .sort(ascending)
-      .map((voicingIdx, idx) => {
-        const noteValue = noteValues[idx];
-        const noteVoicings = voicing[voicingIdx];
-        return (noteVoicings.map((singleVoicing) => {
-          const octaveAdjustment = this.chord.octave * 12 + (singleVoicing * 12);
-          return noteValue + octaveAdjustment;
-        }))
-      })).sort(ascending);
+    const voicedValues =
+      this.voice ||
+      _.flatten(
+        Object.keys(voicing)
+          .sort(ascending)
+          .map((voicingIdx, idx) => {
+            const noteValue = noteValues[idx];
+            const noteVoicings = voicing[voicingIdx];
+            return noteVoicings.map(singleVoicing => {
+              const octaveAdjustment =
+                this.chord.octave * 12 + singleVoicing * 12;
+              return noteValue + octaveAdjustment;
+            });
+          }),
+      ).sort(ascending);
+      const adjustedVoiceValues = withRoot ? [this.root().value() + (12 * withRoot), ...voicedValues] : voicedValues
     return {
-      noteNames: () => voicedValues.map(n => notes[n % 12]),
-      noteValues: () => voicedValues,
+      noteNames: () => adjustedVoiceValues.map(n => notes[n % 12]),
+      noteValues: () => adjustedVoiceValues,
     };
   }
 
+  setVoice(voice) {
+    this.voice = voice;
+  }
+
   matchVoicingToChord(otherChord) {
-    return this;
+    const newVoice = [];
+
+    const vals = this.noteValues().map(x => x % 12);
+    otherChord
+      .voicing()
+      .noteValues()
+      .forEach(note => {
+        newVoice.push(findNearestNote(note, vals));
+      });
+    const c = this.clone();
+    c.setVoice(newVoice);
+    return c;
   }
 }
 
