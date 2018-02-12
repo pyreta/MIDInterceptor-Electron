@@ -51,7 +51,8 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord }) => {
   // const voicing = x => x + 48;
   // const notes = [chordNotes[0] + 36, ...chordNotes.map(voicing)];
   const voicedChord = chord.matchVoicingToChord(lastPlayedChord);
-  const notes = voicedChord.voicing({ withRoot: 2 }).noteValues();
+  const notes = voicedChord.voicing().noteValues();
+  // const notes = voicedChord.voicing({ withRoot: 3 }).noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
     <Container

@@ -334,7 +334,9 @@ class Chord {
       const amountBelowOctave = (this.get('octave') * 12) - note;
       const octave = Math.floor((val - unvoicedNote) / 12);
       if (amountBelowOctave > 0) {
-        octavesBelow = Math.round(amountBelowOctave/12) + 1
+        octavesBelow = 1
+        // TODO fix this and notes under octave are ringing out
+        // octavesBelow = Math.round(amountBelowOctave/12) + 1
       }
       newVoice[interval].push(octave - octavesBelow)
     })
