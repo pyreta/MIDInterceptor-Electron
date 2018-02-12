@@ -25,22 +25,6 @@ const defaultChord = {
   },
 };
 
-const findNearestNote = (note, vals) => {
-  let diff = 0;
-  while (true) {
-    if (vals.includes((note + diff) % 12)) {
-      break;
-    } else {
-      if (diff >= 0) {
-        diff++;
-      } else {
-        diff *= -1;
-      }
-    }
-  }
-  return note + diff;
-};
-
 class Chord {
   static newChordFromScale(chord, scale, progression) {
     return new Chord({ scale, chord }, progression);
@@ -335,20 +319,55 @@ class Chord {
 
   setVoice(voice) {
     this.voice = voice;
+    const noteValues = this.noteValues();
+    const moddedNotes = noteValues.map(x => x % 12);
+    const intervals = Object.keys(this.get('notes'))
+    const newVoice = intervals.reduce((acc, n) => {
+      return {...acc, [n]: []}
+    }, {});
+    voice.forEach((note, idx) => {
+      const val = note % 12;
+      const valIdx = moddedNotes.indexOf(val);
+      const interval = intervals[valIdx];
+      const unvoicedNote = noteValues[valIdx]
+      let octavesBelow = 0;
+      const amountBelowOctave = (this.get('octave') * 12) - note;
+      const octave = Math.floor((val - unvoicedNote) / 12);
+      if (amountBelowOctave > 0) {
+        octavesBelow = Math.round(amountBelowOctave/12) + 1
+      }
+      newVoice[interval].push(octave - octavesBelow)
+    })
+    this.chord.voicing = newVoice;
+  }
+
+  findDistance(lastVoicing, closestNote) {
+    return lastVoicing.map(x => Math.abs(x - closestNote))
   }
 
   matchVoicingToChord(otherChord) {
     const newVoice = [];
+    const lastVoicing = otherChord.voicing().noteValues();
 
-    const vals = this.noteValues().map(x => x % 12);
-    otherChord
-      .voicing()
-      .noteValues()
-      .forEach(note => {
-        newVoice.push(findNearestNote(note, vals));
-      });
+    this.noteValues().forEach(closestNote => {
+
+      let winner = { smallestDistance: 1000 };
+      while (closestNote <= lastVoicing[lastVoicing.length - 1] + 12) {
+        const distancesFromVoicing = this.findDistance(lastVoicing, closestNote);
+        const smallestDistance = _.min(distancesFromVoicing);
+        const smallestIdx = distancesFromVoicing.indexOf(smallestDistance);
+
+        if (smallestDistance < winner.smallestDistance) {
+          winner = { smallestIdx, smallestDistance, closestNote };
+        }
+        _.min()
+        closestNote += 12;
+      }
+      newVoice.push(winner.closestNote);
+    })
+
     const c = this.clone();
-    c.setVoice(newVoice);
+    c.setVoice(newVoice.sort(ascending));
     return c;
   }
 }

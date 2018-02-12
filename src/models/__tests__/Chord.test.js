@@ -188,4 +188,40 @@ describe('Chord', () => {
       .noteValues())
       .toEqual([45, 60, 64, 69]);
     });
+
+  describe('voicings', () => {
+    const Cmaj = new Chord();
+    const Cmaj7 = new Chord().addNote(7).matchVoicingToChord(Cmaj);
+    const Emin = new Chord({ chord: 3 }).matchVoicingToChord(Cmaj);
+    const Amin = new Chord({ chord: 6 }).matchVoicingToChord(Cmaj);
+    const Adim = new Chord({ chord: 6, mode: 2 }).matchVoicingToChord(Amin);
+    const Fmaj = new Chord({ chord: 4 }).matchVoicingToChord(Amin);
+    const Gmaj = new Chord({ chord: 5 }).matchVoicingToChord(Fmaj);
+    const GmajFromE = new Chord({ chord: 5 }).matchVoicingToChord(Emin);
+
+    it('matches voicings in a progression', () => {
+      expect(Cmaj7.voicing().noteValues()).toEqual([59, 60, 64, 67]);
+      expect(Amin.voicing().noteValues()).toEqual([60, 64, 69]);
+      expect(Adim.voicing().noteValues()).toEqual([60, 63, 69]);
+      expect(Fmaj.voicing().noteValues()).toEqual([60, 65, 69]);
+      expect(Gmaj.voicing().noteValues()).toEqual([59, 62, 67]);
+
+      expect(Emin.voicing().noteValues()).toEqual([59, 64, 67]);
+      expect(GmajFromE.voicing().noteValues()).toEqual([59, 62, 67]);
+    });
+
+    it('serializes a new voicing', () => {
+      const voicedAmin = new Chord({
+        chord: 6,
+        voicing: { 1: [0], 3: [-1], 5: [-1] }
+      });
+      expect(voicedAmin.voicing().noteValues()).toEqual([60, 64, 69]);
+      expect(Amin.get('voicing')).toEqual({ 1: [0], 3: [-1], 5: [-1] });
+      expect(GmajFromE.get('voicing')).toEqual({ 1: [0], 3: [-1], 5: [-1] });
+      expect(new Chord({ chord: 5, voicing: { 1: [0], 3: [-1], 5: [-1] } })
+        .voicing()
+        .noteValues())
+        .toEqual([59, 62, 67]);
+    });
+  });
 });

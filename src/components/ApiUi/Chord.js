@@ -50,11 +50,12 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord }) => {
   // const chordNotes = chord.noteValues();
   // const voicing = x => x + 48;
   // const notes = [chordNotes[0] + 36, ...chordNotes.map(voicing)];
-  const notes = chord.matchVoicingToChord(lastPlayedChord).voicing({ withRoot: 3 }).noteValues();
+  const voicedChord = chord.matchVoicingToChord(lastPlayedChord);
+  const notes = voicedChord.voicing({ withRoot: 2 }).noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
     <Container
-      onMouseDown={() => onClick(notes, chord.unwrap())}
+      onMouseDown={() => onClick(notes, voicedChord.unwrap())}
       onMouseUp={() => onStop(notes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
