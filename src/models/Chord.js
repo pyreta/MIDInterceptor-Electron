@@ -296,7 +296,6 @@ class Chord {
     const voicing = this.get('voicing');
     const noteValues = this.noteValues();
     const voicedValues =
-      this.voice ||
       _.flatten(
         Object.keys(voicing)
           .sort(ascending)
@@ -318,7 +317,6 @@ class Chord {
   }
 
   setVoice(voice) {
-    this.voice = voice;
     const noteValues = this.noteValues();
     const moddedNotes = noteValues.map(x => x % 12);
     const intervals = Object.keys(this.get('notes'))
