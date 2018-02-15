@@ -113,7 +113,12 @@ export class ApiUi extends React.Component {
   render() {
     return (
       <MidiDeviceSetup>
-        <KeySelect changeKey={this.props.changeKey} tonic={this.props.tonic} />
+        <KeySelect
+          changeKey={this.props.changeKey}
+          playChord={this.props.playChord}
+          stopChord={this.props.stopChord}
+          tonic={this.props.tonic}
+        />
         <ModeRows />
       </MidiDeviceSetup>
     );

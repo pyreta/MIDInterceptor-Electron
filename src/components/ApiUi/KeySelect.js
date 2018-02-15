@@ -34,10 +34,16 @@ const Container = styled.div`
   }
 `;
 
-const KeySelect = ({ tonic, changeKey }) => (
+const KeySelect = ({ tonic, changeKey, playChord, stopChord }) => (
   <StyledContainer>
     {notes.map((note, idx) => (
-      <Container key={idx} onClick={() => changeKey(idx)} selected={tonic === idx}>
+      <Container
+        key={idx}
+        onClick={() => changeKey(idx)}
+        onMouseDown={() => playChord([idx + 60])}
+        onMouseUp={() => stopChord([idx + 60])}
+      selected={tonic === idx}
+    >
         {note}
       </Container>
     ))}
