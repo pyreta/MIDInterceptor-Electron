@@ -61,7 +61,7 @@ export class ModeRows extends React.Component {
     const { stopChord, tonic, chordBody, secondaryDominants } = this.props;
     return (
       <Container>
-        {[1, 6, 2, 3, 5, 7, 4].map(mode => (
+        {[1, 6].map(mode => (
           <ModeRow
             playChord={this.playChord}
             stopChord={stopChord}
@@ -73,7 +73,7 @@ export class ModeRows extends React.Component {
             secondaryDominants={secondaryDominants}
           />
         ))}
-        {[1, 5].map(mode => (
+        {[1].map(mode => (
           <ModeRow
             playChord={this.playChord}
             stopChord={stopChord}
@@ -81,6 +81,18 @@ export class ModeRows extends React.Component {
             mode={mode}
             key={mode}
             scale={'harmonicMinor'}
+            chordBody={chordBody}
+            secondaryDominants={secondaryDominants}
+          />
+        ))}
+        {[1].map(mode => (
+          <ModeRow
+            playChord={this.playChord}
+            stopChord={stopChord}
+            tonic={tonic}
+            mode={mode}
+            key={mode}
+            scale={'melodicMinor'}
             chordBody={chordBody}
             secondaryDominants={secondaryDominants}
           />

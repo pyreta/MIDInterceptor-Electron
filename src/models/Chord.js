@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Scale from './Scale';
 import Progression from './Progression';
 import chordDictionary from '../constants/chordDictionary';
@@ -8,7 +9,7 @@ import {
   intervals,
   romanNumerals,
 } from '../constants/theory';
-import _ from 'lodash';
+import { getVoicing, setVoicing, matchChordVoicings } from './helpers';
 
 const ascending = (a, b) => a - b;
 const defaultChord = {
@@ -52,6 +53,10 @@ class Chord {
     this.progression = progression || new Progression([chord]);
   }
 
+  clone() {
+    return new Chord({ ...this.chord }, this.progression);
+  }
+
   // *************** change chord
 
   sus(i1 = 4, i2) {
@@ -65,22 +70,14 @@ class Chord {
 
   tritoneSubstitution() {
     // TODO take scales into account
-    return this.set('key', this.get('key') + 6).setNotes({
-      1: 0,
-      3: 0,
-      5: 0,
-      7: 0,
-    });
+    const notes = { 1: 0, 3: 0, 5: 0, 7: 0 };
+    return this.set('key', this.get('key') + 6).setNotes(notes);
   }
 
   diminishedSubstitution() {
     // TODO take scales into account
-    return this.set('key', this.get('key') + 4).setNotes({
-      1: 0,
-      3: -1,
-      5: -1,
-      7: -1,
-    });
+    const notes = { 1: 0, 3: -1, 5: -1, 7: -1 };
+    return this.set('key', this.get('key') + 4).setNotes(notes);
   }
 
   incrementKey(add = 1) {
@@ -88,10 +85,6 @@ class Chord {
       { ...this.chord, key: this.get('key') + add },
       this.progression,
     );
-  }
-
-  clone() {
-    return new Chord({ ...this.chord }, this.progression);
   }
 
   chromaticSubstitution() {
@@ -133,6 +126,10 @@ class Chord {
 
   // ****************** change chord
 
+  setNotes(notes) {
+    return new Chord({ ...this.chord, notes }, this.progression);
+  }
+
   addNote(interval, value = 0) {
     const chord = new Chord(
       {
@@ -148,10 +145,6 @@ class Chord {
     const notes = { ...this.get('notes') };
     delete notes[interval];
     return this.setNotes(notes);
-  }
-
-  setNotes(notes) {
-    return new Chord({ ...this.chord, notes }, this.progression);
   }
 
   data() {
@@ -260,7 +253,11 @@ class Chord {
   }
 
   isValid() {
-    return !!chordDictionary[this.signature()];
+    const sig = this.signature();
+    const validity = !!chordDictionary[sig];
+    if (validity) return validity;
+    // console.log('missing:', sig);
+    // console.log('');
   }
 
   name(format = 'abreviation') {
@@ -292,53 +289,12 @@ class Chord {
     );
   }
 
-  voicing({ withRoot } = {}) {
-    const voicing = this.get('voicing');
-    const noteValues = this.noteValues();
-    const voicedValues =
-      _.flatten(
-        Object.keys(voicing)
-          .sort(ascending)
-          .map((voicingIdx, idx) => {
-            const noteValue = noteValues[idx];
-            const noteVoicings = voicing[voicingIdx];
-            return noteVoicings.map(singleVoicing => {
-              const octaveAdjustment =
-                this.chord.octave * 12 + singleVoicing * 12;
-              return noteValue + octaveAdjustment;
-            });
-          }),
-      ).sort(ascending);
-      const adjustedVoiceValues = withRoot ? [this.root().value() + (12 * withRoot), ...voicedValues] : voicedValues
-    return {
-      noteNames: () => adjustedVoiceValues.map(n => notes[n % 12]),
-      noteValues: () => adjustedVoiceValues,
-    };
+  voicing(options) {
+    return getVoicing(this, options);
   }
 
   setVoice(voice) {
-    const noteValues = this.noteValues();
-    const moddedNotes = noteValues.map(x => x % 12);
-    const intervals = Object.keys(this.get('notes'))
-    const newVoice = intervals.reduce((acc, n) => {
-      return {...acc, [n]: []}
-    }, {});
-    voice.forEach((note, idx) => {
-      const val = note % 12;
-      const valIdx = moddedNotes.indexOf(val);
-      const interval = intervals[valIdx];
-      const unvoicedNote = noteValues[valIdx]
-      let octavesBelow = 0;
-      const amountBelowOctave = (this.get('octave') * 12) - note;
-      const octave = Math.floor((val - unvoicedNote) / 12);
-      if (amountBelowOctave > 0) {
-        octavesBelow = 1
-        // TODO fix this and notes under octave are ringing out
-        // octavesBelow = Math.round(amountBelowOctave/12) + 1
-      }
-      newVoice[interval].push(octave - octavesBelow)
-    })
-    this.chord.voicing = newVoice;
+    return setVoicing(this, voice);
   }
 
   findDistance(lastVoicing, closestNote) {
@@ -346,29 +302,7 @@ class Chord {
   }
 
   matchVoicingToChord(otherChord) {
-    const newVoice = [];
-    const lastVoicing = otherChord.voicing().noteValues();
-
-    this.noteValues().forEach(closestNote => {
-
-      let winner = { smallestDistance: 1000 };
-      while (closestNote <= lastVoicing[lastVoicing.length - 1] + 12) {
-        const distancesFromVoicing = this.findDistance(lastVoicing, closestNote);
-        const smallestDistance = _.min(distancesFromVoicing);
-        const smallestIdx = distancesFromVoicing.indexOf(smallestDistance);
-
-        if (smallestDistance < winner.smallestDistance) {
-          winner = { smallestIdx, smallestDistance, closestNote };
-        }
-        _.min()
-        closestNote += 12;
-      }
-      newVoice.push(winner.closestNote);
-    })
-
-    const c = this.clone();
-    c.setVoice(newVoice.sort(ascending));
-    return c;
+    return matchChordVoicings(this, otherChord);
   }
 }
 

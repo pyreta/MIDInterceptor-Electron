@@ -47,9 +47,6 @@ const Container = styled.div`
 
 const Chord = ({ chord, onClick, onStop, i, lastPlayedChord }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
-  // const chordNotes = chord.noteValues();
-  // const voicing = x => x + 48;
-  // const notes = [chordNotes[0] + 36, ...chordNotes.map(voicing)];
   const voicedChord = chord.matchVoicingToChord(lastPlayedChord);
   const notes = voicedChord.voicing().noteValues();
   // const notes = voicedChord.voicing({ withRoot: 3 }).noteValues();
