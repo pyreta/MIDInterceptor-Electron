@@ -58,56 +58,36 @@ export class ModeRows extends React.Component {
   }
 
   render() {
-    const { stopChord, tonic, chordBody, secondaryDominants } = this.props;
+    const { modeRows, stopChord, tonic, chordBody, secondaryDominants } = this.props;
     return (
       <Container>
-        {[1, 6].map(mode => (
+        {Object.keys(modeRows)
+          .map(scale => Object.keys(modeRows[scale])
+          .filter(mode => modeRows[scale][mode])
+          .map(mode => (
           <ModeRow
             playChord={this.playChord}
             stopChord={stopChord}
             tonic={tonic}
             mode={mode}
             key={mode}
-            scale={'major'}
+            scale={scale}
             chordBody={chordBody}
             secondaryDominants={secondaryDominants}
           />
-        ))}
-        {[1].map(mode => (
-          <ModeRow
-            playChord={this.playChord}
-            stopChord={stopChord}
-            tonic={tonic}
-            mode={mode}
-            key={mode}
-            scale={'harmonicMinor'}
-            chordBody={chordBody}
-            secondaryDominants={secondaryDominants}
-          />
-        ))}
-        {[1].map(mode => (
-          <ModeRow
-            playChord={this.playChord}
-            stopChord={stopChord}
-            tonic={tonic}
-            mode={mode}
-            key={mode}
-            scale={'melodicMinor'}
-            chordBody={chordBody}
-            secondaryDominants={secondaryDominants}
-          />
-        ))}
+        )))}
       </Container>
     );
   }
 }
 
-const mapStateToProps = ({ keysPressed, chordBody, devices: { outputDevice }, tonic }) => ({
+const mapStateToProps = ({ modeRows, keysPressed, chordBody, devices: { outputDevice }, tonic }) => ({
   tonic,
   chordBody,
   stopChord: chord => outputDevice.stopNote(chord, 1),
   playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
   secondaryDominants: keysPressed["83"],
+  modeRows,
 });
 
 const mapDispatchToProps = dispatch => ({

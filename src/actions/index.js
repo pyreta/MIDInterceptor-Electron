@@ -16,6 +16,7 @@ const actionsAndTypes = createActionsAndTypes([
   'REMOVE_KEY_PRESS',
   'UPDATE_CHORD_BODY',
   'PLAY_CHORD',
+  'TOGGLE_MODE',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;

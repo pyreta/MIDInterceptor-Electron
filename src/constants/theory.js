@@ -74,7 +74,7 @@ export const scales = {
       'Dorian #4',
       'Phrygian Dominant',
       'Lydian #2',
-      'Alt Dominant bb7'
+      'Superlocrian'
     ],
   },
   melodicMinor: {
@@ -87,7 +87,7 @@ export const scales = {
       'Lydian Dominant',
       'Mixolydian b6',
       'Semilocrian',
-      'Superlocrian'
+      'Altered Scale'
     ],
   },
   harmonicMajor: {

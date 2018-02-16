@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import MidiDeviceSetup from './MidiDeviceSetup';
 import KeySelect from './KeySelect';
 import ModeRows from './ModeRows';
+import ModeSelect from './ModeSelect';
 import actions from '../../actions';
 
 let held = false;
@@ -113,6 +114,7 @@ export class ApiUi extends React.Component {
   render() {
     return (
       <MidiDeviceSetup>
+        <ModeSelect />
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}
