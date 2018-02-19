@@ -32,7 +32,7 @@ export class ApiUi extends React.Component {
         if (keyCache['2']) return;
         keyCache['4'] ?
         this.props.addNotes({ 1: 0, 2: 0, 4: 0, 5: 0 }) :
-        this.props.addNotes({ 1: 0, 4: 0, 5: 0 })
+        this.props.addNotes({ 1: 0, 2: 0, 5: 0 })
         keyCache['2'] = true;
       }
       if (held) return;
@@ -46,10 +46,6 @@ export class ApiUi extends React.Component {
         this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
         keyCache['7'] = true;
       }
-      // if (e.key === '2') {
-      //   this.props.addNotes({ 1: 0, 2: 0, 5: 0 });
-      //   keyCache['2'] = true;
-      // }
       if (e.key === '6') {
         this.props.addNotes({ 1: 0, 3: 0, 5: 0, 6: 0 });
         keyCache['6'] = true;

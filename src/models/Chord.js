@@ -9,7 +9,7 @@ import {
   intervals,
   romanNumerals,
 } from '../constants/theory';
-import { getVoicing, setVoicing, matchChordVoicings } from './helpers';
+import { getVoicing, matchChordVoicings, rotateVoice, convertNotesToVoicing } from './helpers';
 
 const ascending = (a, b) => a - b;
 const defaultChord = {
@@ -53,8 +53,8 @@ class Chord {
     this.progression = progression || new Progression([chord]);
   }
 
-  clone() {
-    return new Chord({ ...this.chord }, this.progression);
+  clone(attrs = {}) {
+    return new Chord({ ...this.chord, ...attrs }, this.progression);
   }
 
   // *************** change chord
@@ -135,6 +135,7 @@ class Chord {
       {
         ...this.chord,
         notes: { ...this.chord.notes, [interval]: value },
+        voicing: {...this.get('voicing'), [interval]: [0] }
       },
       this.progression,
     );
@@ -293,16 +294,18 @@ class Chord {
     return getVoicing(this, options);
   }
 
-  setVoice(voice) {
-    return setVoicing(this, voice);
-  }
-
   findDistance(lastVoicing, closestNote) {
     return lastVoicing.map(x => Math.abs(x - closestNote))
   }
 
   matchVoicingToChord(otherChord) {
     return matchChordVoicings(this, otherChord);
+  }
+
+  inversion(n) {
+    const vals = this.voicing().noteValues();
+    const newV = rotateVoice(vals, n % vals.length);
+    return this.clone({ voicing: convertNotesToVoicing(this, newV)});
   }
 }
 

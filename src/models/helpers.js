@@ -26,7 +26,7 @@ export const getVoicing = (chord, { withRoot } = {}) => {
           const noteVoicings = voicing[voicingIdx];
           return noteVoicings.map(singleVoicing => {
             const octaveAdjustment =
-              chord.chord.octave * 12 + singleVoicing * 12;
+              chord.get('octave') * 12 + singleVoicing * 12;
             return noteValue + octaveAdjustment;
           });
         }),
@@ -38,30 +38,33 @@ export const getVoicing = (chord, { withRoot } = {}) => {
   };
 }
 
-export const setVoicing = (chord, voice) => {
+export const convertNotesToVoicing = (chord, voice) => {
   const noteValues = chord.noteValues();
   const moddedNotes = noteValues.map(x => x % 12);
   const intervals = Object.keys(chord.get('notes'))
   const newVoice = intervals.reduce((acc, n) => {
     return {...acc, [n]: []}
   }, {});
-  voice.forEach((note, idx) => {
+
+  const intervalsInOrder = voice.map((note, idx) => {
     const val = note % 12;
     const valIdx = moddedNotes.indexOf(val);
-    const interval = intervals[valIdx];
-    const unvoicedNote = noteValues[valIdx]
-    let octavesBelow = 0;
-    const amountBelowOctave = (chord.get('octave') * 12) - note;
-    const octave = Math.floor((val - unvoicedNote) / 12);
-    if (amountBelowOctave > 0) {
-      octavesBelow = 1
-      // TODO fix chord and notes under octave are ringing out
-      // octavesBelow = Math.round(amountBelowOctave/12) + 1
-    }
-    newVoice[interval].push(octave - octavesBelow)
+    return intervals[valIdx];
+  });
+  const voiceOctaveRemoved = voice.map(n => n - (12 * chord.get('octave')) - chord.root().value())
+  const octavesRepresented = voiceOctaveRemoved.map(n => Math.floor(n/12))
+  intervalsInOrder.forEach((interval, idx) => {
+    newVoice[interval].push(octavesRepresented[idx])
   })
-  chord.chord.voicing = newVoice;
+  return newVoice;
 }
+
+export const rotateVoice = (voicing, times) => {
+  if (times === 0) return voicing;
+  let [first, last] = [voicing[0], voicing[voicing.length - 1]];
+  while (first <= last) first += 12;
+  return rotateVoice([...voicing.slice(1), first], times - 1);
+};
 
 export const matchChordVoicings = (chord, otherChord) => {
   const newVoice = [];
@@ -84,7 +87,5 @@ export const matchChordVoicings = (chord, otherChord) => {
     newVoice.push(winner.closestNote);
   })
 
-  const c = chord.clone();
-  setVoicing(c,newVoice.sort(ascending))
-  return c;
+  return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
 }

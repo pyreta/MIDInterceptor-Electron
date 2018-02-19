@@ -1,4 +1,5 @@
 import Chord from '../Chord';
+import { convertNotesToVoicing } from '../helpers';
 
 describe('Chord', () => {
   const D_minor_in_C_Dorian = new Chord({ key: 0, scale: 'major', mode: 2, chord: 2, notes: { 1: 0, 3: 0, 5: 0 }});
@@ -222,6 +223,38 @@ describe('Chord', () => {
         .voicing()
         .noteValues())
         .toEqual([59, 62, 67]);
+    });
+
+    describe('helpers', () => {
+      describe('convertNotesToVoicing', () => {
+        const Cmaj = new Chord();
+        const Cmaj7 = new Chord().addNote(7);
+        const Dmaj7 = new Chord({ key: 2 }).addNote(7);
+        it('converts an adjust voicing to voicing object', () => {
+          expect(Cmaj.voicing().noteValues()).toEqual([60, 64, 67]);
+          expect(Cmaj7.voicing().noteValues()).toEqual([60, 64, 67, 71]);
+          expect(Dmaj7.voicing().noteValues()).toEqual([62, 66, 69, 73]);
+          expect(convertNotesToVoicing(Cmaj, [64, 67, 72])).toEqual({ 1: [1], 3: [0], 5: [0] });
+          expect(convertNotesToVoicing(Cmaj, [67, 72, 76])).toEqual({ 1: [1], 3: [1], 5: [0] });
+          expect(convertNotesToVoicing(Cmaj7, [64, 67, 71, 72])).toEqual({ 1: [1], 3: [0], 5: [0], 7:[0] });
+          expect(convertNotesToVoicing(Cmaj7, [59, 60, 64, 67])).toEqual({ 1: [0], 3: [0], 5: [0], 7:[-1] });
+          expect(convertNotesToVoicing(Cmaj7, [59, 60, 52, 67])).toEqual({ 1: [0], 3: [-1], 5: [0], 7:[-1] });
+          expect(convertNotesToVoicing(Dmaj7, [61, 62, 54, 69])).toEqual({ 1: [0], 3: [-1], 5: [0], 7:[-1] });
+          expect(convertNotesToVoicing(Dmaj7, [62, 66, 69, 73])).toEqual({ 1: [0], 3: [0], 5: [0], 7:[0] });
+        });
+      });
+    });
+
+    it('has inversions', () => {
+      const Cmaj = new Chord();
+      const Cmaj7 = new Chord().addNote(7);
+      expect(Cmaj.voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj.inversion(0).voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj.inversion(1).voicing().noteValues()).toEqual([64, 67, 72]);
+      expect(Cmaj.inversion(2).voicing().noteValues()).toEqual([67, 72, 76]);
+      expect(Cmaj.inversion(3).voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj7.inversion(3).voicing().noteValues()).toEqual([71, 72, 76, 79]);
+      expect(Cmaj7.inversion(4).voicing().noteValues()).toEqual([60, 64, 67, 71]);
     });
   });
 });
