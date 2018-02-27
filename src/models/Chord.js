@@ -19,11 +19,6 @@ const defaultChord = {
   mode: 1,
   chord: 1,
   notes: { 1: 0, 3: 0, 5: 0 },
-  voicing: {
-    1: [0],
-    3: [0],
-    5: [0],
-  },
 };
 
 class Chord {
@@ -50,6 +45,8 @@ class Chord {
   constructor(chord = {}, progression) {
     // TODO what if only a progression is passed into constuctor?
     this.chord = { ...defaultChord, ...chord };
+    const voicing = Object.keys(this.chord.notes).reduce((acc, n) => ({...acc, [n]: [0]}), {});
+    this.chord.voicing = this.chord.voicing || voicing;
     this.progression = progression || new Progression([chord]);
   }
 
@@ -131,14 +128,20 @@ class Chord {
   }
 
   addNote(interval, value = 0) {
-    const chord = new Chord(
-      {
-        ...this.chord,
-        notes: { ...this.chord.notes, [interval]: value },
-        voicing: {...this.get('voicing'), [interval]: [0] }
-      },
-      this.progression,
-    );
+    const chord = this.clone({
+      notes: { ...this.chord.notes, [interval]: value },
+      voicing: {...this.get('voicing'), [interval]: [0] }
+    });
+    // console.log(`chord.voicing().noteValues():`, chord.voicing().noteValues())
+    // const chord2 = new Chord(
+    //   {
+    //     ...this.chord,
+    //     notes: { ...this.chord.notes, [interval]: value },
+    //     voicing: {...this.get('voicing'), [interval]: [0] }
+    //   },
+    //   this.progression,
+    // );
+    // console.log(`chord2.voicing().noteNames():`, chord2.voicing().noteNames())
     return interval > 7 ? chord.addNote(7) : chord;
   }
 
@@ -290,6 +293,16 @@ class Chord {
     );
   }
 
+  inversion() {
+    const bassNote = this.voicing().noteNames()[0];
+    return this.noteNames().indexOf(bassNote);
+  }
+
+  romanNumeralAnalysis() {
+    const numeral = romanNumerals[this.get('chord') - 1];
+    return this.chordDefinition().romanNumeralAnalysis(numeral, this.inversion());
+  }
+
   voicing(options) {
     return getVoicing(this, options);
   }
@@ -302,9 +315,10 @@ class Chord {
     return matchChordVoicings(this, otherChord);
   }
 
-  inversion(n) {
+  setInversion(n) {
     const vals = this.voicing().noteValues();
-    const newV = rotateVoice(vals, n % vals.length);
+    const resetVoice = rotateVoice(vals, vals.length - this.inversion()).map(n => n - 12);
+    const newV = rotateVoice(resetVoice, n % vals.length);
     return this.clone({ voicing: convertNotesToVoicing(this, newV)});
   }
 }

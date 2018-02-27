@@ -1,90 +1,134 @@
 //♯⦰♭iiºV+ vii°7
+// triads
+// 1st: 6
+// 2nd: 6/4
+
+// seventh
+// 1st: 6/5
+// 2nd: 4/3
+// 3rd: 4/2
+
+const triadInversions = [[], [6], [6, 4]];
+const seventhInversions = [[], [6, 5], [4, 3], [4, 2]];
+const makeRomanNumeralAnalysis = ({
+  major,
+  seventh,
+  quality,
+  invertedQuality,
+} = {}) => (n, i) => ({
+  numeral: major ? n.toUpperCase() : n,
+  quality,
+  invertedQuality,
+  figuredBass: seventh ? seventhInversions[i] : triadInversions[i],
+});
+
+
+
+
 export default {
 // triads
   major3perfect5: {
     name: ' Major',
     abreviation: 'M',
-    getRomanNumeral: n => n
+    getRomanNumeral: n => n,
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ major: true })
   },
   minor3perfect5: {
     name: ' minor',
     abreviation: 'm',
-    getRomanNumeral: n => n
+    getRomanNumeral: n => n,
+    romanNumeralAnalysis: makeRomanNumeralAnalysis()
   },
   minor3flat5: {
     name: ' diminished',
     abreviation: 'dim',
-    getRomanNumeral: n => `${n}°`
+    getRomanNumeral: n => `${n}°`,
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '°', quality: '°'})
   },
   major3sharp5: {
     name: ' augmented',
     abreviation: 'aug',
-    getRomanNumeral: n => `${n}+`
+    getRomanNumeral: n => `${n}+`,
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '+', quality: '+', major: true})
   },
   major2perfect5: {
     name: ' suspened 2nd',
     abreviation: 'sus2',
-    getRomanNumeral: n => `${n}sus2`
+    getRomanNumeral: n => `${n}sus2`,
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'sus2' }),
   },
   major2major3perfect5: {
     name: ' Major add 2',
     abreviation: 'Madd2',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'add2', major: true }),
     getRomanNumeral: n => `${n}add2`
   },
   major2minor3perfect5: {
     name: ' minor add 2',
     abreviation: 'madd2',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'add2' }),
     getRomanNumeral: n => `${n}add2`
   },
   major2flat5: {
     name: ' suspened 2nd flat 5',
     abreviation: '°sus2',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: '°sus2' }),
     getRomanNumeral: n => `${n}°sus2`
   },
   perfect4perfect5: {
     name: ' suspened 4th',
     abreviation: 'sus4',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'sus', major: true }),
     getRomanNumeral: n => `${n}sus`
   },
   major2perfect4perfect5: {
     name: ' suspened 4th and 2nd',
     abreviation: 'sus42',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'sus42' }),
     getRomanNumeral: n => `${n}sus42`
   },
+
 // 7th chords
   major3perfect5major7: {
     name: ' Major 7th',
     abreviation: 'M7',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'M7', seventh: true, major: true }),
     getRomanNumeral: n => `${n}M7`
   },
   minor3perfect5major7: {
     name: ' minor Major 7th',
     abreviation: 'mM7',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'mM7', seventh: true }),
     getRomanNumeral: n => `${n}mM7`
   },
   major3perfect5minor7: {
     name: ' Dominant 7th',
     abreviation: '7',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '7', quality: '7', seventh: true, major: true }),
     getRomanNumeral: n => `${n}7`
   },
   minor3perfect5minor7: {
     name: ' minor 7th',
     abreviation: 'm7',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ quality: 'm7', seventh: true }),
     getRomanNumeral: n => `${n}7`
   },
   minor3flat5minor7: {
     name: ' Half-diminished',
     abreviation: 'm7♭5',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '⦰', quality: '⦰', seventh: true }),
     getRomanNumeral: n => `${n}⦰`
   },
   minor3flat5diminished7: {
     name: ' diminished',
     abreviation: 'dim7',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '°', quality: '°7', seventh: true }),
     getRomanNumeral: n => `${n}°7`
   },
   major3sharp5major7: {
     name: ' augmented 7th',
     abreviation: 'aug7',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '+', quality: '+7', seventh: true, major: true }),
     getRomanNumeral: n => `${n}+7`
   },
   major2perfect5minor7: {

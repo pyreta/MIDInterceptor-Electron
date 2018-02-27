@@ -13,6 +13,7 @@ export default class Progression {
       scale: 'major',
       mode: 1,
       notes: defaultNotes,
+      inversion: 0,
       ...args,
     };
     const progression = new Progression([1, 2, 3, 4, 5, 6, 7].map(chord => {
@@ -36,6 +37,12 @@ export default class Progression {
       ..._.flatten([fn(this.getChord(chordNumber))]).map(c => c.unwrap()),
       ...right,
     ]);
+  }
+
+  setInversion(n) {
+    return new Progression(this.progression.map(
+      chord => new Chord(chord).setInversion(n).unwrap())
+    );
   }
 
   unwrap() {

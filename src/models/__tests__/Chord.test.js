@@ -107,6 +107,7 @@ describe('Chord', () => {
     expect(D_minor_in_C_Dorian.sus(2).name()).toEqual('Dsus2');
     expect(D_minor_in_C_Dorian.sus(2,4).name()).toEqual('Dsus42');
     expect(D_minor_in_C_Dorian.sus(4,2,6).name()).toEqual('Dsus42');
+    console.log(`!!!!!!!!!! in can be suspended:`, D_minor_in_C_Dorian.sus(4,2,6).voicing().noteValues());
   });
 
   it('creates a secondary dominant', () => {
@@ -249,12 +250,35 @@ describe('Chord', () => {
       const Cmaj = new Chord();
       const Cmaj7 = new Chord().addNote(7);
       expect(Cmaj.voicing().noteValues()).toEqual([60, 64, 67]);
-      expect(Cmaj.inversion(0).voicing().noteValues()).toEqual([60, 64, 67]);
-      expect(Cmaj.inversion(1).voicing().noteValues()).toEqual([64, 67, 72]);
-      expect(Cmaj.inversion(2).voicing().noteValues()).toEqual([67, 72, 76]);
-      expect(Cmaj.inversion(3).voicing().noteValues()).toEqual([60, 64, 67]);
-      expect(Cmaj7.inversion(3).voicing().noteValues()).toEqual([71, 72, 76, 79]);
-      expect(Cmaj7.inversion(4).voicing().noteValues()).toEqual([60, 64, 67, 71]);
+      expect(Cmaj.setInversion(0).voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj.setInversion(1).voicing().noteValues()).toEqual([64, 67, 72]);
+      expect(Cmaj.setInversion(2).voicing().noteValues()).toEqual([67, 72, 76]);
+      expect(Cmaj.setInversion(3).voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj7.setInversion(3).voicing().noteValues()).toEqual([71, 72, 76, 79]);
+      expect(Cmaj7.setInversion(4).voicing().noteValues()).toEqual([60, 64, 67, 71]);
+    });
+
+    it('has idempotent inversions', () => {
+      const Cmaj = new Chord();
+      expect(Cmaj.setInversion(1).voicing().noteValues()).toEqual([64, 67, 72]);
+      expect(Cmaj.setInversion(2).voicing().noteValues()).toEqual([67, 72, 76]);
+      expect(Cmaj.setInversion(2).setInversion(1).voicing().noteValues()).toEqual([64, 67, 72]);
+      expect(Cmaj.setInversion(1).setInversion(1).voicing().noteValues()).toEqual([64, 67, 72]);
+      expect(Cmaj.setInversion(1).setInversion(2).voicing().noteValues()).toEqual([67, 72, 76]);
+      expect(Cmaj.setInversion(1).setInversion(0).voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj.setInversion(0).setInversion(0).voicing().noteValues()).toEqual([60, 64, 67]);
+      expect(Cmaj.setInversion(2).setInversion(2).voicing().noteValues()).toEqual([67, 72, 76]);
+      expect(Cmaj.setInversion(2).addNote(7).setInversion(0).voicing().noteValues()).toEqual([60, 64, 67, 71]);
+      expect(Cmaj.setInversion(2).addNote(7).setInversion(3).voicing().noteValues()).toEqual([71, 72, 76, 79]);
+      expect(Cmaj.addNote(7).setInversion(2).setInversion(3).voicing().noteValues()).toEqual([71, 72, 76, 79]);
+    });
+
+    it('has roman numeral analysis', () => {
+      const Cmin = new Chord({ mode: 2 });
+      expect(Cmin.name()).toEqual('Cm');
+      expect(Cmin.setInversion(1).romanNumeralAnalysis().figuredBass).toEqual([6]);
+      expect(Cmin.setInversion(2).romanNumeralAnalysis().figuredBass).toEqual([6, 4]);
+      expect(Cmin.setInversion(3).romanNumeralAnalysis().figuredBass).toEqual([]);
     });
   });
 });

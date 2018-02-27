@@ -28,8 +28,16 @@ const ModeRow = ({
   mode,
   chordBody: notes,
   secondaryDominants,
+  inversion
 }) => {
-  const progression = Progression.allChords({ key: tonic, scale, mode, notes }, secondaryDominants);
+  const progression = Progression.allChords({
+    key:
+    tonic,
+    scale,
+    mode,
+    notes,
+  }, secondaryDominants).setInversion(inversion);
+  // console.log(`progression.chords():`, progression.chords()[0].voicing().noteNames())
   return (
     <ScaleContainer>
       <ModeName>{progression.last().getMode().name()}</ModeName>
@@ -66,6 +74,7 @@ export class ModeRows extends React.Component {
           .filter(mode => modeRows[scale][mode])
           .map(mode => (
           <ModeRow
+            inversion={this.props.inversion}
             playChord={this.playChord}
             stopChord={stopChord}
             tonic={tonic}

@@ -30,9 +30,12 @@ const initialState = {
   chordBody: { 1: 0, 3: 0, 5: 0 },
   keysPressed: {},
   modeRows: {
-    major: {1: true, 2: true, 6: true },
-    harmonicMinor: {1: true, 5: true},
-    melodicMinor: {1: true},
+    // major: {1: true, 2: true, 6: true },
+    // harmonicMinor: {1: true, 5: true},
+    // melodicMinor: {1: true},
+    major: {1: true},
+    harmonicMinor: {},
+    melodicMinor: {},
   }
 };
 

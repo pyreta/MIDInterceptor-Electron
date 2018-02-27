@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import ChordModel from '../../models/Chord';
+import RomanNumeral from './RomanNumeral';
 
-const RomanNumeral = styled.div`
-  font-size: 19px;
-  font-family: times;
-  font-weight: bold;
-`;
+// const RomanNumeral = styled.div`
+//   font-size: 19px;
+//   font-family: times;
+//   font-weight: bold;
+// `;
 
 const Name = styled.div`
   font-size: 12px;
@@ -45,11 +46,11 @@ const Container = styled.div`
 `;
 
 
-const Chord = ({ chord, onClick, onStop, i, lastPlayedChord }) => {
+const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
-  const voicedChord = chord.matchVoicingToChord(lastPlayedChord);
+  //  TODO make this auto voice or auto octave or somet shit.  Rite now autovoicing is always false
+  const voicedChord = autoVoicing ? chord.matchVoicingToChord(lastPlayedChord) : chord;
   const notes = voicedChord.voicing().noteValues();
-  // const notes = voicedChord.voicing({ withRoot: 3 }).noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
     <Container
@@ -57,7 +58,10 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord }) => {
       onMouseUp={() => onStop(notes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
-      <RomanNumeral>{chord.romanNumeral()}</RomanNumeral>
+      {
+        // <RomanNumeral>{chord.romanNumeral()}</RomanNumeral>
+      }
+      <RomanNumeral {...chord.romanNumeralAnalysis()} />
       <Name>{chord.name()}</Name>
     </Container>
   )

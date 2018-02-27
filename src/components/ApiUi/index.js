@@ -21,6 +21,7 @@ export class ApiUi extends React.Component {
   }
   componentDidMount() {
     document.addEventListener('keydown', e => {
+      keyCache[e.key] = true;
       if (e.key === '4') {
         if (keyCache['4']) return;
         keyCache['2'] ?
@@ -62,11 +63,13 @@ export class ApiUi extends React.Component {
         this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 13: 0 });
         keyCache['3'] = true;
       }
+      if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
       held = true;
     });
     document.addEventListener('keyup', e => {
       held = false;
-
+      keyCache[e.key] = false;
+      if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
       if (e.key === '4') {
         keyCache['2'] ?
         this.props.addNotes({ 1: 0, 2: 0, 5: 0 }) :
@@ -107,6 +110,13 @@ export class ApiUi extends React.Component {
     });
   }
 
+  inversion() {
+    if (keyCache['e']) return 3;
+    if (keyCache['w']) return 2;
+    if (keyCache['q']) return 1;
+    return 0;
+  }
+
   render() {
     return (
       <MidiDeviceSetup>
@@ -117,7 +127,7 @@ export class ApiUi extends React.Component {
           stopChord={this.props.stopChord}
           tonic={this.props.tonic}
         />
-        <ModeRows />
+        <ModeRows inversion={this.inversion()}/>
       </MidiDeviceSetup>
     );
   }

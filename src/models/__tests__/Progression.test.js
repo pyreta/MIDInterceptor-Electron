@@ -33,6 +33,32 @@ describe('Progression', () => {
     expect(newProgression.at(1).get('key')).toEqual(3);
   });
 
+  it('inverts all chords inversion', () => {
+    const progression = new Progression([
+      {
+        key: 0,
+        octave: 5,
+        scale: 'major',
+        mode: 1,
+        chord: 1,
+        notes: { 1: 0, 3: 0, 5: 0 },
+      },
+      {
+        key: 0,
+        octave: 5,
+        scale: 'major',
+        mode: 1,
+        chord: 6,
+        notes: { 1: 0, 3: 0, 5: 0, 7: 0 },
+      },
+    ])
+    expect(progression.getChord(1).inversion()).toEqual(0);
+    expect(progression.setInversion(1).getChord(1).inversion()).toEqual(1);
+    expect(progression.setInversion(1).getChord(2).inversion()).toEqual(1);
+    expect(progression.setInversion(3).getChord(1).inversion()).toEqual(0);
+    expect(progression.setInversion(3).getChord(2).inversion()).toEqual(3);
+  });
+
   it('replaces chords', () => {
     const replacedPrgression = newProgression.replace(1, c => [c.sus(), c.addNote(7), c.set('mode', 7)]);
     expect(replacedPrgression.getChord(1).name()).toEqual('Dsus4');
