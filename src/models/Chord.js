@@ -9,7 +9,7 @@ import {
   intervals,
   romanNumerals,
 } from '../constants/theory';
-import { getVoicing, matchChordVoicings, rotateVoice, convertNotesToVoicing } from './helpers';
+import { getVoicing, matchChordVoicings, matchOctaveToChord, rotateVoice, convertNotesToVoicing } from './helpers';
 
 const ascending = (a, b) => a - b;
 const defaultChord = {
@@ -266,9 +266,11 @@ class Chord {
 
   name(format = 'abreviation') {
     const sig = this.signature();
+    const inversion = this.inversion();
     if (chordDictionary[sig]) {
       const extension = chordDictionary[sig][format];
-      return this.root().name() + extension;
+      const inv = inversion > 0 ? `/${this.noteNames()[inversion]}` : '';
+      return this.root().name() + extension + inv;
     }
     return `Unknown Chord: ${sig}`;
   }
@@ -315,11 +317,23 @@ class Chord {
     return matchChordVoicings(this, otherChord);
   }
 
+  matchOctaveToChord(otherChord) {
+    return matchOctaveToChord(this, otherChord);
+  }
+
   setInversion(n) {
     const vals = this.voicing().noteValues();
     const resetVoice = rotateVoice(vals, vals.length - this.inversion()).map(n => n - 12);
     const newV = rotateVoice(resetVoice, n % vals.length);
     return this.clone({ voicing: convertNotesToVoicing(this, newV)});
+  }
+
+  shiftOctave(diff) {
+    const v = this.get('voicing');
+    const voicing = Object.keys(v).reduce((acc, i) => {
+      return { ...acc, [i]: v[i].map(n => n + diff)}
+    }, {});
+    return this.clone({ voicing })
   }
 }
 

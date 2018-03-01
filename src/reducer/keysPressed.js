@@ -9,7 +9,7 @@ const {
 export default handleActions(
   {
     [ADD_KEY_PRESS]: (state, { payload }) => ({ ...state, [payload]: true }),
-    [REMOVE_KEY_PRESS]: (state, { payload }) => ({ ...state, [payload]: false })
+    [REMOVE_KEY_PRESS]: (state, { payload }) => ({ ...state, [payload]: false }),
   },
   0
 );

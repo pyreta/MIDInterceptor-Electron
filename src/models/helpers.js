@@ -81,11 +81,30 @@ export const matchChordVoicings = (chord, otherChord) => {
       if (smallestDistance < winner.smallestDistance) {
         winner = { smallestIdx, smallestDistance, closestNote };
       }
-      _.min()
+      // _.min()
       closestNote += 12;
     }
     newVoice.push(winner.closestNote);
   })
 
   return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
+}
+
+export const matchOctaveToChord = (chord, otherChord) => {
+  const chordValues = chord.voicing().noteValues();
+  const otherChordValues = otherChord.voicing().noteValues();
+  const diff = chordValues[0] - otherChordValues[0]
+  if (diff > 12) {
+    return chord.shiftOctave(-1)
+  }
+  if (diff < -12) {
+    return chord.shiftOctave(1)
+  }
+  if (diff > 0) {
+    return Math.abs(diff) < Math.abs(diff - 12) ? chord : chord.shiftOctave(-1)
+  }
+  if (diff < 0) {
+    return Math.abs(diff) < Math.abs(diff - 12) ? chord : chord.shiftOctave(+1)
+  }
+  return chord;
 }

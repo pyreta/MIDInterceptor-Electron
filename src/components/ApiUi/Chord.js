@@ -49,7 +49,7 @@ const Container = styled.div`
 const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
   //  TODO make this auto voice or auto octave or somet shit.  Rite now autovoicing is always false
-  const voicedChord = autoVoicing ? chord.matchVoicingToChord(lastPlayedChord) : chord;
+  const voicedChord = autoVoicing ? chord.matchVoicingToChord(lastPlayedChord) : chord.matchOctaveToChord(lastPlayedChord);
   const notes = voicedChord.voicing().noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
@@ -67,8 +67,9 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing }) => {
   )
 };
 
-const mapStateToProps = ({ lastPlayedChord }) => ({
-  lastPlayedChord: lastPlayedChord.notes ? new ChordModel(lastPlayedChord) : new ChordModel(lastPlayedChord)
+const mapStateToProps = ({ lastPlayedChord, autoVoicing }) => ({
+  lastPlayedChord: lastPlayedChord.notes ? new ChordModel(lastPlayedChord) : new ChordModel(lastPlayedChord),
+  autoVoicing,
 })
 
 export default connect(mapStateToProps)(Chord);

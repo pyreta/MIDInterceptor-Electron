@@ -17,6 +17,7 @@ const actionsAndTypes = createActionsAndTypes([
   'UPDATE_CHORD_BODY',
   'PLAY_CHORD',
   'TOGGLE_MODE',
+  'TOGGLE_AUTO_VOICING',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;
