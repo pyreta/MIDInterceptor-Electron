@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import progression from './progression';
+import voicingDecorator from './voicingDecorator';
 import devices from './devices';
 import webMidiEnabled from './webMidiEnabled';
 import tonic from './tonic';
@@ -20,5 +21,6 @@ export default combineReducers({
   },
   webMidiEnabled,
   devices,
+  voicingDecorator,
   progression,
 });;

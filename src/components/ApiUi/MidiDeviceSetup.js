@@ -13,7 +13,8 @@ class MidiDeviceSetup extends Component {
       dawListener:
         WebMidi.getInputById(defaultdeviceIds.dawListener) || noOpMidiDevice,
       outputDevice:
-        WebMidi.getOutputById(defaultdeviceIds.outputDevice) || noOpMidiDevice
+        WebMidi.outputs[0] || noOpMidiDevice
+        // WebMidi.getOutputById(defaultdeviceIds.outputDevice) || noOpMidiDevice
     };
 
     this.props.loadDevices(devices);

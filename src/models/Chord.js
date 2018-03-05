@@ -132,16 +132,6 @@ class Chord {
       notes: { ...this.chord.notes, [interval]: value },
       voicing: {...this.get('voicing'), [interval]: [0] }
     });
-    // console.log(`chord.voicing().noteValues():`, chord.voicing().noteValues())
-    // const chord2 = new Chord(
-    //   {
-    //     ...this.chord,
-    //     notes: { ...this.chord.notes, [interval]: value },
-    //     voicing: {...this.get('voicing'), [interval]: [0] }
-    //   },
-    //   this.progression,
-    // );
-    // console.log(`chord2.voicing().noteNames():`, chord2.voicing().noteNames())
     return interval > 7 ? chord.addNote(7) : chord;
   }
 
@@ -334,6 +324,17 @@ class Chord {
       return { ...acc, [i]: v[i].map(n => n + diff)}
     }, {});
     return this.clone({ voicing })
+  }
+
+  get decorate() {
+    const v = this.get('voicing');
+    const vg = this.voicing().noteValues();
+    const newV = [vg[0] - 24, ...vg]
+    return {
+      identity: () => this,
+      bassNote: () => this.clone({ voicing: convertNotesToVoicing(this, newV)}),
+      rootNote: () => this.clone({ voicing: { ...v, 1: [ v[1][0]-2, ...v[1]] } }),
+    }
   }
 }
 

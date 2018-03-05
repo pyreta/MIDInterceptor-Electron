@@ -4,34 +4,8 @@ import MidiDeviceSetup from './MidiDeviceSetup';
 import KeySelect from './KeySelect';
 import ModeRows from './ModeRows';
 import ModeSelect from './ModeSelect';
+import Buttons from './Buttons';
 import actions from '../../actions';
-import styled from 'styled-components';
-
-// let held = false;
-
-// const keyCache = {};
-
-const Switch = styled.div`
-  background: ${({ on }) => (on ? 'rgba(245, 43, 43, 0.9)' : 'white')};
-  ${({ on }) => (on ? 'box-shadow: 0px 0px 14px 5px rgba(245, 43, 43, 0.4);' : '')}
-  height: 29px;
-  width: 106px;
-  text-align: center;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  border-radius: 2px;
-  font-size: 15px;
-  border: 1px solid #21252b;
-  user-select: none;
-  cursor: pointer;
-  margin: 5px;
-  transition: all 100ms ease-out;
-  &:active {
-    font-size: 14px;
-    box-shadow: inset 1px 1px 5px rgba(0,0,0,0.9);
-  }
-`;
 
 export class ApiUi extends React.Component {
   constructor() {
@@ -184,12 +158,7 @@ export class ApiUi extends React.Component {
     return (
       <MidiDeviceSetup>
         <ModeSelect />
-        <Switch
-        on={this.props.autoVoicing}
-        onClick={this.props.toggleAutoVoicing}
-        >
-        Auto Voicing
-        </Switch>
+        <Buttons />
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}
@@ -204,14 +173,12 @@ export class ApiUi extends React.Component {
 
 const mapStateToProps = ({
   tonic,
-  autoVoicing,
   progression,
   devices: { outputDevice },
   keysPressed,
 }) => ({
   keysPressed,
   tonic,
-  autoVoicing,
   playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
   stopChord: chord => outputDevice.stopNote(chord, 1),
 });
@@ -222,7 +189,7 @@ const mapDispatchToProps = dispatch => ({
   changeKey: key => dispatch(actions.CHANGE_KEY(key)),
   addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
   registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
-  toggleAutoVoicing: () => dispatch(actions.TOGGLE_AUTO_VOICING()),
 });
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiUi);

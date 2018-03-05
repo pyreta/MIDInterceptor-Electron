@@ -5,12 +5,6 @@ import _ from 'lodash';
 import ChordModel from '../../models/Chord';
 import RomanNumeral from './RomanNumeral';
 
-// const RomanNumeral = styled.div`
-//   font-size: 19px;
-//   font-family: times;
-//   font-weight: bold;
-// `;
-
 const Name = styled.div`
   font-size: 12px;
 `;
@@ -26,7 +20,8 @@ const Container = styled.div`
   border-left: 0;
   border-bottom: 0;
   color: rgb(33, 37, 43);
-  transition: all 0.2s ease;
+  user-select: none;
+  transition: all 200ms ease;
   background: rgba(43, 123, 245, 0.${({ notesInCommon }) => notesInCommon});
   &:hover {
     background: rgb(33, 37, 43);
@@ -45,12 +40,14 @@ const Container = styled.div`
   }
 `;
 
-
-const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing }) => {
+const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicingDecorator }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
-  //  TODO make this auto voice or auto octave or somet shit.  Rite now autovoicing is always false
-  const voicedChord = autoVoicing ? chord.matchVoicingToChord(lastPlayedChord) : chord.matchOctaveToChord(lastPlayedChord);
-  const notes = voicedChord.voicing().noteValues();
+  // const voicedChord = (autoVoicing && !chord.voicing()) ? chord.matchVoicingToChord(lastPlayedChord) : chord;
+  // console.log(`chord.voicing():`, chord.inversion())
+  // const voicedChord = (autoVoicing) ? chord.matchVoicingToChord(lastPlayedChord) : chord.matchOctaveToChord(lastPlayedChord);
+  const voicedChord = (autoVoicing && !chord.inversion()) ? chord.matchVoicingToChord(lastPlayedChord) : chord.matchOctaveToChord(lastPlayedChord);
+  // const notes = voicedChord.voicing().noteValues();
+  const notes = voicedChord.decorate[voicingDecorator]().voicing().noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
     <Container
@@ -58,18 +55,16 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing }) => {
       onMouseUp={() => onStop(notes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
-      {
-        // <RomanNumeral>{chord.romanNumeral()}</RomanNumeral>
-      }
       <RomanNumeral {...chord.romanNumeralAnalysis()} />
       <Name>{chord.name()}</Name>
     </Container>
   )
 };
 
-const mapStateToProps = ({ lastPlayedChord, autoVoicing }) => ({
+const mapStateToProps = ({ lastPlayedChord, autoVoicing, voicingDecorator }) => ({
   lastPlayedChord: lastPlayedChord.notes ? new ChordModel(lastPlayedChord) : new ChordModel(lastPlayedChord),
   autoVoicing,
+  voicingDecorator,
 })
 
 export default connect(mapStateToProps)(Chord);

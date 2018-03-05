@@ -18,6 +18,7 @@ const actionsAndTypes = createActionsAndTypes([
   'PLAY_CHORD',
   'TOGGLE_MODE',
   'TOGGLE_AUTO_VOICING',
+  'TOGGLE_VOICING_DECORATOR',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;
