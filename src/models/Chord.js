@@ -303,8 +303,8 @@ class Chord {
     return lastVoicing.map(x => Math.abs(x - closestNote))
   }
 
-  matchVoicingToChord(otherChord) {
-    return matchChordVoicings(this, otherChord);
+  matchVoicingToChord(otherChord, method = 'louisMethod') {
+    return matchChordVoicings[method](this, otherChord);
   }
 
   matchOctaveToChord(otherChord) {

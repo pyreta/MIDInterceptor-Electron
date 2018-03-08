@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Chord from './Chord';
 import Progression from '../../models/Progression';
+import ChordModel from '../../models/Chord';
 import actions from '../../actions';
 
-const ScaleContainer = styled.div`display: flex;`;
+const ScaleContainer = styled.div`
+  display: flex;
+`;
 
 const ModeName = styled.div`
   width: 60px;
@@ -32,6 +35,8 @@ const ModeRow = ({
   chordBody: notes,
   secondaryDominants,
   inversion,
+  autoVoicing,
+  lastPlayedChord,
 }) => {
   const progression = Progression.allChords(
     {
@@ -46,19 +51,26 @@ const ModeRow = ({
   return (
     <ScaleContainer>
       <ModeName>
-        {progression.last().getMode().name()}
+        {progression
+          .last()
+          .getMode()
+          .name()}
       </ModeName>
-      {progression
-        .chords()
-        .map((c, i) => (
+      {progression.chords().map((c, i) => {
+        const voicedChord =
+          autoVoicing && (inversion < 1)
+            ? c.matchVoicingToChord(lastPlayedChord, 'bijective')
+            : c.matchOctaveToChord(lastPlayedChord);
+        return (
           <Chord
             key={i}
-            chord={c}
+            chord={voicedChord}
             i={i}
             onClick={playChord}
             onStop={stopChord}
           />
-        ))}
+        );
+      })}
     </ScaleContainer>
   );
 };
@@ -81,6 +93,8 @@ export class ModeRows extends React.Component {
       tonic,
       chordBody,
       secondaryDominants,
+      autoVoicing,
+      lastPlayedChord,
     } = this.props;
     return (
       <Container>
@@ -97,6 +111,8 @@ export class ModeRows extends React.Component {
                 key={mode}
                 scale={scale}
                 chordBody={chordBody}
+                autoVoicing={autoVoicing}
+                lastPlayedChord={lastPlayedChord}
                 secondaryDominants={secondaryDominants}
               />
             )),
@@ -110,11 +126,17 @@ const mapStateToProps = ({
   modeRows,
   keysPressed,
   chordBody,
+  autoVoicing,
+  lastPlayedChord,
   devices: { outputDevice },
   tonic,
 }) => ({
   tonic,
   chordBody,
+  autoVoicing,
+  lastPlayedChord: lastPlayedChord.notes
+    ? new ChordModel(lastPlayedChord)
+    : new ChordModel(lastPlayedChord),
   stopChord: chord => outputDevice.stopNote(chord, 1),
   playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
   secondaryDominants: keysPressed['83'],

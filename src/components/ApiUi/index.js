@@ -25,12 +25,14 @@ export class ApiUi extends React.Component {
       if (this.state[e.key]) return;
       this.setState({ [e.key]: true });
       if (e.key === '7') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
+      if (e.key === '6') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 6: 0 });
       if (e.keyCode === 37) this.decreaseKey();
       if (e.keyCode === 39) this.increaseKey();
+      if (e.key === 'a') this.props.toggleAutoVoicing();
     });
     document.addEventListener('keyup', e => {
       this.setState({ [e.key]: false });
-      if (e.key === '7') this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+      if (parseInt(e.key, 10) >= 6) this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
     });
 
     // document.addEventListener('keydown', e => {
@@ -148,9 +150,10 @@ export class ApiUi extends React.Component {
   }
 
   inversion() {
-    if (this.state.e) return 3;
-    if (this.state.w) return 2;
-    if (this.state.q) return 1;
+    if (this.state.r) return 3;
+    if (this.state.e) return 2;
+    if (this.state.w) return 1;
+    if (this.state.q) return 99;
     return 0;
   }
 
@@ -189,6 +192,7 @@ const mapDispatchToProps = dispatch => ({
   changeKey: key => dispatch(actions.CHANGE_KEY(key)),
   addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
   registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
+  toggleAutoVoicing: () => dispatch(actions.TOGGLE_AUTO_VOICING()),
 });
 
 

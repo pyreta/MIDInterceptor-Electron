@@ -10,5 +10,5 @@ export default handleActions(
     [TOGGLE_VOICING_DECORATOR]: (decorator, { payload }) =>
       decorator === payload ? 'identity' : payload
   },
-  'identity'
+  'rootNote'
 );

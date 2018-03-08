@@ -10,17 +10,29 @@
 
 const triadInversions = [[], [6], [6, 4]];
 const seventhInversions = [[], [6, 5], [4, 3], [4, 2]];
+const sixthInversions = [[], [6, 4, 3], [6, 4, 2], [7, 5, 3]];
 const makeRomanNumeralAnalysis = ({
   major,
   seventh,
+  sixth,
   quality,
   invertedQuality,
-} = {}) => (n, i) => ({
-  numeral: major ? n.toUpperCase() : n,
-  quality,
-  invertedQuality,
-  figuredBass: seventh ? seventhInversions[i] : triadInversions[i],
-});
+} = {}) => (n, i) => {
+  let figuredBass;
+  if (seventh) {
+    figuredBass = seventhInversions[i];
+  } else if (sixth) {
+    figuredBass = sixthInversions[i];
+  } else {
+    figuredBass = triadInversions[i];
+  }
+  return {
+    numeral: major ? n.toUpperCase() : n,
+    quality,
+    invertedQuality,
+    figuredBass,
+  }
+};
 
 
 
@@ -234,24 +246,28 @@ export default {
   minor3perfect5major6: {
     name: ' Minor 6th',
     abreviation: 'm6',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: 'm6', quality: 'm6', sixth: true }),
     getRomanNumeral: n => `${n}m6`
   },
 
   major3perfect5major6: {
     name: ' Major 6th',
     abreviation: '6',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '6', quality: '6', sixth: true, major: true }),
     getRomanNumeral: n => `${n}6`
   },
 
   minor3flat5major6: {
     name: ' Dim 6th',
     abreviation: 'dim6',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '°6', quality: '°6', sixth: true }),
     getRomanNumeral: n => `${n}°6`
   },
 
   major3sharp5major6: {
     name: ' Aug 6th',
     abreviation: 'aug6',
+    romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: '6+', quality: '6+', sixth: true, major: true }),
     getRomanNumeral: n => `${n}6+`
   },
 

@@ -42,16 +42,13 @@ const Container = styled.div`
 
 const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicingDecorator }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
-  // const voicedChord = (autoVoicing && !chord.voicing()) ? chord.matchVoicingToChord(lastPlayedChord) : chord;
-  // console.log(`chord.voicing():`, chord.inversion())
-  // const voicedChord = (autoVoicing) ? chord.matchVoicingToChord(lastPlayedChord) : chord.matchOctaveToChord(lastPlayedChord);
-  const voicedChord = (autoVoicing && !chord.inversion()) ? chord.matchVoicingToChord(lastPlayedChord) : chord.matchOctaveToChord(lastPlayedChord);
-  // const notes = voicedChord.voicing().noteValues();
-  const notes = voicedChord.decorate[voicingDecorator]().voicing().noteValues();
+  const notes = chord.decorate[voicingDecorator]().voicing().noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
     <Container
-      onMouseDown={() => onClick(notes, voicedChord.unwrap())}
+      onMouseDown={() => {
+        onClick(notes, chord.unwrap())
+      }}
       onMouseUp={() => onStop(notes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >

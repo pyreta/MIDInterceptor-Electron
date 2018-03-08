@@ -1,6 +1,6 @@
 import _ from 'lodash';
 // import { NOTES } from './constants';
-import { nonbijective_vl } from './voiceLeading';
+import { nonbijective_vl, bijective_vl } from './voiceLeading';
 import { notes } from '../constants/theory';
 
 // const isString = x => typeof x === 'string';
@@ -67,35 +67,50 @@ export const rotateVoice = (voicing, times) => {
   return rotateVoice([...voicing.slice(1), first], times - 1);
 };
 
-export const matchChordVoicings = (chord, otherChord) => {
-  const lastVoicing = otherChord.voicing().noteValues();
-  const newVoice = nonbijective_vl(lastVoicing, chord.noteValues())[1].map(x => x[1] + (otherChord.get('octave') * 12));
-  return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
+export const matchChordVoicings = {
+
+  nonBijective: (chord, otherChord) => {
+    const lastVoicing = otherChord.voicing().noteValues();
+    const newVoice = nonbijective_vl(lastVoicing, chord.noteValues())[1].map(x => x[1] + (otherChord.get('octave') * 12));
+    return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
+  },
+
+  bijective: (chord, otherChord) => {
+    const lastVoicing = otherChord.voicing().noteValues();
+    const bijective = bijective_vl(lastVoicing, chord.noteValues());
+    let newVoice;
+    if (bijective) {
+      newVoice = bijective.map(diff => diff[0] + diff[1]);
+    } else {
+      newVoice = nonbijective_vl(lastVoicing, chord.noteValues())[1].map(x => x[1] + (otherChord.get('octave') * 12));
+    }
+    return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
+  },
+
+  louisMethod: (chord, otherChord) => {
+    const newVoice = [];
+    const lastVoicing = otherChord.voicing().noteValues();
+
+    chord.noteValues().forEach(closestNote => {
+
+      let winner = { smallestDistance: 1000 };
+      while (closestNote <= lastVoicing[lastVoicing.length - 1] + 12) {
+        const distancesFromVoicing = chord.findDistance(lastVoicing, closestNote);
+        const smallestDistance = _.min(distancesFromVoicing);
+        const smallestIdx = distancesFromVoicing.indexOf(smallestDistance);
+
+        if (smallestDistance < winner.smallestDistance) {
+          winner = { smallestIdx, smallestDistance, closestNote };
+        }
+        // _.min()
+        closestNote += 12;
+      }
+      newVoice.push(winner.closestNote);
+    })
+
+    return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
+  }
 }
-//
-// export const matchChordVoicings = (chord, otherChord) => {
-//   const newVoice = [];
-//   const lastVoicing = otherChord.voicing().noteValues();
-//
-//   chord.noteValues().forEach(closestNote => {
-//
-//     let winner = { smallestDistance: 1000 };
-//     while (closestNote <= lastVoicing[lastVoicing.length - 1] + 12) {
-//       const distancesFromVoicing = chord.findDistance(lastVoicing, closestNote);
-//       const smallestDistance = _.min(distancesFromVoicing);
-//       const smallestIdx = distancesFromVoicing.indexOf(smallestDistance);
-//
-//       if (smallestDistance < winner.smallestDistance) {
-//         winner = { smallestIdx, smallestDistance, closestNote };
-//       }
-//       // _.min()
-//       closestNote += 12;
-//     }
-//     newVoice.push(winner.closestNote);
-//   })
-//
-//   return chord.clone({ voicing: convertNotesToVoicing(chord, newVoice)});
-// }
 
 export const matchOctaveToChord = (chord, otherChord) => {
   const chordValues = chord.voicing().noteValues();

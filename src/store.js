@@ -29,7 +29,7 @@ const initialState = {
   tonic: 0,
   chordBody: { 1: 0, 3: 0, 5: 0 },
   keysPressed: {},
-  voicingDecorator: 'identity',
+  voicingDecorator: 'rootNote',
   modeRows: {
     major: {1: true, 2: true, 6: true },
     harmonicMinor: {1: true, 5: true},
