@@ -16,10 +16,12 @@ export default class Progression {
       inversion: 0,
       ...args,
     };
+
     const progression = new Progression([1, 2, 3, 4, 5, 6, 7].map(chord => {
-      return Chord.wrap({ key, scale, mode, chord, notes }).isValid()
+      const c =  Chord.wrap({ key, scale, mode, chord, notes }).isValid()
         ? { key, scale, mode, chord, notes }
         : { key, scale, mode, chord, notes: defaultNotes };
+      return c;
     }));
     // return new Progression(progression);
     return secondaryDominants ? progression.secondaryDominants() : progression;

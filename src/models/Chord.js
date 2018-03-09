@@ -62,7 +62,7 @@ class Chord {
   }
 
   secondaryDominant() {
-    return new Chord({ key: this.root().value(), chord: 5 }).addNote(7);
+    return new Chord({ key: this.root().value(), chord: 5 }, this.progression).addNote(7);
   }
 
   tritoneSubstitution() {
@@ -303,8 +303,8 @@ class Chord {
     return lastVoicing.map(x => Math.abs(x - closestNote))
   }
 
-  matchVoicingToChord(otherChord, method = 'louisMethod') {
-    return matchChordVoicings[method](this, otherChord);
+  matchVoicingToChord(lastPlayedChord, method = 'louisMethod') {
+    return matchChordVoicings[method](this, lastPlayedChord);
   }
 
   matchOctaveToChord(otherChord) {

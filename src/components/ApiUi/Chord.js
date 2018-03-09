@@ -39,7 +39,7 @@ const Container = styled.div`
     background: rgb(216, 0, 0);
   }
 `;
-
+const allNotes = [...Array(124).keys()];
 const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicingDecorator }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
   const notes = chord.decorate[voicingDecorator]().voicing().noteValues();
@@ -47,9 +47,10 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicin
   return (
     <Container
       onMouseDown={() => {
+        // console.log(`played notes:`, notes)
         onClick(notes, chord.unwrap())
       }}
-      onMouseUp={() => onStop(notes)}
+      onMouseUp={() => onStop(allNotes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
       <RomanNumeral {...chord.romanNumeralAnalysis()} />

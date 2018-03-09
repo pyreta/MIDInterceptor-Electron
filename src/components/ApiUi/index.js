@@ -7,34 +7,6 @@ import ModeSelect from './ModeSelect';
 import Buttons from './Buttons';
 import actions from '../../actions';
 
-export class ApiUi extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-  decreaseKey() {
-    return this.props.tonic === 0
-      ? this.props.changeKey(11)
-      : this.props.changeKey(this.props.tonic - 1);
-  }
-  increaseKey() {
-    return this.props.changeKey((this.props.tonic + 1) % 12);
-  }
-  componentDidMount() {
-    document.addEventListener('keydown', e => {
-      if (this.state[e.key]) return;
-      this.setState({ [e.key]: true });
-      if (e.key === '7') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
-      if (e.key === '6') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 6: 0 });
-      if (e.keyCode === 37) this.decreaseKey();
-      if (e.keyCode === 39) this.increaseKey();
-      if (e.key === 'a') this.props.toggleAutoVoicing();
-    });
-    document.addEventListener('keyup', e => {
-      this.setState({ [e.key]: false });
-      if (parseInt(e.key, 10) >= 6) this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
-    });
-
     // document.addEventListener('keydown', e => {
     //   // keyCache[e.key] = true;
     //   if (e.key === '4') {
@@ -147,6 +119,42 @@ export class ApiUi extends React.Component {
     //   }
     //   // if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
     // });
+
+export class ApiUi extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  decreaseKey() {
+    return this.props.tonic === 0
+      ? this.props.changeKey(11)
+      : this.props.changeKey(this.props.tonic - 1);
+  }
+
+  increaseKey() {
+    return this.props.changeKey((this.props.tonic + 1) % 12);
+  }
+
+  setupKeyBindings() {
+    document.addEventListener('keydown', e => {
+      if (this.state[e.key]) return;
+      this.setState({ [e.key]: true });
+      if (e.key === '7') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
+      if (e.key === '6') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 6: 0 });
+      if (e.key === '9') this.props.addNotes({ 1: 0, 3: 0, 5: 0, 9: 0 });
+      if (e.keyCode === 37) this.decreaseKey();
+      if (e.keyCode === 39) this.increaseKey();
+      if (e.key === 'a') this.props.toggleAutoVoicing();
+    });
+    document.addEventListener('keyup', e => {
+      this.setState({ [e.key]: false });
+      if (parseInt(e.key, 10) >= 6) this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+    });
+  }
+
+  componentDidMount() {
+    this.setupKeyBindings()
   }
 
   inversion() {

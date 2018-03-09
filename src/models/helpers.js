@@ -53,7 +53,10 @@ export const convertNotesToVoicing = (chord, voice) => {
     return intervals[valIdx];
   });
   const voiceOctaveRemoved = voice.map(n => n - (12 * chord.get('octave')) - chord.root().value())
-  const octavesRepresented = voiceOctaveRemoved.map(n => Math.floor(n/12))
+  const octavesRepresented = voiceOctaveRemoved.map((n, i) => {
+    const currentInterval = intervalsInOrder[i];
+    return currentInterval > 7 ? Math.floor(n/12) - 1 : Math.floor(n/12);
+  })
   intervalsInOrder.forEach((interval, idx) => {
     newVoice[interval].push(octavesRepresented[idx])
   })
@@ -102,7 +105,6 @@ export const matchChordVoicings = {
         if (smallestDistance < winner.smallestDistance) {
           winner = { smallestIdx, smallestDistance, closestNote };
         }
-        // _.min()
         closestNote += 12;
       }
       newVoice.push(winner.closestNote);

@@ -229,6 +229,7 @@ describe('Chord', () => {
     describe('helpers', () => {
       describe('convertNotesToVoicing', () => {
         const Cmaj = new Chord();
+        const Cmaj9 = new Chord({ notes: {1:0, 3:0, 5:0, 7:0, 9:0}});
         const Cmaj7 = new Chord().addNote(7);
         const Dmaj7 = new Chord({ key: 2 }).addNote(7);
         it('converts an adjust voicing to voicing object', () => {
@@ -242,6 +243,7 @@ describe('Chord', () => {
           expect(convertNotesToVoicing(Cmaj7, [59, 60, 52, 67])).toEqual({ 1: [0], 3: [-1], 5: [0], 7:[-1] });
           expect(convertNotesToVoicing(Dmaj7, [61, 62, 54, 69])).toEqual({ 1: [0], 3: [-1], 5: [0], 7:[-1] });
           expect(convertNotesToVoicing(Dmaj7, [62, 66, 69, 73])).toEqual({ 1: [0], 3: [0], 5: [0], 7:[0] });
+          expect(convertNotesToVoicing(Cmaj9, [60, 64, 67, 71, 74])).toEqual({ 1: [0], 3: [0], 5: [0], 7:[0], 9:[0] });
         });
       });
     });
