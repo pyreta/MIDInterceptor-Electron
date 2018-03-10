@@ -12,6 +12,7 @@ const actionsAndTypes = createActionsAndTypes([
   'REMOVE_SEVEN',
   'ENABLE_WEB_MIDI',
   'LOAD_MIDI_DEVICES',
+  'SET_MIDI_DEVICE',
   'ADD_KEY_PRESS',
   'REMOVE_KEY_PRESS',
   'UPDATE_CHORD_BODY',
