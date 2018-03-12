@@ -138,7 +138,7 @@ const mapStateToProps = ({
   autoVoicing,
   lastPlayedChord: new ChordModel(lastPlayedChord),
   stopChord: chord => outputDevice.stopNote(chord, 1),
-  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
+  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.7 }),
   secondaryDominants: keysPressed['83'],
   modeRows,
 });

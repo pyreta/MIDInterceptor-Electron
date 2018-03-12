@@ -33,10 +33,11 @@ export class DeviceManager extends React.Component {
       device = this.props.devices.inputDevice;
     }
     device.addListener('noteon', 'all', e => {
-      console.log('noteon', e);
+      const { note, velocity } = e;
+      this.props.devices.outputDevice.playNote(note.number, 1, { velocity })
     });
     device.addListener('noteoff', 'all', e => {
-      console.log('noteoff', e);
+      this.props.devices.outputDevice.stopNote(e.note.number, 1)
     });
   }
 

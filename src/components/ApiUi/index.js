@@ -197,7 +197,7 @@ const mapStateToProps = ({
 }) => ({
   keysPressed,
   tonic,
-  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.5 }),
+  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 1 }),
   stopChord: chord => outputDevice.stopNote(chord, 1),
 });
 
