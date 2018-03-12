@@ -9,8 +9,9 @@ import DeviceManager from './DeviceManager';
 class MidiDeviceSetup extends Component {
   loadDevices() {
     const devices = {
-      midiDevice:
-        WebMidi.inputs[0] || noOpMidiDevice,
+      inputDevice:
+        noOpMidiDevice,
+        // WebMidi.inputs[0] || noOpMidiDevice,
         // WebMidi.getInputById(defaultdeviceIds.midiDevice) || noOpMidiDevice,
       dawListener:
         WebMidi.inputs[0] || noOpMidiDevice,

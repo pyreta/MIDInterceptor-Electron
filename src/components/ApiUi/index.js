@@ -7,118 +7,118 @@ import ModeSelect from './ModeSelect';
 import Buttons from './Buttons';
 import actions from '../../actions';
 
-    // document.addEventListener('keydown', e => {
-    //   // keyCache[e.key] = true;
-    //   if (e.key === '4') {
-    //     if (keyCache['4']) return;
-    //     keyCache['2'] ?
-    //     this.props.addNotes({ 1: 0, 2: 0, 4: 0, 5: 0 }) :
-    //     this.props.addNotes({ 1: 0, 4: 0, 5: 0 })
-    //     keyCache['4'] = true;
-    //   }
-    //   if (e.key === '2') {
-    //     if (keyCache['2']) return;
-    //     keyCache['4'] ?
-    //     this.props.addNotes({ 1: 0, 2: 0, 4: 0, 5: 0 }) :
-    //     this.props.addNotes({ 1: 0, 2: 0, 5: 0 })
-    //     keyCache['2'] = true;
-    //   }
-    //
-    //   // if (e.key === 'q') {
-    //   //   if (this.props.keysPressed.q) return;
-    //   //   this.props.addKeyPress('q');
-    //   // }
-    //   // if (e.key === 'w') {
-    //   //   if (this.props.keysPressed.w) return;
-    //   //   this.props.addKeyPress('w');
-    //   // }
-    //   // if (e.key === 'e') {
-    //   //   if (this.props.keysPressed.e) return;
-    //   //   this.props.addKeyPress('e');
-    //   // }
-    //
-    //   if (held) return;
-    //   if (e.keyCode === 37) this.decreaseKey();
-    //   if (e.keyCode === 39) this.increaseKey();
-    //   if (e.key === 's') {
-    //     this.props.addKeyPress(e.keyCode);
-    //     keyCache['s'] = true;
-    //   }
-    //   if (e.key === '7') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
-    //     keyCache['7'] = true;
-    //   }
-    //   if (e.key === '6') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 6: 0 });
-    //     keyCache['6'] = true;
-    //   }
-    //   if (e.key === '9') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 9: 0 });
-    //     keyCache['9'] = true;
-    //   }
-    //   if (e.key === '1') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 11: 0 });
-    //     keyCache['1'] = true;
-    //   }
-    //   if (e.key === '3') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 13: 0 });
-    //     keyCache['3'] = true;
-    //   }
-    //   // if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
-    //   held = true;
-    // });
+// document.addEventListener('keydown', e => {
+//   // keyCache[e.key] = true;
+//   if (e.key === '4') {
+//     if (keyCache['4']) return;
+//     keyCache['2'] ?
+//     this.props.addNotes({ 1: 0, 2: 0, 4: 0, 5: 0 }) :
+//     this.props.addNotes({ 1: 0, 4: 0, 5: 0 })
+//     keyCache['4'] = true;
+//   }
+//   if (e.key === '2') {
+//     if (keyCache['2']) return;
+//     keyCache['4'] ?
+//     this.props.addNotes({ 1: 0, 2: 0, 4: 0, 5: 0 }) :
+//     this.props.addNotes({ 1: 0, 2: 0, 5: 0 })
+//     keyCache['2'] = true;
+//   }
+//
+//   // if (e.key === 'q') {
+//   //   if (this.props.keysPressed.q) return;
+//   //   this.props.addKeyPress('q');
+//   // }
+//   // if (e.key === 'w') {
+//   //   if (this.props.keysPressed.w) return;
+//   //   this.props.addKeyPress('w');
+//   // }
+//   // if (e.key === 'e') {
+//   //   if (this.props.keysPressed.e) return;
+//   //   this.props.addKeyPress('e');
+//   // }
+//
+//   if (held) return;
+//   if (e.keyCode === 37) this.decreaseKey();
+//   if (e.keyCode === 39) this.increaseKey();
+//   if (e.key === 's') {
+//     this.props.addKeyPress(e.keyCode);
+//     keyCache['s'] = true;
+//   }
+//   if (e.key === '7') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0 });
+//     keyCache['7'] = true;
+//   }
+//   if (e.key === '6') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 6: 0 });
+//     keyCache['6'] = true;
+//   }
+//   if (e.key === '9') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 9: 0 });
+//     keyCache['9'] = true;
+//   }
+//   if (e.key === '1') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 11: 0 });
+//     keyCache['1'] = true;
+//   }
+//   if (e.key === '3') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0, 7: 0, 13: 0 });
+//     keyCache['3'] = true;
+//   }
+//   // if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
+//   held = true;
+// });
 
-    // document.addEventListener('keyup', e => {
-    //   held = false;
-    //   // keyCache[e.key] = false;
-    //   if (e.key === '4') {
-    //     keyCache['2'] ?
-    //     this.props.addNotes({ 1: 0, 2: 0, 5: 0 }) :
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 })
-    //     keyCache['4'] = false;
-    //   }
-    //   if (e.key === '2') {
-    //     keyCache['4'] ?
-    //     this.props.addNotes({ 1: 0, 4: 0, 5: 0 }) :
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 })
-    //     keyCache['2'] = false;
-    //   }
-    //
-    //   if (e.key === 's') {
-    //     this.props.removeKeyPress(e.keyCode);
-    //     keyCache['s'] = false;
-    //   }
-    //   if (e.key === '7') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
-    //     keyCache['7'] = false;
-    //   }
-    //   if (e.key === '6') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
-    //     keyCache['6'] = false;
-    //   }
-    //   if (e.key === '9') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
-    //     keyCache['9'] = false;
-    //   }
-    //   if (e.key === '1') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
-    //     keyCache['1'] = false;
-    //   }
-    //   if (e.key === '3') {
-    //     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
-    //     keyCache['3'] = false;
-    //   }
-    //   if (e.key === 'q') {
-    //     this.props.removeKeyPress('q');
-    //   }
-    //   if (e.key === 'w') {
-    //     this.props.removeKeyPress('w');
-    //   }
-    //   if (e.key === 'e') {
-    //     this.props.removeKeyPress('e');
-    //   }
-    //   // if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
-    // });
+// document.addEventListener('keyup', e => {
+//   held = false;
+//   // keyCache[e.key] = false;
+//   if (e.key === '4') {
+//     keyCache['2'] ?
+//     this.props.addNotes({ 1: 0, 2: 0, 5: 0 }) :
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 })
+//     keyCache['4'] = false;
+//   }
+//   if (e.key === '2') {
+//     keyCache['4'] ?
+//     this.props.addNotes({ 1: 0, 4: 0, 5: 0 }) :
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 })
+//     keyCache['2'] = false;
+//   }
+//
+//   if (e.key === 's') {
+//     this.props.removeKeyPress(e.keyCode);
+//     keyCache['s'] = false;
+//   }
+//   if (e.key === '7') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+//     keyCache['7'] = false;
+//   }
+//   if (e.key === '6') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+//     keyCache['6'] = false;
+//   }
+//   if (e.key === '9') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+//     keyCache['9'] = false;
+//   }
+//   if (e.key === '1') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+//     keyCache['1'] = false;
+//   }
+//   if (e.key === '3') {
+//     this.props.addNotes({ 1: 0, 3: 0, 5: 0 });
+//     keyCache['3'] = false;
+//   }
+//   if (e.key === 'q') {
+//     this.props.removeKeyPress('q');
+//   }
+//   if (e.key === 'w') {
+//     this.props.removeKeyPress('w');
+//   }
+//   if (e.key === 'e') {
+//     this.props.removeKeyPress('e');
+//   }
+//   // if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
+// });
 
 export class ApiUi extends React.Component {
   constructor() {
@@ -154,7 +154,7 @@ export class ApiUi extends React.Component {
   }
 
   componentDidMount() {
-    this.setupKeyBindings()
+    this.setupKeyBindings();
   }
 
   inversion() {
@@ -162,6 +162,13 @@ export class ApiUi extends React.Component {
     if (this.state.e) return 2;
     if (this.state.w) return 1;
     if (this.state.q) return 99;
+    return 0;
+  }
+
+  secondary() {
+    if (this.state.s) return 4;
+    if (this.state.d) return 5;
+    if (this.state.f) return 7;
     return 0;
   }
 
@@ -176,7 +183,7 @@ export class ApiUi extends React.Component {
           stopChord={this.props.stopChord}
           tonic={this.props.tonic}
         />
-        <ModeRows inversion={this.inversion()} />
+        <ModeRows inversion={this.inversion()} secondary={this.secondary()} />
       </MidiDeviceSetup>
     );
   }
@@ -202,6 +209,5 @@ const mapDispatchToProps = dispatch => ({
   registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
   toggleAutoVoicing: () => dispatch(actions.TOGGLE_AUTO_VOICING()),
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiUi);

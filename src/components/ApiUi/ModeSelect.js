@@ -21,6 +21,7 @@ const Mode = styled.div`
   transition: all 0.2s ease;
   justify-content: center;
   text-align: center;
+  flex: 1;
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -37,20 +38,11 @@ const Mode = styled.div`
     background: rgb(216, 0, 0);
   }
 `;
-const ModeName = styled.div`
-  width: 60px;
-  display: flex;
-  align-items: center;
-  padding: 4px 10px;
-  font-family: sans-serif;
-  color: rgba(141, 152, 169, 0.9);
-  background: rgb(33,37,43);
-  font-size: 13px;
-`;
+
 const Container = styled.div`
   border-bottom: 1px solid rgb(33, 37, 43);
-  display: inline-block;
 `;
+
 const ModeRow = ({
   scale,
   selectedModes,
@@ -58,7 +50,6 @@ const ModeRow = ({
 }) => {
   return (
     <ScaleContainer>
-      <ModeName></ModeName>
       {scales[scale].modes.map((mode, idx) => (
         <Mode
           key={idx}

@@ -65,6 +65,13 @@ class Chord {
     return new Chord({ key: this.root().value(), chord: 5 }, this.progression).addNote(7);
   }
 
+  secondary(chord = 0, chordOptions) {
+    if (chord) {
+      return new Chord({ notes: this.get('notes'), ...chordOptions, key: this.root().value(), chord }, this.progression);
+    }
+    return this;
+  }
+
   tritoneSubstitution() {
     // TODO take scales into account
     const notes = { 1: 0, 3: 0, 5: 0, 7: 0 };
@@ -141,16 +148,13 @@ class Chord {
     return this.setNotes(notes);
   }
 
-  data() {
-    return { ...this.chord };
-  }
-
   get(attr) {
     return this.chord[attr];
   }
 
   set(attr, value) {
-    return new Chord({ ...this.chord, [attr]: value }, this.progression);
+    return this.clone({ [attr]: value });
+    // return new Chord({ ...this.chord, [attr]: value }, this.progression);
   }
 
   getScale() {

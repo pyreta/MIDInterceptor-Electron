@@ -35,6 +35,7 @@ const ModeRow = ({
   chordBody: notes,
   secondaryDominants,
   inversion,
+  secondary,
   autoVoicing,
   lastPlayedChord,
 }) => {
@@ -59,8 +60,8 @@ const ModeRow = ({
       {progression.chords().map((c, i) => {
         const voicedChord =
           autoVoicing && (inversion < 1)
-            ? c.matchVoicingToChord(lastPlayedChord, 'bijective')
-            : c.matchOctaveToChord(lastPlayedChord);
+            ? c.secondary(secondary).matchVoicingToChord(lastPlayedChord, 'bijective')
+            : c.secondary(secondary).matchOctaveToChord(lastPlayedChord);
         return (
           <Chord
             key={i}
@@ -104,6 +105,7 @@ export class ModeRows extends React.Component {
             .map(mode => (
               <ModeRow
                 inversion={this.props.inversion}
+                secondary={this.props.secondary}
                 playChord={this.playChord}
                 stopChord={stopChord}
                 tonic={tonic}

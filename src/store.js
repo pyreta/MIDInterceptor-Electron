@@ -21,7 +21,7 @@ const initialState = {
   lastPlayedChord: {},
   webMidiEnabled: false,
   devices: {
-    midiDevice: noOpMidiDevice,
+    inputDevice: noOpMidiDevice,
     dawListener: noOpMidiDevice,
     outputDevice: noOpMidiDevice,
   },

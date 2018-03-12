@@ -114,6 +114,16 @@ describe('Chord', () => {
     expect(D_minor_in_C_Dorian.secondaryDominant().name()).toEqual('A7');
   });
 
+  it('creates a secondary chord', () => {
+    expect(D_minor_in_C_Dorian.secondary(5).addNote(7).name()).toEqual('A7');
+    const Fmaj = new Chord({ chord: 4});
+    expect(Fmaj.name()).toEqual('FM');
+    expect(Fmaj.secondary(5).secondary(7).name()).toEqual('Bdim');
+    expect(Fmaj.addNote(7).secondary(5).secondary(7).name()).toEqual('Bm7♭5');
+    expect(Fmaj.addNote(7).secondary(5,{ notes:   {1: 0, 3: 0, 5: 0}}).secondary(7).name()).toEqual('Bdim');
+    expect(G7.secondary(4).name()).toEqual('CM7');
+  });
+
   it('has tritone substitution', () => {
     expect(G7.tritoneSubstitution().name()).toEqual('C♯7');
     expect(A7.tritoneSubstitution().name()).toEqual('D♯7');
