@@ -3,6 +3,7 @@ import WebMidi from 'webmidi';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import actions from '../../actions';
+import mapScale from '../../helpers/mapScale';
 
 const Div = styled.div`
   display: flex;
@@ -34,10 +35,17 @@ export class DeviceManager extends React.Component {
     }
     device.addListener('noteon', 'all', e => {
       const { note, velocity } = e;
-      this.props.devices.outputDevice.playNote(note.number, 1, { velocity })
+      this.props.devices.outputDevice.playNote(
+        mapScale(note.number, this.props.lastPlayedChord),
+        1,
+        { velocity },
+      );
     });
     device.addListener('noteoff', 'all', e => {
-      this.props.devices.outputDevice.stopNote(e.note.number, 1)
+      this.props.devices.outputDevice.stopNote(
+        mapScale(e.note.number, this.props.lastPlayedChord),
+        1,
+      );
     });
   }
 
@@ -79,8 +87,9 @@ export class DeviceManager extends React.Component {
   }
 }
 
-const mapStateToProps = ({ devices }) => ({
+const mapStateToProps = ({ devices, lastPlayedChord }) => ({
   devices,
+  lastPlayedChord,
 });
 
 const mapDispatchToProps = dispatch => ({

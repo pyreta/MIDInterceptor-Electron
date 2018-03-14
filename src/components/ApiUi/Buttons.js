@@ -31,6 +31,28 @@ const Button = styled.div`
 const Wrapper = styled.div`display: flex;`;
 
 class Buttons extends React.Component {
+  constructor() {
+    super();
+    this.toggleSeventh = this.toggleSeventh.bind(this);
+    this.toggleSixth = this.toggleSixth.bind(this);
+  }
+
+  toggleSeventh() {
+    const notes = { 1: 0, 3: 0, 5: 0 };
+    if (!(this.props.chordBody[7] === 0)) {
+      notes[7] = 0;
+    }
+    this.props.addNotes(notes);
+  }
+
+  toggleSixth() {
+    const notes = { 1: 0, 3: 0, 5: 0 };
+    if (!(this.props.chordBody[6] === 0)) {
+      notes[6] = 0;
+    }
+    this.props.addNotes(notes);
+  }
+
   render() {
     return (
       <Wrapper>
@@ -52,14 +74,27 @@ class Buttons extends React.Component {
         >
           Bass Note
         </Button>
+        <Button
+          on={this.props.chordBody[6] === 0}
+          onClick={this.toggleSixth}
+          >
+          Sixth
+        </Button>
+        <Button
+          on={this.props.chordBody[7] === 0}
+          onClick={this.toggleSeventh}
+        >
+          Seventh
+        </Button>
       </Wrapper>
     );
   }
 }
 
-const mapStateToProps = ({ autoVoicing, voicingDecorator }) => ({
+const mapStateToProps = ({ autoVoicing, voicingDecorator, chordBody }) => ({
   autoVoicing,
   voicingDecorator,
+  chordBody,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -68,6 +103,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.TOGGLE_VOICING_DECORATOR('rootNote')),
   toggleBassNoteDecorator: () =>
     dispatch(actions.TOGGLE_VOICING_DECORATOR('bassNote')),
+  addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buttons);
