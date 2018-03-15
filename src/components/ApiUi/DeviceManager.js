@@ -29,7 +29,7 @@ export class DeviceManager extends React.Component {
     // const scale = 'major';
     const mode = 1;
     const scaleDegree = getScaleDegree(note);
-    const chord = window.loadedChords[mode - 1][scaleDegree - 1];
+    const chord = window.loadedChords[mode - 1][scaleDegree];
     const notes = chord.decorate[this.props.voicingDecorator]()
       .voicing()
       .noteValues();
@@ -48,14 +48,14 @@ export class DeviceManager extends React.Component {
     device.addListener('noteon', 'all', e => {
       const { note, velocity } = e;
       const newNote =
-        note < 60
+        note.number < 60
           ? this.getChord(note.number)
           : mapScale(note.number, this.props.lastPlayedChord);
       this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
     });
     device.addListener('noteoff', 'all', e => {
       const newNote =
-        e.note < 60
+        e.note.number < 60
           ? this.getChord(e.note.number)
           : mapScale(e.note.number, this.props.lastPlayedChord);
       this.props.devices.outputDevice.stopNote(newNote, 1);
@@ -100,7 +100,7 @@ export class DeviceManager extends React.Component {
   }
 }
 
-const mapStateToProps = ({ devices, lastPlayedChord }) => ({
+const mapStateToProps = ({ devices, lastPlayedChord, voicingDecorator }) => ({
   devices,
   lastPlayedChord,
   voicingDecorator,
