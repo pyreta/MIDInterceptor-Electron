@@ -26,6 +26,12 @@ const Container = styled.div`
   display: inline-block;
 `;
 
+// window.loadedChords = [[]];
+const setLoadedChord = chord => {
+  const lastRow = window.loadedChords[window.loadedChords.length - 1];
+  lastRow.length < 7 ? lastRow.push(chord) : window.loadedChords.push([chord]);
+};
+
 const ModeRow = ({
   playChord,
   stopChord,
@@ -49,6 +55,7 @@ const ModeRow = ({
     secondaryDominants,
   ).setInversion(inversion);
 
+
   return (
     <ScaleContainer>
       <ModeName>
@@ -62,6 +69,8 @@ const ModeRow = ({
           autoVoicing && (inversion < 1)
             ? c.secondary(secondary).matchVoicingToChord(lastPlayedChord, 'bijective')
             : c.secondary(secondary).matchOctaveToChord(lastPlayedChord);
+
+        setLoadedChord(voicedChord);
         return (
           <Chord
             key={i}
@@ -97,6 +106,7 @@ export class ModeRows extends React.Component {
       autoVoicing,
       lastPlayedChord,
     } = this.props;
+    window.loadedChords = [[]];
     return (
       <Container>
         {Object.keys(modeRows).map(scale =>

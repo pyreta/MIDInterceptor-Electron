@@ -3,7 +3,7 @@ import WebMidi from 'webmidi';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import actions from '../../actions';
-import mapScale from '../../helpers/mapScale';
+import mapScale, { getScaleDegree } from '../../helpers/mapScale';
 
 const Div = styled.div`
   display: flex;
@@ -24,6 +24,18 @@ export class DeviceManager extends React.Component {
     type === 'input' && this.connectListener(device);
   }
 
+  getChord(note) {
+    // const key = 0;
+    // const scale = 'major';
+    const mode = 1;
+    const scaleDegree = getScaleDegree(note);
+    const chord = window.loadedChords[mode - 1][scaleDegree - 1];
+    const notes = chord.decorate[this.props.voicingDecorator]()
+      .voicing()
+      .noteValues();
+    return notes;
+  }
+
   connectListener(d) {
     let device;
     if (d) {
@@ -35,17 +47,18 @@ export class DeviceManager extends React.Component {
     }
     device.addListener('noteon', 'all', e => {
       const { note, velocity } = e;
-      this.props.devices.outputDevice.playNote(
-        mapScale(note.number, this.props.lastPlayedChord),
-        1,
-        { velocity },
-      );
+      const newNote =
+        note < 60
+          ? this.getChord(note.number)
+          : mapScale(note.number, this.props.lastPlayedChord);
+      this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
     });
     device.addListener('noteoff', 'all', e => {
-      this.props.devices.outputDevice.stopNote(
-        mapScale(e.note.number, this.props.lastPlayedChord),
-        1,
-      );
+      const newNote =
+        e.note < 60
+          ? this.getChord(e.note.number)
+          : mapScale(e.note.number, this.props.lastPlayedChord);
+      this.props.devices.outputDevice.stopNote(newNote, 1);
     });
   }
 
@@ -90,6 +103,7 @@ export class DeviceManager extends React.Component {
 const mapStateToProps = ({ devices, lastPlayedChord }) => ({
   devices,
   lastPlayedChord,
+  voicingDecorator,
 });
 
 const mapDispatchToProps = dispatch => ({
