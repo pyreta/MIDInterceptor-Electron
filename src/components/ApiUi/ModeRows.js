@@ -27,6 +27,7 @@ const Container = styled.div`
 `;
 
 // window.loadedChords = [[]];
+window.modeRow = 0;
 const setLoadedChord = chord => {
   const lastRow = window.loadedChords[window.loadedChords.length - 1];
   lastRow.length < 7 ? lastRow.push(chord) : window.loadedChords.push([chord]);

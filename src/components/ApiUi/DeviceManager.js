@@ -9,6 +9,15 @@ const Div = styled.div`
   display: flex;
   width: 100%;
 `;
+
+const modeIndexMap = {
+  1: 0,
+  3: 1,
+  6: 2,
+  8: 3,
+  10: 4,
+};
+
 export class DeviceManager extends React.Component {
   componentWillMount() {
     this.connectListener();
@@ -27,9 +36,8 @@ export class DeviceManager extends React.Component {
   getChord(note) {
     // const key = 0;
     // const scale = 'major';
-    const mode = 1;
     const scaleDegree = getScaleDegree(note);
-    const chord = window.loadedChords[mode - 1][scaleDegree];
+    const chord = window.loadedChords[window.modeRow][scaleDegree];
     const notes = chord.decorate[this.props.voicingDecorator]()
       .voicing()
       .noteValues();
@@ -47,18 +55,41 @@ export class DeviceManager extends React.Component {
     }
     device.addListener('noteon', 'all', e => {
       const { note, velocity } = e;
+
       const newNote =
         note.number < 60
           ? this.getChord(note.number)
           : mapScale(note.number, this.props.lastPlayedChord);
-      this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
+
+      if (newNote) {
+        this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
+        return;
+      }
+
+      console.log('black note!', note.number);
+
+      if (note.number > 60) {
+        const modeIdx = modeIndexMap[note.number % 12] % window.loadedChords.length;
+        console.log('change mode!', modeIdx);
+      }
+
+      // const newNote =
+      //   note.number < 60
+      //     ? this.getChord(note.number)
+      //     : mapScale(note.number, this.props.lastPlayedChord);
+      // this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
     });
     device.addListener('noteoff', 'all', e => {
       const newNote =
         e.note.number < 60
           ? this.getChord(e.note.number)
           : mapScale(e.note.number, this.props.lastPlayedChord);
-      this.props.devices.outputDevice.stopNote(newNote, 1);
+
+      if (newNote) {
+        this.props.devices.outputDevice.stopNote(newNote, 1);
+        return;
+      }
+      // console.log('black note!', e.note.number);
     });
   }
 
