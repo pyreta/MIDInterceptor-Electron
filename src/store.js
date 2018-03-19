@@ -35,7 +35,7 @@ const initialState = {
     harmonicMinor: {1: true, 5: true},
     melodicMinor: {},
   },
-  autoVoicing: false,
+  autoVoicing: true,
 };
 
 export default createStore(

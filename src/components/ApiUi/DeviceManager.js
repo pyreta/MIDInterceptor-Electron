@@ -38,10 +38,12 @@ export class DeviceManager extends React.Component {
     // const scale = 'major';
     const scaleDegree = getScaleDegree(note);
     const chord = window.loadedChords[window.modeRow][scaleDegree];
-    const notes = chord.decorate[this.props.voicingDecorator]()
+    if (chord) {
+      const notes = chord.decorate[this.props.voicingDecorator]()
       .voicing()
       .noteValues();
-    return notes;
+      return notes;
+    }
   }
 
   connectListener(d) {
@@ -57,33 +59,34 @@ export class DeviceManager extends React.Component {
       const { note, velocity } = e;
 
       const newNote =
-        note.number < 60
+        note.number < 48
           ? this.getChord(note.number)
-          : mapScale(note.number, this.props.lastPlayedChord);
+          : mapScale(note.number, window.loadedChords[window.modeRow][0].unwrap());
 
       if (newNote) {
         this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
         return;
       }
 
-      console.log('black note!', note.number);
+      // console.log('black note!', note.number);
 
-      if (note.number > 60) {
+      if (note.number > 48) {
         const modeIdx = modeIndexMap[note.number % 12] % window.loadedChords.length;
-        console.log('change mode!', modeIdx);
+        // console.log('change mode!', modeIdx);
+        window.modeRow = modeIdx;
       }
 
       // const newNote =
-      //   note.number < 60
+      //   note.number < 48
       //     ? this.getChord(note.number)
       //     : mapScale(note.number, this.props.lastPlayedChord);
       // this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
     });
     device.addListener('noteoff', 'all', e => {
       const newNote =
-        e.note.number < 60
+        e.note.number < 48
           ? this.getChord(e.note.number)
-          : mapScale(e.note.number, this.props.lastPlayedChord);
+          : mapScale(e.note.number, window.loadedChords[window.modeRow][0].unwrap());
 
       if (newNote) {
         this.props.devices.outputDevice.stopNote(newNote, 1);
