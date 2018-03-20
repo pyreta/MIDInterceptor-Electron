@@ -16,7 +16,8 @@ const ModeName = styled.div`
   align-items: center;
   padding: 10px;
   font-family: sans-serif;
-  color: rgba(141, 152, 169, 0.9);
+  color: ${({ isSelected }) => isSelected ? 'rgba(43, 123, 245, 0.9)' : 'rgba(141, 152, 169, 0.9)'};
+  ${({ isSelected }) => isSelected ? 'font-weight: bold;' : ''};
   background: rgb(33, 37, 43);
   font-size: 13px;
 `;
@@ -42,6 +43,7 @@ const ModeRow = ({
   chordBody: notes,
   secondaryDominants,
   inversion,
+  isSelected,
   secondary,
   autoVoicing,
   lastPlayedChord,
@@ -59,7 +61,7 @@ const ModeRow = ({
 
   return (
     <ScaleContainer>
-      <ModeName>
+      <ModeName isSelected={isSelected}>
         {progression
           .last()
           .getMode()
@@ -109,27 +111,32 @@ export class ModeRows extends React.Component {
       lastPlayedChord,
     } = this.props;
     window.loadedChords = [[]];
+    let previousModes = -1;
     return (
       <Container>
-        {Object.keys(modeRows).map(scale =>
-          Object.keys(modeRows[scale])
+        {Object.keys(modeRows).map((scale, scaleIdx) => {
+          return Object.keys(modeRows[scale])
             .filter(mode => modeRows[scale][mode])
-            .map(mode => (
-              <ModeRow
-                inversion={this.props.inversion}
-                secondary={this.props.secondary}
-                playChord={this.playChord}
-                stopChord={stopChord}
-                tonic={tonic}
-                mode={mode}
-                key={mode}
-                scale={scale}
-                chordBody={chordBody}
-                autoVoicing={autoVoicing}
-                lastPlayedChord={lastPlayedChord}
-                secondaryDominants={secondaryDominants}
-              />
-            )),
+            .map((mode, idx) => {
+              previousModes += 1;
+              return (
+                <ModeRow
+                  inversion={this.props.inversion}
+                  secondary={this.props.secondary}
+                  playChord={this.playChord}
+                  stopChord={stopChord}
+                  tonic={tonic}
+                  mode={mode}
+                  key={mode}
+                  scale={scale}
+                  isSelected={window.modeRow === (idx + previousModes)}
+                  chordBody={chordBody}
+                  autoVoicing={autoVoicing}
+                  lastPlayedChord={lastPlayedChord}
+                  secondaryDominants={secondaryDominants}
+                />
+            )})
+          },
         )}
       </Container>
     );

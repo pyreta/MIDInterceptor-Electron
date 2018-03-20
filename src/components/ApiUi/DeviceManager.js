@@ -34,8 +34,6 @@ export class DeviceManager extends React.Component {
   }
 
   getChord(note) {
-    // const key = 0;
-    // const scale = 'major';
     const scaleDegree = getScaleDegree(note);
     const chord = window.loadedChords[window.modeRow][scaleDegree];
     if (chord) {
@@ -68,19 +66,12 @@ export class DeviceManager extends React.Component {
         return;
       }
 
-      // console.log('black note!', note.number);
-
       if (note.number > 48) {
-        const modeIdx = modeIndexMap[note.number % 12] % window.loadedChords.length;
-        // console.log('change mode!', modeIdx);
-        window.modeRow = modeIdx;
+        const modeIdx = modeIndexMap[note.number % 12];
+        if (modeIdx < window.loadedChords.length) {
+          window.modeRow = modeIdx;
+        }
       }
-
-      // const newNote =
-      //   note.number < 48
-      //     ? this.getChord(note.number)
-      //     : mapScale(note.number, this.props.lastPlayedChord);
-      // this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
     });
     device.addListener('noteoff', 'all', e => {
       const newNote =
@@ -92,7 +83,6 @@ export class DeviceManager extends React.Component {
         this.props.devices.outputDevice.stopNote(newNote, 1);
         return;
       }
-      // console.log('black note!', e.note.number);
     });
   }
 
