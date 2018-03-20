@@ -176,7 +176,7 @@ export class ApiUi extends React.Component {
     return (
       <MidiDeviceSetup>
         <ModeSelect />
-        <Buttons />
+        <Buttons isInverted={!!this.inversion()}/>
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}

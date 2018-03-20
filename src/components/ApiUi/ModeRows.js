@@ -79,6 +79,7 @@ const ModeRow = ({
             i={i}
             onClick={playChord}
             onStop={stopChord}
+            isInverted={!!inversion}
           />
         );
       })}

@@ -63,13 +63,13 @@ class Buttons extends React.Component {
           Auto Voicing
         </Button>
         <Button
-          on={this.props.voicingDecorator === 'rootNote'}
+          on={this.props.voicingDecorator === 'rootNote' && !this.props.isInverted}
           onClick={this.props.toggleRootNoteDecorator}
         >
           Root Note
         </Button>
         <Button
-          on={this.props.voicingDecorator === 'bassNote'}
+          on={this.props.voicingDecorator === 'bassNote' || (this.props.voicingDecorator === 'rootNote' && this.props.isInverted)}
           onClick={this.props.toggleBassNoteDecorator}
         >
           Bass Note

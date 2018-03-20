@@ -40,8 +40,10 @@ const Container = styled.div`
   }
 `;
 const allNotes = [...Array(124).keys()];
-const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicingDecorator }) => {
+const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicingDecorator: decorator, isInverted }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
+  let voicingDecorator = decorator;
+  if (voicingDecorator === 'rootNote' && isInverted) voicingDecorator = 'bassNote';
   const notes = chord.decorate[voicingDecorator]().voicing().noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   return (
@@ -53,8 +55,8 @@ const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicin
       onMouseUp={() => onStop(allNotes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
-      <RomanNumeral {...chord.romanNumeralAnalysis()} />
-      <Name>{chord.name()}</Name>
+      <RomanNumeral {...chord.romanNumeralAnalysis()} showInversion={voicingDecorator !== 'rootNote'}/>
+      <Name>{chord.name({ showInversion: voicingDecorator !== 'rootNote' })}</Name>
     </Container>
   )
 };

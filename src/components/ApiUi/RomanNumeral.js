@@ -21,13 +21,14 @@ const RomanNumeral = ({
   numeral,
   figuredBass,
   quality,
-  invertedQuality
+  invertedQuality,
+  showInversion,
 }) => (
     <Wrapper>
       { numeral }
-      { figuredBass.length ? invertedQuality : quality }
+      { (figuredBass.length && showInversion) ? invertedQuality : quality }
       <FiguredBass>
-        { figuredBass.map(i => <Num key={i}>{i}</Num>) }
+        { showInversion && figuredBass.map(i => <Num key={i}>{i}</Num>) }
       </FiguredBass>
     </Wrapper>
   )

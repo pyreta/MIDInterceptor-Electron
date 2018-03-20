@@ -258,12 +258,12 @@ class Chord {
     // console.log('');
   }
 
-  name(format = 'abreviation') {
+  name({format = 'abreviation', showInversion = true} = {}) {
     const sig = this.signature();
     const inversion = this.inversion();
     if (chordDictionary[sig]) {
       const extension = chordDictionary[sig][format];
-      const inv = inversion > 0 ? `/${this.noteNames()[inversion]}` : '';
+      const inv = (inversion > 0 && showInversion) ? `/${this.noteNames()[inversion]}` : '';
       return this.root().name() + extension + inv;
     }
     return `Unknown Chord: ${sig}`;
