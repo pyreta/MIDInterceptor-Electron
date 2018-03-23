@@ -66,7 +66,7 @@ export class DeviceManager extends React.Component {
         const modeIdx = modeIndexMap[note.number % 12];
 
         if (modeIdx < this.props.rows.length) {
-          this.props.setCurrentModeIdx(modeIdx);
+          this.props.selectModeRow(modeIdx);
         }
       }
     });
