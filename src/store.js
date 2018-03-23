@@ -27,7 +27,9 @@ const initialState = {
   },
   progression,
   tonic: 0,
+  selectedModeRow: 0,
   chordBody: { 1: 0, 3: 0, 5: 0 },
+  modeRowIndex: 0,
   keysPressed: {},
   voicingDecorator: 'rootNote',
   modeRows: {

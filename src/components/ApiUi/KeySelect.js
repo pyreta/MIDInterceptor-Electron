@@ -5,6 +5,7 @@ import { notes } from '../../constants/theory';
 const StyledContainer = styled.div`
   display: flex;
   width: 619px;
+  margin-top: 4px;
 `;
 
 const Container = styled.div`
@@ -14,7 +15,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   border-left: 0;
-  border-bottom: 0;
   padding: 5px 0;
   transition: all 0.2s ease;
   background: rgb(33, 37, 43);

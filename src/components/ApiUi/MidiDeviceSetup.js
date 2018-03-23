@@ -44,7 +44,7 @@ class MidiDeviceSetup extends Component {
       <div>
         {this.props.ready ? (
           <div>
-            <DeviceManager />
+            <DeviceManager rows={this.props.rows} />
             {this.props.children}
           </div>
         ) : (

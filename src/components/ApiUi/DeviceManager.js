@@ -10,13 +10,7 @@ const Div = styled.div`
   width: 100%;
 `;
 
-const modeIndexMap = {
-  1: 0,
-  3: 1,
-  6: 2,
-  8: 3,
-  10: 4,
-};
+const modeIndexMap = { 1: 0, 3: 1, 6: 2, 8: 3, 10: 4 };
 
 export class DeviceManager extends React.Component {
   componentWillMount() {
@@ -35,13 +29,19 @@ export class DeviceManager extends React.Component {
 
   getChord(note) {
     const scaleDegree = getScaleDegree(note);
-    const chord = window.loadedChords[window.modeRow][scaleDegree];
+    const chord = this.props.rows[this.props.selectedModeRow][scaleDegree];
     if (chord) {
       const notes = chord.decorate[this.props.voicingDecorator]()
-      .voicing()
-      .noteValues();
+        .voicing()
+        .noteValues();
       return notes;
     }
+  }
+
+  getNewNote(note) {
+    return note.number < 48
+      ? this.getChord(note.number)
+      : mapScale(note.number, this.props.rows[this.props.selectedModeRow][0].unwrap());
   }
 
   connectListener(d) {
@@ -55,11 +55,7 @@ export class DeviceManager extends React.Component {
     }
     device.addListener('noteon', 'all', e => {
       const { note, velocity } = e;
-
-      const newNote =
-        note.number < 48
-          ? this.getChord(note.number)
-          : mapScale(note.number, window.loadedChords[window.modeRow][0].unwrap());
+      const newNote = this.getNewNote(note);
 
       if (newNote) {
         this.props.devices.outputDevice.playNote(newNote, 1, { velocity });
@@ -68,16 +64,16 @@ export class DeviceManager extends React.Component {
 
       if (note.number > 48) {
         const modeIdx = modeIndexMap[note.number % 12];
-        if (modeIdx < window.loadedChords.length) {
-          window.modeRow = modeIdx;
+        if (modeIdx < this.props.rows.length) {
+          this.props.selectedModeRow = modeIdx;
+        }
+        if (modeIdx < this.props.rows.length) {
+          this.props.setCurrentModeIdx(modeIdx);
         }
       }
     });
     device.addListener('noteoff', 'all', e => {
-      const newNote =
-        e.note.number < 48
-          ? this.getChord(e.note.number)
-          : mapScale(e.note.number, window.loadedChords[window.modeRow][0].unwrap());
+      const newNote = this.getNewNote(e.note);
 
       if (newNote) {
         this.props.devices.outputDevice.stopNote(newNote, 1);
@@ -124,14 +120,21 @@ export class DeviceManager extends React.Component {
   }
 }
 
-const mapStateToProps = ({ devices, lastPlayedChord, voicingDecorator }) => ({
+const mapStateToProps = ({
   devices,
   lastPlayedChord,
   voicingDecorator,
+  selectedModeRow,
+}) => ({
+  devices,
+  lastPlayedChord,
+  voicingDecorator,
+  selectedModeRow,
 });
 
 const mapDispatchToProps = dispatch => ({
   setDevice: device => dispatch(actions.SET_MIDI_DEVICE(device)),
+  setCurrentModeIdx: idx => dispatch(actions.SET_MODE_INDEX(idx)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeviceManager);

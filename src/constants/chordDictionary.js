@@ -2,7 +2,9 @@
 // triads
 // 1st: 6
 // 2nd: 6/4
-
+//Major
+//M7
+//M9
 // seventh
 // 1st: 6/5
 // 2nd: 4/3
@@ -46,7 +48,7 @@ export default {
 // triads
   major3perfect5: {
     name: ' Major',
-    abreviation: 'M',
+    abreviation: '',
     getRomanNumeral: n => n,
     romanNumeralAnalysis: makeRomanNumeralAnalysis({ major: true })
   },
@@ -264,7 +266,7 @@ export default {
   // 6th chords
 
   minor3perfect5major6: {
-    name: ' Minor 6th',
+    name: ' minor 6th',
     abreviation: 'm6',
     romanNumeralAnalysis: makeRomanNumeralAnalysis({ invertedQuality: 'm6', quality: 'm6', sixth: true }),
     getRomanNumeral: n => `${n}m6`

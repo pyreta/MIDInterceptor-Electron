@@ -42,12 +42,12 @@ export const scales = {
     name: 'Major',
     intervals: [2, 2, 1, 2, 2, 2, 1],
     modes: [
-      'Major (Ionian)',
+      'Major',
       'Dorian',
       'Phrygian',
       'Lydian',
       'Mixolydian',
-      'Minor (Aeolian)',
+      'Minor',
       'Locrian'
     ],
   },
@@ -55,9 +55,9 @@ export const scales = {
     name: 'Minor',
     intervals: [2, 1, 2, 2, 1, 2, 2],
     modes: [
-      'Minor (Aeolian)',
+      'Minor',
       'Locrian',
-      'Major (Ionian)',
+      'Major',
       'Dorian',
       'Phrygian',
       'Lydian',

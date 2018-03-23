@@ -8,8 +8,8 @@ const Button = styled.div`
   ${({ on }) =>
     on
       ? 'box-shadow: 0px 0px 14px 5px rgba(245, 43, 43, 0.4);'
-      : 'box-shadow: 1px 1px 5px rgba(0,0,0,0.6);'} height: 29px;
-  width: 106px;
+      : 'box-shadow: 1px 1px 5px rgba(0,0,0,0.6);'}
+  height: 29px;
   text-align: center;
   justify-content: center;
   display: flex;
@@ -22,13 +22,14 @@ const Button = styled.div`
   margin: 5px 0 5px 5px;
   transition: all 40ms ease-out;
   transition: background 200ms ease-out;
+  flex: 1;
   &:active {
     font-size: 14px;
     box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.9);
   }
 `;
 
-const Wrapper = styled.div`display: flex;`;
+const Wrapper = styled.div`display: flex; width: 619px;`;
 
 class Buttons extends React.Component {
   constructor() {

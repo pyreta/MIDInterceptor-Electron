@@ -6,6 +6,8 @@ import ModeRows from './ModeRows';
 import ModeSelect from './ModeSelect';
 import Buttons from './Buttons';
 import actions from '../../actions';
+import ChordModel from '../../models/Chord';
+import Progression from '../../models/Progression';
 
 // document.addEventListener('keydown', e => {
 //   // keyCache[e.key] = true;
@@ -172,18 +174,62 @@ export class ApiUi extends React.Component {
     return 0;
   }
 
+  chordRows() {
+    const {
+      modeRows,
+      tonic,
+      chordBody,
+      secondaryDominants,
+      autoVoicing,
+      lastPlayedChord,
+    } = this.props;
+
+    const inversion = this.inversion();
+    const secondary = this.secondary();
+
+    return Object.keys(modeRows).map((scale, scaleIdx) => {
+      return Object.keys(modeRows[scale])
+        .filter(mode => modeRows[scale][mode])
+        .map((mode, idx) => {
+          const progression = Progression.allChords(
+            {
+              key: tonic,
+              scale,
+              mode,
+              notes: chordBody,
+            },
+            secondaryDominants,
+          ).setInversion(inversion);
+          return progression.chords().map((c, i) => {
+            const voicedChord =
+              autoVoicing && inversion < 1
+                ? c
+                    .secondary(secondary)
+                    .matchVoicingToChord(lastPlayedChord, 'bijective')
+                : c.secondary(secondary).matchOctaveToChord(lastPlayedChord);
+            return voicedChord;
+          });
+        });
+    });
+  }
+
   render() {
+    const chordRows = this.chordRows();
     return (
-      <MidiDeviceSetup>
+      <MidiDeviceSetup rows={chordRows}>
         <ModeSelect />
-        <Buttons isInverted={!!this.inversion()}/>
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}
           stopChord={this.props.stopChord}
           tonic={this.props.tonic}
+          />
+        <Buttons isInverted={!!this.inversion()} />
+        <ModeRows
+          rows={chordRows}
+          inversion={this.inversion()}
+          selectedModeRow={this.props.selectedModeRow}
         />
-        <ModeRows inversion={this.inversion()} secondary={this.secondary()} />
       </MidiDeviceSetup>
     );
   }
@@ -194,11 +240,24 @@ const mapStateToProps = ({
   progression,
   devices: { outputDevice },
   keysPressed,
+  // modeRowsProps
+  modeRows,
+  chordBody,
+  autoVoicing,
+  lastPlayedChord,
+  selectedModeRow,
 }) => ({
   keysPressed,
   tonic,
-  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 1 }),
+  playChord: chord => outputDevice.playNote(chord, 1, { velocity: 0.7 }),
   stopChord: chord => outputDevice.stopNote(chord, 1),
+  // modeRowsProps
+  chordBody,
+  autoVoicing,
+  lastPlayedChord: new ChordModel(lastPlayedChord),
+  secondaryDominants: keysPressed['83'],
+  modeRows,
+  selectedModeRow,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -208,6 +267,7 @@ const mapDispatchToProps = dispatch => ({
   addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
   registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
   toggleAutoVoicing: () => dispatch(actions.TOGGLE_AUTO_VOICING()),
+  loadChords: chords => dispatch(actions.LOAD_CHORDS(chords)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiUi);

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import Chord from './Chord';
-import Progression from '../../models/Progression';
 import ChordModel from '../../models/Chord';
 import actions from '../../actions';
 
@@ -15,79 +14,34 @@ const ModeName = styled.div`
   display: flex;
   align-items: center;
   padding: 10px;
+  user-select: none;
+  cursor: pointer;
   font-family: sans-serif;
-  color: ${({ isSelected }) => isSelected ? 'rgba(43, 123, 245, 0.9)' : 'rgba(141, 152, 169, 0.9)'};
-  ${({ isSelected }) => isSelected ? 'font-weight: bold;' : ''};
+  color: ${({ isSelected }) =>
+    isSelected ? 'rgba(43, 123, 245, 0.9)' : 'rgba(141, 152, 169, 0.9)'};
   background: rgb(33, 37, 43);
   font-size: 13px;
+  transition: all 100ms ease;
+`;
+
+const ScaleDegree = styled.div`
+  width: 57px;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  user-select: none;
+  font-family: sans-serif;
+  color: ${({ isSelected }) =>
+    isSelected ? 'rgba(43, 123, 245, 0.9)' : 'rgba(141, 152, 169, 0.9)'};
+  background: rgb(33, 37, 43);
+  font-size: 13px;
+  transition: all 100ms ease;
 `;
 
 const Container = styled.div`
   border-bottom: 1px solid rgb(33, 37, 43);
   display: inline-block;
 `;
-
-// window.loadedChords = [[]];
-window.modeRow = 0;
-const setLoadedChord = chord => {
-  const lastRow = window.loadedChords[window.loadedChords.length - 1];
-  lastRow.length < 7 ? lastRow.push(chord) : window.loadedChords.push([chord]);
-};
-
-const ModeRow = ({
-  playChord,
-  stopChord,
-  tonic,
-  scale,
-  mode,
-  chordBody: notes,
-  secondaryDominants,
-  inversion,
-  isSelected,
-  secondary,
-  autoVoicing,
-  lastPlayedChord,
-}) => {
-  const progression = Progression.allChords(
-    {
-      key: tonic,
-      scale,
-      mode,
-      notes,
-    },
-    secondaryDominants,
-  ).setInversion(inversion);
-
-
-  return (
-    <ScaleContainer>
-      <ModeName isSelected={isSelected}>
-        {progression
-          .last()
-          .getMode()
-          .name()}
-      </ModeName>
-      {progression.chords().map((c, i) => {
-        const voicedChord =
-          autoVoicing && (inversion < 1)
-            ? c.secondary(secondary).matchVoicingToChord(lastPlayedChord, 'bijective')
-            : c.secondary(secondary).matchOctaveToChord(lastPlayedChord);
-
-        setLoadedChord(voicedChord);
-        return (
-          <Chord
-            key={i}
-            chord={voicedChord}
-            i={i}
-            onClick={playChord}
-            onStop={stopChord}
-            isInverted={!!inversion}
-          />
-        );
-      })}
-    </ScaleContainer>
-  );
-};
 
 export class ModeRows extends React.Component {
   constructor() {
@@ -100,43 +54,55 @@ export class ModeRows extends React.Component {
     this.props.registerChord(chord);
   }
 
+  componentWillReceiveProps({ rows, selectedModeRow }) {
+    const totalRows = rows.reduce((acc, row) => row.length + acc, 0);
+    if (selectedModeRow >= totalRows) this.props.selectModeRow(totalRows - 1);
+  }
+
+  indexAdder() {
+    return [
+      0,
+      this.props.rows[0].length,
+      this.props.rows[0].length + this.props.rows[1].length,
+    ];
+  }
+
   render() {
-    const {
-      modeRows,
-      stopChord,
-      tonic,
-      chordBody,
-      secondaryDominants,
-      autoVoicing,
-      lastPlayedChord,
-    } = this.props;
-    window.loadedChords = [[]];
-    let previousModes = -1;
+    const indexAdder = this.indexAdder();
     return (
       <Container>
-        {Object.keys(modeRows).map((scale, scaleIdx) => {
-          return Object.keys(modeRows[scale])
-            .filter(mode => modeRows[scale][mode])
+        <ScaleContainer>
+          <ModeName />
+          {[1,2,3,4,5,6,7].map((c, i) => (
+            <ScaleDegree key={c}>{c}</ScaleDegree>
+          ))}
+        </ScaleContainer>
+        {this.props.rows.map((scale, row) =>
+          Object.keys(scale)
+            .filter(mode => scale[mode])
             .map((mode, idx) => {
-              previousModes += 1;
+              const rowIndex = idx + indexAdder[row];
               return (
-                <ModeRow
-                  inversion={this.props.inversion}
-                  secondary={this.props.secondary}
-                  playChord={this.playChord}
-                  stopChord={stopChord}
-                  tonic={tonic}
-                  mode={mode}
-                  key={mode}
-                  scale={scale}
-                  isSelected={window.modeRow === (idx + previousModes)}
-                  chordBody={chordBody}
-                  autoVoicing={autoVoicing}
-                  lastPlayedChord={lastPlayedChord}
-                  secondaryDominants={secondaryDominants}
-                />
-            )})
-          },
+                <ScaleContainer key={idx}>
+                  <ModeName
+                    isSelected={this.props.selectedModeRow === rowIndex}
+                    onClick={() => this.props.selectModeRow(rowIndex)}
+                  >
+                    {scale[idx][0].getMode().name()}
+                  </ModeName>
+                  {scale[idx].map((c, i) => (
+                    <Chord
+                      key={i}
+                      chord={c}
+                      i={i}
+                      onClick={this.playChord}
+                      onStop={this.props.stopChord}
+                      isInverted={!!this.props.inversion}
+                    />
+                  ))}
+                </ScaleContainer>
+              );
+            }),
         )}
       </Container>
     );
@@ -151,8 +117,10 @@ const mapStateToProps = ({
   lastPlayedChord,
   devices: { outputDevice },
   tonic,
+  loadedChords,
 }) => ({
   tonic,
+  loadedChords,
   chordBody,
   autoVoicing,
   lastPlayedChord: new ChordModel(lastPlayedChord),
@@ -164,6 +132,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
+  selectModeRow: idx => dispatch(actions.SELECT_MODE_ROW(idx)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModeRows);
