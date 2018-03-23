@@ -21,7 +21,6 @@ const actionsAndTypes = createActionsAndTypes([
   'TOGGLE_AUTO_VOICING',
   'TOGGLE_VOICING_DECORATOR',
   'LOAD_CHORDS',
-  'SET_MODE_INDEX',
   'SELECT_MODE_ROW',
 ]);
 

@@ -187,8 +187,8 @@ export class ApiUi extends React.Component {
     const inversion = this.inversion();
     const secondary = this.secondary();
 
-    return Object.keys(modeRows).map((scale, scaleIdx) => {
-      return Object.keys(modeRows[scale])
+    return Object.keys(modeRows).reduce((acc, scale) => {
+      const scaleModes = Object.keys(modeRows[scale])
         .filter(mode => modeRows[scale][mode])
         .map((mode, idx) => {
           const progression = Progression.allChords(
@@ -210,7 +210,9 @@ export class ApiUi extends React.Component {
             return voicedChord;
           });
         });
-    });
+
+      return [...acc, ...scaleModes]
+    }, []);
   }
 
   render() {

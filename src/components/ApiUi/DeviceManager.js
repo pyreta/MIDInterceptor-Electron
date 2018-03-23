@@ -64,9 +64,7 @@ export class DeviceManager extends React.Component {
 
       if (note.number > 48) {
         const modeIdx = modeIndexMap[note.number % 12];
-        if (modeIdx < this.props.rows.length) {
-          this.props.selectedModeRow = modeIdx;
-        }
+
         if (modeIdx < this.props.rows.length) {
           this.props.setCurrentModeIdx(modeIdx);
         }
@@ -80,6 +78,12 @@ export class DeviceManager extends React.Component {
         return;
       }
     });
+  }
+
+  componentWillReceiveProps({ rows, selectedModeRow }) {
+    if (selectedModeRow >= rows.length) {
+      this.props.selectModeRow(rows.length - 1);
+    }
   }
 
   render() {
@@ -134,7 +138,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   setDevice: device => dispatch(actions.SET_MIDI_DEVICE(device)),
-  setCurrentModeIdx: idx => dispatch(actions.SET_MODE_INDEX(idx)),
+  selectModeRow: idx => dispatch(actions.SELECT_MODE_ROW(idx)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeviceManager);

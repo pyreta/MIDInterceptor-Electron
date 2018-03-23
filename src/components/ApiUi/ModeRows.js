@@ -59,51 +59,37 @@ export class ModeRows extends React.Component {
     if (selectedModeRow >= totalRows) this.props.selectModeRow(totalRows - 1);
   }
 
-  indexAdder() {
-    return [
-      0,
-      this.props.rows[0].length,
-      this.props.rows[0].length + this.props.rows[1].length,
-    ];
-  }
-
   render() {
-    const indexAdder = this.indexAdder();
     return (
       <Container>
         <ScaleContainer>
           <ModeName />
-          {[1,2,3,4,5,6,7].map((c, i) => (
+          {[1, 2, 3, 4, 5, 6, 7].map((c, i) => (
             <ScaleDegree key={c}>{c}</ScaleDegree>
           ))}
         </ScaleContainer>
-        {this.props.rows.map((scale, row) =>
-          Object.keys(scale)
-            .filter(mode => scale[mode])
-            .map((mode, idx) => {
-              const rowIndex = idx + indexAdder[row];
-              return (
-                <ScaleContainer key={idx}>
-                  <ModeName
-                    isSelected={this.props.selectedModeRow === rowIndex}
-                    onClick={() => this.props.selectModeRow(rowIndex)}
-                  >
-                    {scale[idx][0].getMode().name()}
-                  </ModeName>
-                  {scale[idx].map((c, i) => (
-                    <Chord
-                      key={i}
-                      chord={c}
-                      i={i}
-                      onClick={this.playChord}
-                      onStop={this.props.stopChord}
-                      isInverted={!!this.props.inversion}
-                    />
-                  ))}
-                </ScaleContainer>
-              );
-            }),
-        )}
+        {this.props.rows.map((mode, idx) => {
+          return (
+            <ScaleContainer key={idx}>
+              <ModeName
+                isSelected={this.props.selectedModeRow === idx}
+                onClick={() => this.props.selectModeRow(idx)}
+              >
+                {mode[0].getMode().name()}
+              </ModeName>
+              {mode.map((c, i) => (
+                <Chord
+                  key={i}
+                  chord={c}
+                  i={i}
+                  onClick={this.playChord}
+                  onStop={this.props.stopChord}
+                  isInverted={!!this.props.inversion}
+                />
+              ))}
+            </ScaleContainer>
+          );
+        })}
       </Container>
     );
   }
