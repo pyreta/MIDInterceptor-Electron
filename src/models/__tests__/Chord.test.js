@@ -84,7 +84,7 @@ describe('Chord', () => {
 
   it('has a name', () => {
     expect(D_minor_in_C_Dorian.name()).toEqual('Dm');
-    expect(D_Major_in_Csharp_Phrygian.name()).toEqual('DM');
+    expect(D_Major_in_Csharp_Phrygian.name()).toEqual('D');
     expect(DsharpDim_in_Dsharp_Locrian.name()).toEqual('D♯dim');
     expect(E7_in_PhrygDom.name()).toEqual('E7');
     expect(Fsharp_minorMajor7_in_HarmonicMinor.name()).toEqual('F♯mM7');
@@ -117,7 +117,7 @@ describe('Chord', () => {
   it('creates a secondary chord', () => {
     expect(D_minor_in_C_Dorian.secondary(5).addNote(7).name()).toEqual('A7');
     const Fmaj = new Chord({ chord: 4});
-    expect(Fmaj.name()).toEqual('FM');
+    expect(Fmaj.name()).toEqual('F');
     expect(Fmaj.secondary(5).secondary(7).name()).toEqual('Bdim');
     expect(Fmaj.addNote(7).secondary(5).secondary(7).name()).toEqual('Bm7♭5');
     expect(Fmaj.addNote(7).secondary(5,{ notes:   {1: 0, 3: 0, 5: 0}}).secondary(7).name()).toEqual('Bdim');
@@ -132,7 +132,7 @@ describe('Chord', () => {
 
   it('creates a default chord from root', () => {
     const gM = Chord.fromRoot(7);
-    expect(gM.name()).toEqual('GM');
+    expect(gM.name()).toEqual('G');
     expect(gM.key().name()).toEqual('G');
     const g7 = gM.makeDominantFifth();
     expect(g7.name()).toEqual('G7');
@@ -157,8 +157,8 @@ describe('Chord', () => {
   it('creates default triads', () => {
     expect(Chord.fromMinorScale(1).name()).toEqual('Cm');
     expect(Chord.fromMinorScale(2).name()).toEqual('Ddim');
-    expect(Chord.fromMinorScale(3).name()).toEqual('D♯M');
-    expect(Chord.fromMajorScale(1).name()).toEqual('CM');
+    expect(Chord.fromMinorScale(3).name()).toEqual('D♯');
+    expect(Chord.fromMajorScale(1).name()).toEqual('C');
     expect(Chord.fromMajorScale(2).name()).toEqual('Dm');
     expect(Chord.fromMajorScale(3).name()).toEqual('Em');
   });

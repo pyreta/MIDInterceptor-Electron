@@ -63,7 +63,7 @@ describe('Progression', () => {
     const replacedPrgression = newProgression.replace(1, c => [c.sus(), c.addNote(7), c.set('mode', 7)]);
     expect(replacedPrgression.getChord(1).name()).toEqual('Dsus4');
     expect(replacedPrgression.getChord(2).name()).toEqual('Dm7');
-    expect(replacedPrgression.getChord(3).name()).toEqual('C♯M');
+    expect(replacedPrgression.getChord(3).name()).toEqual('C♯');
     expect(replacedPrgression.getChord(4).name()).toEqual(newProgression.getChord(2).name());
     expect(replacedPrgression.chords().length).toEqual(5);
     expect(newProgression.chords().length).toEqual(3);
