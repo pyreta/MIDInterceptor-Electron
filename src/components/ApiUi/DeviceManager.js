@@ -7,8 +7,48 @@ import mapScale, { getScaleDegree } from '../../helpers/mapScale';
 
 const Div = styled.div`
   display: flex;
-  width: 100%;
+  width: 619px;
+  justify-content: space-between;
 `;
+
+const Div2 = styled.div`
+  display: flex;
+  border: 2px solid #21252b;
+  border-radius: 4px;
+  padding: 2px;
+  margin: 4px 0 0 4px;
+  flex: 1;
+`;
+
+const Title = styled.span`
+  padding: 5px;
+  font-size: 11px;
+  background: #21252b;
+  color: #296ed7;
+  flex: 1;
+  text-align: center;
+`;
+
+const DeviceSelect = props => (
+  <Div2>
+    <Title>{props.text}</Title>
+    <select
+      onChange={props.onChange}
+      value={props.value}
+      default="default"
+      >
+      <option value="default" hidden>
+        Select a MIDI device
+      </option>
+
+      {props.devices.map((device, idx) => (
+        <option value={device.id} key={idx}>
+          {`${device.manufacturer} ${device.name}`}
+        </option>
+      ))}
+    </select>
+  </Div2>
+);
 
 const modeIndexMap = { 1: 0, 3: 1, 6: 2, 8: 3, 10: 4 };
 
@@ -89,36 +129,18 @@ export class DeviceManager extends React.Component {
   render() {
     return (
       <Div>
-        <select
+        <DeviceSelect
           onChange={e => this.setDevice(e.target.value, 'output')}
           value={this.props.devices.outputDevice.id}
-          default="default"
-        >
-          <option value="default" hidden>
-            Select an output
-          </option>
-
-          {WebMidi.outputs.map((device, idx) => (
-            <option value={device.id} key={idx}>
-              {`${device.manufacturer} ${device.name}`}
-            </option>
-          ))}
-        </select>
-        <select
+          text="Output to DAW"
+          devices={WebMidi.outputs}
+        />
+        <DeviceSelect
           onChange={e => this.setDevice(e.target.value, 'input')}
-          value={this.props.devices.inputDevice.id}
-          default="default"
-        >
-          <option value="default" hidden>
-            Select an input
-          </option>
-
-          {WebMidi.inputs.map((device, idx) => (
-            <option value={device.id} key={idx}>
-              {`${device.manufacturer} ${device.name}`}
-            </option>
-          ))}
-        </select>
+          value={this.props.devices.outputDevice.id}
+          text="Input from keyboard"
+          devices={WebMidi.inputs}
+        />
       </Div>
     );
   }

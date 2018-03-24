@@ -8,6 +8,7 @@ import Buttons from './Buttons';
 import actions from '../../actions';
 import ChordModel from '../../models/Chord';
 import Progression from '../../models/Progression';
+import DeviceManager from './DeviceManager';
 
 // document.addEventListener('keydown', e => {
 //   // keyCache[e.key] = true;
@@ -220,6 +221,7 @@ export class ApiUi extends React.Component {
     return (
       <MidiDeviceSetup rows={chordRows}>
         <ModeSelect />
+        <DeviceManager rows={chordRows} />
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}

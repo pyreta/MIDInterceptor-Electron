@@ -4,7 +4,7 @@ import noOpMidiDevice from '../../helpers/noOpMidiDevice';
 // import { defaultdeviceIds } from '../../constants';
 import actions from '../../actions';
 import { connect } from 'react-redux';
-import DeviceManager from './DeviceManager';
+
 
 class MidiDeviceSetup extends Component {
   loadDevices() {
@@ -44,7 +44,6 @@ class MidiDeviceSetup extends Component {
       <div>
         {this.props.ready ? (
           <div>
-            <DeviceManager rows={this.props.rows} />
             {this.props.children}
           </div>
         ) : (
