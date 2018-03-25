@@ -38,6 +38,7 @@ const initialState = {
     melodicMinor: {},
   },
   autoVoicing: true,
+  showRomanNumerals: true,
 };
 
 export default createStore(

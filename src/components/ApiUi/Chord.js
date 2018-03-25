@@ -9,6 +9,10 @@ const Name = styled.div`
   font-size: 12px;
 `;
 
+const NameNoRoman = styled.div`
+  font-size: 15px;
+`;
+
 const Container = styled.div`
   border: 1px solid rgb(33, 37, 43);
   padding: 13px;
@@ -16,6 +20,7 @@ const Container = styled.div`
   height: 40px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   border-left: 0;
   border-bottom: 0;
@@ -40,31 +45,63 @@ const Container = styled.div`
   }
 `;
 const allNotes = [...Array(124).keys()];
-const Chord = ({ chord, onClick, onStop, i, lastPlayedChord, autoVoicing, voicingDecorator: decorator, isInverted }) => {
+const Chord = ({
+  chord,
+  onClick,
+  onStop,
+  i,
+  lastPlayedChord,
+  autoVoicing,
+  voicingDecorator: decorator,
+  isInverted,
+  showRomanNumerals,
+}) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
   let voicingDecorator = decorator;
-  if (voicingDecorator === 'rootNote' && isInverted) voicingDecorator = 'bassNote';
-  const notes = chord.decorate[voicingDecorator]().voicing().noteValues();
-  const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
+  if (voicingDecorator === 'rootNote' && isInverted)
+    voicingDecorator = 'bassNote';
+  const notes = chord.decorate[voicingDecorator]()
+    .voicing()
+    .noteValues();
+  const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames())
+    .length;
   return (
     <Container
       onMouseDown={() => {
         // console.log(`played notes:`, notes)
-        onClick(notes, chord.unwrap())
+        onClick(notes, chord.unwrap());
       }}
       onMouseUp={() => onStop(allNotes)}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
-      <RomanNumeral {...chord.romanNumeralAnalysis()} showInversion={voicingDecorator !== 'rootNote'}/>
-      <Name>{chord.name({ showInversion: voicingDecorator !== 'rootNote' })}</Name>
+      {showRomanNumerals && <RomanNumeral
+        {...chord.romanNumeralAnalysis()}
+        showInversion={voicingDecorator !== 'rootNote'}
+      />}
+      {showRomanNumerals ?
+        <Name>
+        {chord.name({ showInversion: voicingDecorator !== 'rootNote' })}
+      </Name> :
+        <NameNoRoman>
+        {chord.name({ showInversion: voicingDecorator !== 'rootNote' })}
+      </NameNoRoman>
+    }
     </Container>
-  )
+  );
 };
 
-const mapStateToProps = ({ lastPlayedChord, autoVoicing, voicingDecorator }) => ({
-  lastPlayedChord: lastPlayedChord.notes ? new ChordModel(lastPlayedChord) : new ChordModel(lastPlayedChord),
+const mapStateToProps = ({
+  lastPlayedChord,
   autoVoicing,
   voicingDecorator,
-})
+  showRomanNumerals,
+}) => ({
+  lastPlayedChord: lastPlayedChord.notes
+    ? new ChordModel(lastPlayedChord)
+    : new ChordModel(lastPlayedChord),
+  autoVoicing,
+  voicingDecorator,
+  showRomanNumerals,
+});
 
 export default connect(mapStateToProps)(Chord);

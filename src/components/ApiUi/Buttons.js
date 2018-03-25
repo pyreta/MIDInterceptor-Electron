@@ -76,6 +76,12 @@ class Buttons extends React.Component {
           Bass Note
         </Button>
         <Button
+          on={this.props.showRomanNumerals}
+          onClick={this.props.toggleRomanNumerals}
+          >
+          Roman
+        </Button>
+        <Button
           on={this.props.chordBody[6] === 0}
           onClick={this.toggleSixth}
           >
@@ -92,10 +98,11 @@ class Buttons extends React.Component {
   }
 }
 
-const mapStateToProps = ({ autoVoicing, voicingDecorator, chordBody }) => ({
+const mapStateToProps = ({ autoVoicing, voicingDecorator, chordBody, showRomanNumerals }) => ({
   autoVoicing,
   voicingDecorator,
   chordBody,
+  showRomanNumerals,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -105,6 +112,7 @@ const mapDispatchToProps = dispatch => ({
   toggleBassNoteDecorator: () =>
     dispatch(actions.TOGGLE_VOICING_DECORATOR('bassNote')),
   addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
+  toggleRomanNumerals: () => dispatch(actions.TOGGLE_ROMAN_NUMERALS()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buttons);

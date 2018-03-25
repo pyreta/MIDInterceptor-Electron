@@ -22,6 +22,7 @@ const actionsAndTypes = createActionsAndTypes([
   'TOGGLE_VOICING_DECORATOR',
   'LOAD_CHORDS',
   'SELECT_MODE_ROW',
+  'TOGGLE_ROMAN_NUMERALS',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;
