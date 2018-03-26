@@ -191,11 +191,11 @@ describe('Chord', () => {
     const Amin = new Chord({ chord: 6 });
     const Cmaj = new Chord();
     expect(Amin.name()).toEqual('Am');
-    expect(Amin.matchVoicingToChord(Cmaj)
+    expect(Amin.matchVoicingToChord({ lastPlayedChord: Cmaj })
       .voicing()
       .noteValues())
       .toEqual([60, 64, 69]);
-    expect(Amin.matchVoicingToChord(Cmaj)
+    expect(Amin.matchVoicingToChord({ lastPlayedChord: Cmaj })
       .voicing({ withRoot: 3})
       .noteValues())
       .toEqual([45, 60, 64, 69]);
@@ -203,13 +203,13 @@ describe('Chord', () => {
 
   describe('voicings', () => {
     const Cmaj = new Chord();
-    const Cmaj7 = new Chord().addNote(7).matchVoicingToChord(Cmaj);
-    const Emin = new Chord({ chord: 3 }).matchVoicingToChord(Cmaj);
-    const Amin = new Chord({ chord: 6 }).matchVoicingToChord(Cmaj);
-    const Adim = new Chord({ chord: 6, mode: 2 }).matchVoicingToChord(Amin);
-    const Fmaj = new Chord({ chord: 4 }).matchVoicingToChord(Amin);
-    const Gmaj = new Chord({ chord: 5 }).matchVoicingToChord(Fmaj);
-    const GmajFromE = new Chord({ chord: 5 }).matchVoicingToChord(Emin);
+    const Cmaj7 = new Chord().addNote(7).matchVoicingToChord({ lastPlayedChord: Cmaj });
+    const Emin = new Chord({ chord: 3 }).matchVoicingToChord({ lastPlayedChord: Cmaj });
+    const Amin = new Chord({ chord: 6 }).matchVoicingToChord({ lastPlayedChord: Cmaj });
+    const Adim = new Chord({ chord: 6, mode: 2 }).matchVoicingToChord({ lastPlayedChord: Amin });
+    const Fmaj = new Chord({ chord: 4 }).matchVoicingToChord({ lastPlayedChord: Amin });
+    const Gmaj = new Chord({ chord: 5 }).matchVoicingToChord({ lastPlayedChord: Fmaj });
+    const GmajFromE = new Chord({ chord: 5 }).matchVoicingToChord({ lastPlayedChord: Emin });
 
     it('matches voicings in a progression', () => {
       expect(Cmaj7.voicing().noteValues()).toEqual([59, 60, 64, 67]);

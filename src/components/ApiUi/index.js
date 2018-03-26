@@ -187,7 +187,6 @@ export class ApiUi extends React.Component {
 
     const inversion = this.inversion();
     const secondary = this.secondary();
-
     return Object.keys(modeRows).reduce((acc, scale) => {
       const scaleModes = Object.keys(modeRows[scale])
         .filter(mode => modeRows[scale][mode])
@@ -206,7 +205,7 @@ export class ApiUi extends React.Component {
               autoVoicing && inversion < 1
                 ? c
                     .secondary(secondary)
-                    .matchVoicingToChord(lastPlayedChord, 'bijective')
+                    .matchVoicingToChord({ lastPlayedChord, method: 'bijective' })
                 : c.secondary(secondary).matchOctaveToChord(lastPlayedChord);
             return voicedChord;
           });

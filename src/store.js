@@ -33,8 +33,10 @@ const initialState = {
   keysPressed: {},
   voicingDecorator: 'rootNote',
   modeRows: {
-    major: {1: true, 2: true, 6: true },
-    harmonicMinor: {1: true, 5: true},
+    major: {1: true},
+    // major: {1: true, 2: true, 6: true },
+    harmonicMinor: {},
+    // harmonicMinor: {1: true, 5: true},
     melodicMinor: {},
   },
   autoVoicing: true,

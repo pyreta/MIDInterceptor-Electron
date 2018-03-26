@@ -27,7 +27,7 @@ const Container = styled.div`
   color: rgb(33, 37, 43);
   user-select: none;
   transition: all 200ms ease;
-  background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 3 });
+  background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 2 });
   &:hover {
     background: rgb(33, 37, 43);
     color: white;

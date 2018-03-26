@@ -54,6 +54,11 @@ class Chord {
     return new Chord({ ...this.chord, ...attrs }, this.progression);
   }
 
+  resetVoicing(attrs = {}) {
+    const voicing = Object.keys(this.chord.notes).reduce((acc, n) => ({...acc, [n]: [0]}), {});
+    return this.clone({ ...attrs, voicing })
+  }
+
   // *************** change chord
 
   sus(i1 = 4, i2) {
@@ -307,8 +312,19 @@ class Chord {
     return lastVoicing.map(x => Math.abs(x - closestNote))
   }
 
-  matchVoicingToChord(lastPlayedChord, method = 'louisMethod') {
-    return matchChordVoicings[method](this, lastPlayedChord);
+  matchVoicingToChord({ lastPlayedChord, method = 'louisMethod' }) {
+    const lowestChord = lastPlayedChord.resetVoicing({ chord: 6 }).shiftOctave(-1);
+    const highestChord = lastPlayedChord.resetVoicing({ chord: 7 });
+    let c = matchChordVoicings[method](this, lastPlayedChord);
+    const firstNote = c.voicing().noteValues()[0];
+
+    if (firstNote < lowestChord.voicing().noteValues()[0]) {
+      return matchChordVoicings[method](this, lowestChord);
+    }
+    if (firstNote > highestChord.voicing().noteValues()[0]) {
+      return matchChordVoicings[method](this, highestChord);
+    }
+    return c;
   }
 
   matchOctaveToChord(otherChord) {
