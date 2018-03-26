@@ -23,6 +23,7 @@ const actionsAndTypes = createActionsAndTypes([
   'LOAD_CHORDS',
   'SELECT_MODE_ROW',
   'TOGGLE_ROMAN_NUMERALS',
+  'TOGGLE_NOTES_IN_COMMON',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;

@@ -39,6 +39,7 @@ const initialState = {
   },
   autoVoicing: true,
   showRomanNumerals: true,
+  showNotesInCommon: true,
 };
 
 export default createStore(

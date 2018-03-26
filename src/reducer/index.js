@@ -11,10 +11,12 @@ import keysPressed from './keysPressed';
 import modeRows from './modeRows';
 import lastPlayedChord from './lastPlayedChord';
 import showRomanNumerals from './showRomanNumerals';
+import showNotesInCommon from './showNotesInCommon';
 
 export default combineReducers({
   lastPlayedChord,
   showRomanNumerals,
+  showNotesInCommon,
   modeRows,
   keysPressed,
   modeRowIndex,

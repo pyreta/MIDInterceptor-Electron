@@ -27,7 +27,7 @@ const Container = styled.div`
   color: rgb(33, 37, 43);
   user-select: none;
   transition: all 200ms ease;
-  background: rgba(43, 123, 245, 0.${({ notesInCommon }) => notesInCommon});
+  background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 3 });
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -55,6 +55,7 @@ const Chord = ({
   voicingDecorator: decorator,
   isInverted,
   showRomanNumerals,
+  showNotesInCommon,
 }) => {
   const lastPlayedNotes = lastPlayedChord.noteNames();
   let voicingDecorator = decorator;
@@ -72,6 +73,7 @@ const Chord = ({
         onClick(notes, chord.unwrap());
       }}
       onMouseUp={() => onStop(allNotes)}
+      showNotesInCommon={showNotesInCommon}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
     >
       {showRomanNumerals && <RomanNumeral
@@ -95,6 +97,7 @@ const mapStateToProps = ({
   autoVoicing,
   voicingDecorator,
   showRomanNumerals,
+  showNotesInCommon,
 }) => ({
   lastPlayedChord: lastPlayedChord.notes
     ? new ChordModel(lastPlayedChord)
@@ -102,6 +105,7 @@ const mapStateToProps = ({
   autoVoicing,
   voicingDecorator,
   showRomanNumerals,
+  showNotesInCommon,
 });
 
 export default connect(mapStateToProps)(Chord);

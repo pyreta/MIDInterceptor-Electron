@@ -15,7 +15,7 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   border-radius: 2px;
-  font-size: 15px;
+  font-size: 11px;
   border: 1px solid #21252b;
   user-select: none;
   cursor: pointer;
@@ -24,7 +24,7 @@ const Button = styled.div`
   transition: background 200ms ease-out;
   flex: 1;
   &:active {
-    font-size: 14px;
+    font-size: 10px;
     box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.9);
   }
 `;
@@ -82,6 +82,12 @@ class Buttons extends React.Component {
           Roman
         </Button>
         <Button
+          on={this.props.showNotesInCommon}
+          onClick={this.props.toggleNotesInCommin}
+          >
+          Common Notes
+        </Button>
+        <Button
           on={this.props.chordBody[6] === 0}
           onClick={this.toggleSixth}
           >
@@ -98,11 +104,12 @@ class Buttons extends React.Component {
   }
 }
 
-const mapStateToProps = ({ autoVoicing, voicingDecorator, chordBody, showRomanNumerals }) => ({
+const mapStateToProps = ({ autoVoicing, voicingDecorator, chordBody, showRomanNumerals, showNotesInCommon }) => ({
   autoVoicing,
   voicingDecorator,
   chordBody,
   showRomanNumerals,
+  showNotesInCommon,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -113,6 +120,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.TOGGLE_VOICING_DECORATOR('bassNote')),
   addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
   toggleRomanNumerals: () => dispatch(actions.TOGGLE_ROMAN_NUMERALS()),
+  toggleNotesInCommin: () => dispatch(actions.TOGGLE_NOTES_IN_COMMON()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buttons);
