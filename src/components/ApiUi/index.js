@@ -219,8 +219,8 @@ export class ApiUi extends React.Component {
     const chordRows = this.chordRows();
     return (
       <MidiDeviceSetup rows={chordRows}>
-        <ModeSelect />
-        <DeviceManager rows={chordRows} />
+        { this.props.showScales && <ModeSelect /> }
+        { this.props.showDeviceSetup && <DeviceManager rows={chordRows} /> }
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}
@@ -249,6 +249,8 @@ const mapStateToProps = ({
   autoVoicing,
   lastPlayedChord,
   selectedModeRow,
+  showScales,
+  showDeviceSetup,
 }) => ({
   keysPressed,
   tonic,
@@ -261,6 +263,8 @@ const mapStateToProps = ({
   secondaryDominants: keysPressed['83'],
   modeRows,
   selectedModeRow,
+  showScales,
+  showDeviceSetup,
 });
 
 const mapDispatchToProps = dispatch => ({

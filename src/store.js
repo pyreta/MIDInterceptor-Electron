@@ -33,15 +33,17 @@ const initialState = {
   keysPressed: {},
   voicingDecorator: 'rootNote',
   modeRows: {
-    major: {1: true},
-    // major: {1: true, 2: true, 6: true },
-    harmonicMinor: {},
-    // harmonicMinor: {1: true, 5: true},
-    melodicMinor: {},
+    // major: {1: true},
+    major: {1: true, 6: true },
+    // harmonicMinor: {},
+    harmonicMinor: {1: true, 5: true},
+    melodicMinor: {1: true},
   },
   autoVoicing: true,
   showRomanNumerals: true,
   showNotesInCommon: true,
+  showDeviceSetup: true,
+  showScales: true,
 };
 
 export default createStore(

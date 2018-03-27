@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import actions from '../../actions';
 
+// prettier-ignore
 const Button = styled.div`
   background: ${({ on }) => (on ? 'rgba(245, 43, 43, 0.9)' : 'white')};
   ${({ on }) =>
@@ -29,7 +30,10 @@ const Button = styled.div`
   }
 `;
 
-const Wrapper = styled.div`display: flex; width: 619px;`;
+const Wrapper = styled.div`
+  display: flex;
+  width: 619px;
+`;
 
 class Buttons extends React.Component {
   constructor() {
@@ -64,13 +68,19 @@ class Buttons extends React.Component {
           Auto Voicing
         </Button>
         <Button
-          on={this.props.voicingDecorator === 'rootNote' && !this.props.isInverted}
+          on={
+            this.props.voicingDecorator === 'rootNote' && !this.props.isInverted
+          }
           onClick={this.props.toggleRootNoteDecorator}
         >
           Root Note
         </Button>
         <Button
-          on={this.props.voicingDecorator === 'bassNote' || (this.props.voicingDecorator === 'rootNote' && this.props.isInverted)}
+          on={
+            this.props.voicingDecorator === 'bassNote' ||
+            (this.props.voicingDecorator === 'rootNote' &&
+              this.props.isInverted)
+          }
           onClick={this.props.toggleBassNoteDecorator}
         >
           Bass Note
@@ -78,25 +88,28 @@ class Buttons extends React.Component {
         <Button
           on={this.props.showRomanNumerals}
           onClick={this.props.toggleRomanNumerals}
-          >
+        >
           Roman
         </Button>
         <Button
           on={this.props.showNotesInCommon}
           onClick={this.props.toggleNotesInCommin}
-          >
+        >
           Common Notes
         </Button>
-        <Button
-          on={this.props.chordBody[6] === 0}
-          onClick={this.toggleSixth}
-          >
-          Sixth
+        <Button on={this.props.showScales} onClick={this.props.toggleScales}>
+          Show Scales
         </Button>
         <Button
-          on={this.props.chordBody[7] === 0}
-          onClick={this.toggleSeventh}
+          on={this.props.showDeviceSetup}
+          onClick={this.props.toggleDeviceSetup}
         >
+          Devices
+        </Button>
+        <Button on={this.props.chordBody[6] === 0} onClick={this.toggleSixth}>
+          Sixth
+        </Button>
+        <Button on={this.props.chordBody[7] === 0} onClick={this.toggleSeventh}>
           Seventh
         </Button>
       </Wrapper>
@@ -104,12 +117,22 @@ class Buttons extends React.Component {
   }
 }
 
-const mapStateToProps = ({ autoVoicing, voicingDecorator, chordBody, showRomanNumerals, showNotesInCommon }) => ({
+const mapStateToProps = ({
   autoVoicing,
   voicingDecorator,
   chordBody,
   showRomanNumerals,
   showNotesInCommon,
+  showScales,
+  showDeviceSetup,
+}) => ({
+  autoVoicing,
+  voicingDecorator,
+  chordBody,
+  showRomanNumerals,
+  showNotesInCommon,
+  showScales,
+  showDeviceSetup,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -121,6 +144,8 @@ const mapDispatchToProps = dispatch => ({
   addNotes: notes => dispatch(actions.UPDATE_CHORD_BODY(notes)),
   toggleRomanNumerals: () => dispatch(actions.TOGGLE_ROMAN_NUMERALS()),
   toggleNotesInCommin: () => dispatch(actions.TOGGLE_NOTES_IN_COMMON()),
+  toggleScales: () => dispatch(actions.TOGGLE_SCALES()),
+  toggleDeviceSetup: () => dispatch(actions.TOGGLE_DEVICE_SETUP()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buttons);
