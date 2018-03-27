@@ -27,6 +27,7 @@ const Container = styled.div`
   user-select: none;
   transition: all 100ms ease;
   background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 2 });
+  ${({ nextChord }) => nextChord && `box-shadow: inset 0px 0px 0px 3px rgb(255, 0, 0);`}
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -71,6 +72,7 @@ const Chord = ({
       onMouseUp={() => onStop(allNotes)}
       showNotesInCommon={showNotesInCommon}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
+      nextChord={lastPlayedChord.isGoodNextChord(chord)}
     >
       {showRomanNumerals && <RomanNumeral
         {...chord.romanNumeralAnalysis()}

@@ -128,19 +128,48 @@ import '../App.css'
 const Wrapper = styled.div`
   width: 619px;
   display: flex;
-  border: 4px solid #3c5e85;
-  border-radius: 20px;
-  padding: 12px;
-  margin: 20px;
+  border: 2px solid #3c5e85;
+  box-shadow: 1px 6px 27px rgba(0,0,0,0.6);
+  border-radius: 10px;
+  padding: 7px;
+  margin: 25px;
   background: rgb(255, 255, 255);
   flex-direction: column;
 `;
 
 const Gear = styled(Icons.Gear)`
-  fill: #2a73e1;
+  fill: #f64040;
   position: absolute;
-  top: -14px;
-  left: 5px;
+  top: -18px;
+  left: 6px;
+`;
+
+const DropdownWrapper = styled.div`
+  position: absolute;
+  z-index: 999;
+  background-color: white;
+  position: absolute;
+  left: 25px;
+  top: 0px;
+  border-radius: 2px;
+  box-shadow: 0 1px 6px rgba(51, 51, 51, 0.6);
+  font-size: 12px;
+`;
+
+const Check = styled.div`
+  color: #4088f6;
+  display: flex;
+  ${({ visible }) => (visible ? '' : 'visibility: hidden;')};
+`;
+
+const SettingsOption = styled.div`
+  padding: 5px 20px 5px 5px;
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    background: rgba(43,123,245,0.3);
+  }
 `;
 
 export class ApiUi extends React.Component {
@@ -148,6 +177,60 @@ export class ApiUi extends React.Component {
     super();
     this.state = {};
   }
+
+  ColumnDropdown = ({ rows }) => {
+    const isInverted = !!this.inversion();
+    return (
+    <DropdownWrapper>
+
+      <SettingsOption onClick={this.props.toggleRomanNumerals}>
+        <Check visible={this.props.showRomanNumerals}>
+          <Icons.Check size={11} />
+        </Check>
+        Roman Numeral Notation
+      </SettingsOption>
+
+      <SettingsOption onClick={this.props.toggleNotesInCommin}>
+        <Check visible={this.props.showNotesInCommon}>
+          <Icons.Check size={11} />
+        </Check>
+        Highlight Chords with common notes
+      </SettingsOption>
+
+      <SettingsOption onClick={this.props.toggleRootNoteDecorator}>
+        <Check visible={this.props.voicingDecorator === 'rootNote' && !isInverted}>
+          <Icons.Check size={11} />
+        </Check>
+        Add root bass note
+      </SettingsOption>
+
+      <SettingsOption onClick={this.props.toggleBassNoteDecorator}>
+        <Check visible={
+          this.props.voicingDecorator === 'bassNote' ||
+          (this.props.voicingDecorator === 'rootNote' && isInverted)
+        }>
+          <Icons.Check size={11} />
+        </Check>
+        Add inverted bass note
+      </SettingsOption>
+
+      <SettingsOption onClick={this.props.toggleAutoVoicing}>
+        <Check visible={this.props.autoVoicing}>
+          <Icons.Check size={11} />
+        </Check>
+        Auto voicing
+      </SettingsOption>
+
+      <SettingsOption onClick={this.props.toggleScales}>
+        <Check visible={this.props.showScales}>
+          <Icons.Check size={11} />
+        </Check>
+        Show scales
+      </SettingsOption>
+
+      <DeviceManager rows={rows} />
+    </DropdownWrapper>
+  )};
 
   decreaseKey() {
     return this.props.tonic === 0
@@ -240,10 +323,10 @@ export class ApiUi extends React.Component {
     return (
       <div>
       <Gear size={20} onClick={this.props.toggleSettings}/>
+      {this.props.showSettingsDropdown && <this.ColumnDropdown rows={chordRows}/>}
       <MidiDeviceSetup rows={chordRows}>
         <Wrapper>
         { this.props.showScales && <ModeSelect /> }
-        { this.props.showDeviceSetup && <DeviceManager rows={chordRows} /> }
         <KeySelect
           changeKey={this.props.changeKey}
           playChord={this.props.playChord}
@@ -275,6 +358,7 @@ const mapStateToProps = ({
   lastPlayedChord,
   selectedModeRow,
   settings,
+  voicingDecorator,
 }) => ({
   keysPressed,
   tonic,
@@ -289,6 +373,10 @@ const mapStateToProps = ({
   selectedModeRow,
   showScales: settings.showScales,
   showDeviceSetup: settings.showDeviceSetup,
+  showSettingsDropdown: settings.show,
+  showRomanNumerals: settings.showRomanNumerals,
+  showNotesInCommon: settings.showNotesInCommon,
+  voicingDecorator,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -300,6 +388,16 @@ const mapDispatchToProps = dispatch => ({
   toggleAutoVoicing: () => dispatch(actions.TOGGLE_AUTO_VOICING()),
   loadChords: chords => dispatch(actions.LOAD_CHORDS(chords)),
   toggleSettings: () => dispatch(actions.TOGGLE_SETTINGS()),
+
+  toggleRomanNumerals: () => dispatch(actions.TOGGLE_ROMAN_NUMERALS()),
+  toggleNotesInCommin: () => dispatch(actions.TOGGLE_NOTES_IN_COMMON()),
+  toggleScales: () => dispatch(actions.TOGGLE_SCALES()),
+  toggleDeviceSetup: () => dispatch(actions.TOGGLE_DEVICE_SETUP()),
+
+  toggleRootNoteDecorator: () =>
+    dispatch(actions.TOGGLE_VOICING_DECORATOR('rootNote')),
+  toggleBassNoteDecorator: () =>
+    dispatch(actions.TOGGLE_VOICING_DECORATOR('bassNote')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiUi);

@@ -356,6 +356,10 @@ class Chord {
       rootNote: () => this.clone({ voicing: { ...v, 1: [ v[1][0]-2, ...v[1]] } }),
     }
   }
+
+  isGoodNextChord(nextChord) {
+    return false;
+  }
 }
 
 export default Chord;

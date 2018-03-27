@@ -6,6 +6,7 @@ const {
   TOGGLE_ROMAN_NUMERALS,
   TOGGLE_NOTES_IN_COMMON,
   TOGGLE_DEVICE_SETUP,
+  TOGGLE_SETTINGS,
 } = actionTypes;
 
 export default handleActions(
@@ -25,6 +26,10 @@ export default handleActions(
     [TOGGLE_DEVICE_SETUP]: settings => ({
       ...settings,
       showDeviceSetup: !settings.showDeviceSetup
+    }),
+    [TOGGLE_SETTINGS]: settings => ({
+      ...settings,
+      show: !settings.show
     }),
   },
   true

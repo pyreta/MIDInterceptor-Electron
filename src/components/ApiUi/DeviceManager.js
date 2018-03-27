@@ -6,24 +6,22 @@ import actions from '../../actions';
 import mapScale, { getScaleDegree } from '../../helpers/mapScale';
 
 const Div = styled.div`
-  display: flex;
-  justify-content: space-between;
+  justiy-content: space-between;
   margin-right: -3px;
+  border-top: 1px dotted black;
 `;
 
 const Div2 = styled.div`
   display: flex;
-  border: 2px solid #21252b;
   border-radius: 4px;
   padding: 2px;
   margin-right: 3px;
   flex: 1;
-  margin-bottom: 3px;
+  flex-direction: column;
 `;
 
 const Title = styled.span`
   padding: 5px;
-  font-size: 11px;
   background: #21252b;
   color: #296ed7;
   flex: 1;
