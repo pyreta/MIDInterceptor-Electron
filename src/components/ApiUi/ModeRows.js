@@ -7,6 +7,7 @@ import actions from '../../actions';
 
 const ScaleContainer = styled.div`
   display: flex;
+  width: 100%;
 `;
 
 const ModeName = styled.div`
@@ -25,8 +26,8 @@ const ModeName = styled.div`
 `;
 
 const ScaleDegree = styled.div`
-  width: 57px;
   display: flex;
+  flex: 1;
   justify-content: center;
   padding: 10px;
   user-select: none;

@@ -20,7 +20,7 @@ const Button = styled.div`
   border: 1px solid #21252b;
   user-select: none;
   cursor: pointer;
-  margin: 5px 0 5px 5px;
+  margin: 0 0 4px 5px;
   transition: all 40ms ease-out;
   transition: background 200ms ease-out;
   flex: 1;
@@ -32,7 +32,7 @@ const Button = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  width: 619px;
+  margin-left: -5px;
 `;
 
 class Buttons extends React.Component {
@@ -121,18 +121,15 @@ const mapStateToProps = ({
   autoVoicing,
   voicingDecorator,
   chordBody,
-  showRomanNumerals,
-  showNotesInCommon,
-  showScales,
-  showDeviceSetup,
+  settings,
 }) => ({
   autoVoicing,
   voicingDecorator,
   chordBody,
-  showRomanNumerals,
-  showNotesInCommon,
-  showScales,
-  showDeviceSetup,
+  showRomanNumerals: settings.showRomanNumerals,
+  showNotesInCommon: settings.showNotesInCommon,
+  showScales: settings.showScales,
+  showDeviceSetup: settings.showDeviceSetup,
 });
 
 const mapDispatchToProps = dispatch => ({

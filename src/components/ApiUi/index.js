@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import MidiDeviceSetup from './MidiDeviceSetup';
 import KeySelect from './KeySelect';
 import ModeRows from './ModeRows';
@@ -8,8 +9,9 @@ import Buttons from './Buttons';
 import actions from '../../actions';
 import ChordModel from '../../models/Chord';
 import Progression from '../../models/Progression';
+import * as Icons from './Icons';
 import DeviceManager from './DeviceManager';
-
+import '../App.css'
 // document.addEventListener('keydown', e => {
 //   // keyCache[e.key] = true;
 //   if (e.key === '4') {
@@ -123,6 +125,24 @@ import DeviceManager from './DeviceManager';
 //   // if(['q', 'e', 'w'].includes(e.key)) this.forceUpdate();
 // });
 
+const Wrapper = styled.div`
+  width: 619px;
+  display: flex;
+  border: 4px solid #3c5e85;
+  border-radius: 20px;
+  padding: 12px;
+  margin: 20px;
+  background: rgb(255, 255, 255);
+  flex-direction: column;
+`;
+
+const Gear = styled(Icons.Gear)`
+  fill: #2a73e1;
+  position: absolute;
+  top: -14px;
+  left: 5px;
+`;
+
 export class ApiUi extends React.Component {
   constructor() {
     super();
@@ -218,7 +238,10 @@ export class ApiUi extends React.Component {
   render() {
     const chordRows = this.chordRows();
     return (
+      <div>
+      <Gear size={20} onClick={this.props.toggleSettings}/>
       <MidiDeviceSetup rows={chordRows}>
+        <Wrapper>
         { this.props.showScales && <ModeSelect /> }
         { this.props.showDeviceSetup && <DeviceManager rows={chordRows} /> }
         <KeySelect
@@ -233,7 +256,9 @@ export class ApiUi extends React.Component {
           inversion={this.inversion()}
           selectedModeRow={this.props.selectedModeRow}
         />
+        </Wrapper>
       </MidiDeviceSetup>
+      </div>
     );
   }
 }
@@ -249,8 +274,7 @@ const mapStateToProps = ({
   autoVoicing,
   lastPlayedChord,
   selectedModeRow,
-  showScales,
-  showDeviceSetup,
+  settings,
 }) => ({
   keysPressed,
   tonic,
@@ -263,8 +287,8 @@ const mapStateToProps = ({
   secondaryDominants: keysPressed['83'],
   modeRows,
   selectedModeRow,
-  showScales,
-  showDeviceSetup,
+  showScales: settings.showScales,
+  showDeviceSetup: settings.showDeviceSetup,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -275,6 +299,7 @@ const mapDispatchToProps = dispatch => ({
   registerChord: chord => dispatch(actions.PLAY_CHORD(chord)),
   toggleAutoVoicing: () => dispatch(actions.TOGGLE_AUTO_VOICING()),
   loadChords: chords => dispatch(actions.LOAD_CHORDS(chords)),
+  toggleSettings: () => dispatch(actions.TOGGLE_SETTINGS()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApiUi);

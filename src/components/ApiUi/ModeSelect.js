@@ -22,6 +22,7 @@ const Mode = styled.div`
   justify-content: center;
   text-align: center;
   flex: 1;
+  user-select: none;
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -41,6 +42,7 @@ const Mode = styled.div`
 
 const Container = styled.div`
   border-bottom: 1px solid rgb(33, 37, 43);
+  margin-bottom: 3px;
 `;
 
 const ModeRow = ({

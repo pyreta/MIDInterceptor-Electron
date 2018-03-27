@@ -7,8 +7,8 @@ import mapScale, { getScaleDegree } from '../../helpers/mapScale';
 
 const Div = styled.div`
   display: flex;
-  width: 619px;
   justify-content: space-between;
+  margin-right: -3px;
 `;
 
 const Div2 = styled.div`
@@ -16,8 +16,9 @@ const Div2 = styled.div`
   border: 2px solid #21252b;
   border-radius: 4px;
   padding: 2px;
-  margin: 4px 0 0 4px;
+  margin-right: 3px;
   flex: 1;
+  margin-bottom: 3px;
 `;
 
 const Title = styled.span`

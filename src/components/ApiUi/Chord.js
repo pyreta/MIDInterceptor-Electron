@@ -15,10 +15,9 @@ const NameNoRoman = styled.div`
 
 const Container = styled.div`
   border: 1px solid rgb(33, 37, 43);
-  padding: 13px;
-  width: 50px;
-  height: 40px;
+  height: 60px;
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -26,7 +25,7 @@ const Container = styled.div`
   border-bottom: 0;
   color: rgb(33, 37, 43);
   user-select: none;
-  transition: all 200ms ease;
+  transition: all 100ms ease;
   background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 2 });
   &:hover {
     background: rgb(33, 37, 43);
@@ -37,10 +36,7 @@ const Container = styled.div`
   }
   &:active {
     color: rgb(33, 37, 43);
-    width: 44px;
-    transform: scale(1.4);
-    height: 34px;
-    border: 3px solid rgb(33, 37, 43);
+    transform: scale(1.2);
     background: rgb(216, 0, 0);
   }
 `;
@@ -96,16 +92,15 @@ const mapStateToProps = ({
   lastPlayedChord,
   autoVoicing,
   voicingDecorator,
-  showRomanNumerals,
-  showNotesInCommon,
+  settings,
 }) => ({
   lastPlayedChord: lastPlayedChord.notes
     ? new ChordModel(lastPlayedChord)
     : new ChordModel(lastPlayedChord),
   autoVoicing,
   voicingDecorator,
-  showRomanNumerals,
-  showNotesInCommon,
+  showRomanNumerals: settings.showRomanNumerals,
+  showNotesInCommon: settings.showNotesInCommon,
 });
 
 export default connect(mapStateToProps)(Chord);

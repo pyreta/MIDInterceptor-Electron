@@ -26,6 +26,7 @@ const actionsAndTypes = createActionsAndTypes([
   'TOGGLE_NOTES_IN_COMMON',
   'TOGGLE_SCALES',
   'TOGGLE_DEVICE_SETUP',
+  'TOGGLE_SETTINGS',
 ]);
 
 export const actionTypes = actionsAndTypes.actionTypes;

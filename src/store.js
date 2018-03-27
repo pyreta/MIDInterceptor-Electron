@@ -39,11 +39,13 @@ const initialState = {
     harmonicMinor: {1: true, 5: true},
     melodicMinor: {1: true},
   },
+  settings: {
+    showRomanNumerals: true,
+    showNotesInCommon: true,
+    showDeviceSetup: true,
+    showScales: true,
+  },
   autoVoicing: true,
-  showRomanNumerals: true,
-  showNotesInCommon: true,
-  showDeviceSetup: true,
-  showScales: true,
 };
 
 export default createStore(

@@ -4,14 +4,13 @@ import { notes } from '../../constants/theory';
 
 const StyledContainer = styled.div`
   display: flex;
-  width: 619px;
-  margin-top: 4px;
+  margin-bottom: 4px;
 `;
 
 const Container = styled.div`
   border: 1px solid rgb(33, 37, 43);
-  width: 51px;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   border-left: 0;
