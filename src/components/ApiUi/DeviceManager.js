@@ -138,7 +138,7 @@ export class DeviceManager extends React.Component {
         />
         <DeviceSelect
           onChange={e => this.setDevice(e.target.value, 'input')}
-          value={this.props.devices.outputDevice.id}
+          value={this.props.devices.inputDevice.id}
           text="Input from keyboard"
           devices={WebMidi.inputs}
         />
