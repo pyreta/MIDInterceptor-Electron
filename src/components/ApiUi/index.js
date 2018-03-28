@@ -11,7 +11,7 @@ import ChordModel from '../../models/Chord';
 import Progression from '../../models/Progression';
 import * as Icons from './Icons';
 import DeviceManager from './DeviceManager';
-import '../App.css'
+import DeviceSetup, { connectMidiController } from './DeviceSetup';
 // document.addEventListener('keydown', e => {
 //   // keyCache[e.key] = true;
 //   if (e.key === '4') {
@@ -129,10 +129,9 @@ const Wrapper = styled.div`
   width: 619px;
   display: flex;
   border: 2px solid #3c5e85;
-  box-shadow: 1px 6px 27px rgba(0,0,0,0.6);
+  box-shadow: 1px 11px 31px rgba(0,0,0,0.9);
   border-radius: 10px;
   padding: 7px;
-  margin: 25px;
   background: rgb(255, 255, 255);
   flex-direction: column;
 `;
@@ -140,19 +139,18 @@ const Wrapper = styled.div`
 const Gear = styled(Icons.Gear)`
   fill: #f64040;
   position: absolute;
-  top: -18px;
-  left: 6px;
+  padding: 5px;
+  top: 0px;
+  left: 0px;
 `;
 
 const DropdownWrapper = styled.div`
-  position: absolute;
-  z-index: 999;
   background-color: white;
   position: absolute;
-  left: 25px;
-  top: 0px;
+  left: 29px;
+  top: 10px;
   border-radius: 2px;
-  box-shadow: 0 1px 6px rgba(51, 51, 51, 0.6);
+  box-shadow: 0 6px 31px rgb(15, 15, 15);
   font-size: 12px;
 `;
 
@@ -228,7 +226,7 @@ export class ApiUi extends React.Component {
         Show scales
       </SettingsOption>
 
-      <DeviceManager rows={rows} />
+      <DeviceManager rows={rows} connectMidiController={connectMidiController} />
     </DropdownWrapper>
   )};
 
@@ -325,6 +323,7 @@ export class ApiUi extends React.Component {
       <Gear size={20} onClick={this.props.toggleSettings}/>
       {this.props.showSettingsDropdown && <this.ColumnDropdown rows={chordRows}/>}
       <MidiDeviceSetup rows={chordRows}>
+        <DeviceSetup rows={chordRows} />
         <Wrapper>
         { this.props.showScales && <ModeSelect /> }
         <KeySelect
