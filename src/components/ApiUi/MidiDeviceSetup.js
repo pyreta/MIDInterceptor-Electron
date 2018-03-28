@@ -10,14 +10,14 @@ class MidiDeviceSetup extends Component {
   loadDevices() {
     const devices = {
       inputDevice:
-        noOpMidiDevice,
-        // WebMidi.inputs[0] || noOpMidiDevice,
+        // noOpMidiDevice,
+        WebMidi.inputs[WebMidi.inputs.length - 1] || noOpMidiDevice,
         // WebMidi.getInputById(defaultdeviceIds.midiDevice) || noOpMidiDevice,
       dawListener:
         WebMidi.inputs[0] || noOpMidiDevice,
         // WebMidi.getInputById(defaultdeviceIds.dawListener) || noOpMidiDevice,
       outputDevice:
-        WebMidi.outputs[0] || noOpMidiDevice
+        WebMidi.outputs[1] || noOpMidiDevice
         // WebMidi.getOutputById(defaultdeviceIds.outputDevice) || noOpMidiDevice
     };
 

@@ -137,7 +137,7 @@ const Wrapper = styled.div`
 `;
 
 const Gear = styled(Icons.Gear)`
-  fill: #f64040;
+  fill: #2a72e1;
   position: absolute;
   padding: 5px;
   top: 0px;
