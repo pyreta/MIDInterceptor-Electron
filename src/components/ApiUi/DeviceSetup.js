@@ -50,8 +50,6 @@ export const connectMidiController = ({
       voicingDecorator,
     });
 
-    console.log(`newNote:`, newNote)
-
     if (newNote) {
       outputDevice.playNote(newNote, 1, { velocity });
       return;
