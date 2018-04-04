@@ -17,7 +17,7 @@ class MidiDeviceSetup extends Component {
         WebMidi.inputs[0] || noOpMidiDevice,
         // WebMidi.getInputById(defaultdeviceIds.dawListener) || noOpMidiDevice,
       outputDevice:
-        WebMidi.outputs[1] || noOpMidiDevice
+        WebMidi.outputs.length === 2 ? noOpMidiDevice : WebMidi.outputs[1]
         // WebMidi.getOutputById(defaultdeviceIds.outputDevice) || noOpMidiDevice
     };
 

@@ -35,13 +35,14 @@ const initialState = {
   modeRows: {
     // major: {1: true},
     major: {1: true, 6: true },
-    // harmonicMinor: {},
-    harmonicMinor: {1: true, 5: true},
-    melodicMinor: {1: true},
+    harmonicMinor: {},
+    // harmonicMinor: {1: true, 5: true},
+    melodicMinor: {},
+    // melodicMinor: {1: true},
   },
   settings: {
     showRomanNumerals: true,
-    showNotesInCommon: true,
+    showNotesInCommon: false,
     showDeviceSetup: true,
     showScales: true,
   },

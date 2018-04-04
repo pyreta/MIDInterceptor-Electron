@@ -293,4 +293,42 @@ describe('Chord', () => {
       expect(Cmin.setInversion(3).romanNumeralAnalysis().figuredBass).toEqual([]);
     });
   });
+
+  it('determines if next chord is compatible', () => {
+    const Bdim = new Chord({ chord: 7 });
+    const Gmaj = new Chord({ chord: 5 });
+    // const Dmin = new Chord({ chord: 2 });
+    expect(Bdim.isGoodNextChord(Gmaj)).toEqual(true);
+    expect(Gmaj.isGoodNextChord(Bdim)).toEqual(false);
+  });
+
+  it('determines hook theory next chord probability', () => {
+    const C = new Chord();
+    const oneSix = C.setInversion(1);
+    const G = new Chord({ chord: 5 });
+    const F = new Chord({ chord: 4 });
+    const Em = new Chord({ chord: 3 });
+    const Dm = new Chord({ chord: 2 });
+    const twoSeven = Dm.addNote(7);
+    const Am = new Chord({ chord: 6 });
+    const E = new Chord({ scale: 'harmonicMinor', mode: 3, chord: 3 });
+    const fiveOfSix = Am.secondary(5);
+    const inverted5of6 = Am.secondary(5).setInversion(2); //
+    console.log(`inverted5of6 not in fist hooktheory chords:`, inverted5of6)
+    const Bdim = new Chord({ chord: 7 });
+    const CmM7 = new Chord({ scale: 'harmonicMinor' }).addNote(7);
+
+    expect(C.nextChordProbability(G)).toEqual(0.252);
+    expect(C.nextChordProbability(F)).toEqual(0.182);
+    expect(C.nextChordProbability(CmM7)).toEqual(0);
+    expect(Dm.nextChordProbability(Am)).toEqual(0.18);
+    expect(Bdim.nextChordProbability(G)).toEqual(0.05);
+    expect(Bdim.nextChordProbability(Am)).toEqual(0.218);
+    expect(Bdim.nextChordProbability(E)).toEqual(0.072);
+    expect(CmM7.nextChordProbability(C)).toEqual(0);
+    expect(Em.nextChordProbability(G)).toEqual(0.077);
+    expect(Bdim.nextChordProbability(fiveOfSix)).toEqual(0.072);
+    // expect(inverted5of6.nextChordProbability(Am)).toEqual(0.072);
+    expect(oneSix.nextChordProbability(twoSeven)).toEqual(0.064);
+  });
 });

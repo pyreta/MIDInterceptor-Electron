@@ -104,3 +104,105 @@ export const scales = {
     ],
   },
 };
+
+//iOMO = 0 semitones from root, Major, 0inversion
+//i9m1 = 9 semitones from root, minor, 1st inversion
+
+export const hooktheoryChordFunction = {
+    '0M0': {
+      '7M0': 0.252,
+      '5M0': 0.182,
+    },
+}
+
+export const chordFunction = {
+  1: {
+    major: {},
+    minor: {},
+    diminished: {},
+    augmented: {},
+  },
+  2: {
+    major: {},
+    minor: {
+      diminished7: true,
+      major5: true,
+    },
+    diminished: {
+      diminished7: true,
+      major5: true,
+    },
+    augmented: {},
+  },
+  3: {
+    major: {
+      major4: true,
+    },
+    minor: {
+      minor6: true,
+      major4: true,
+    },
+    diminished: {
+      major4: true,
+    },
+    augmented: {},
+  },
+  4: {
+    major: {
+      minor2: true,
+      diminished7: true,
+      major5: true,
+      major1: true,
+      minor1: true,
+    },
+    minor: {
+      diminished2: true,
+      diminished7: true,
+      major5: true,
+    },
+    diminished: {},
+    augmented: {},
+  },
+  5: {
+    major: {
+      major1: true,
+      minor1: true,
+      major4inversion1: true,
+      minor4inversion1: true,
+      minor6: true,
+      major6: true,
+    },
+    minor: {},
+    diminished: {},
+    augmented: {},
+  },
+  6: {
+    major: {
+      minor1inversion1: true,
+      minor4: true,
+      diminished2: true,
+      diminished7: true,
+      major5: true,
+    },
+    minor: {
+      major1inversion1: true,
+      major4: true,
+      minor3: true,
+      minor2: true,
+      diminished7: true,
+      major5: true,
+    },
+    diminished: {},
+    augmented: {},
+  },
+  7: {
+    major: {},
+    minor: {},
+    diminished: {
+      major5: true,
+      major1: true,
+      minor1: true,
+    },
+    augmented: {},
+  },
+}

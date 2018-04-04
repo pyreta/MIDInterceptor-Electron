@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Scale from './Scale';
 import Progression from './Progression';
+import chordProbabilities from './hookTheory/chordProbabilities';
 import chordDictionary from '../constants/chordDictionary';
 import {
   scales,
@@ -8,8 +9,15 @@ import {
   notes,
   intervals,
   romanNumerals,
+  chordFunction,
 } from '../constants/theory';
-import { getVoicing, matchChordVoicings, matchOctaveToChord, rotateVoice, convertNotesToVoicing } from './helpers';
+import {
+  getVoicing,
+  matchChordVoicings,
+  matchOctaveToChord,
+  rotateVoice,
+  convertNotesToVoicing,
+} from './helpers';
 
 const ascending = (a, b) => a - b;
 const defaultChord = {
@@ -45,7 +53,10 @@ class Chord {
   constructor(chord = {}, progression) {
     // TODO what if only a progression is passed into constuctor?
     this.chord = { ...defaultChord, ...chord };
-    const voicing = Object.keys(this.chord.notes).reduce((acc, n) => ({...acc, [n]: [0]}), {});
+    const voicing = Object.keys(this.chord.notes).reduce(
+      (acc, n) => ({ ...acc, [n]: [0] }),
+      {},
+    );
     this.chord.voicing = this.chord.voicing || voicing;
     this.progression = progression || new Progression([chord]);
   }
@@ -55,8 +66,11 @@ class Chord {
   }
 
   resetVoicing(attrs = {}) {
-    const voicing = Object.keys(this.chord.notes).reduce((acc, n) => ({...acc, [n]: [0]}), {});
-    return this.clone({ ...attrs, voicing })
+    const voicing = Object.keys(this.chord.notes).reduce(
+      (acc, n) => ({ ...acc, [n]: [0] }),
+      {},
+    );
+    return this.clone({ ...attrs, voicing });
   }
 
   // *************** change chord
@@ -67,12 +81,23 @@ class Chord {
   }
 
   secondaryDominant() {
-    return new Chord({ key: this.root().value(), chord: 5 }, this.progression).addNote(7);
+    return new Chord(
+      { key: this.root().value(), chord: 5 },
+      this.progression,
+    ).addNote(7);
   }
 
   secondary(chord = 0, chordOptions) {
     if (chord) {
-      return new Chord({ notes: this.get('notes'), ...chordOptions, key: this.root().value(), chord }, this.progression);
+      return new Chord(
+        {
+          notes: this.get('notes'),
+          ...chordOptions,
+          key: this.root().value(),
+          chord,
+        },
+        this.progression,
+      );
     }
     return this;
   }
@@ -142,7 +167,7 @@ class Chord {
   addNote(interval, value = 0) {
     const chord = this.clone({
       notes: { ...this.chord.notes, [interval]: value },
-      voicing: {...this.get('voicing'), [interval]: [0] }
+      voicing: { ...this.get('voicing'), [interval]: [0] },
     });
     return interval > 7 ? chord.addNote(7) : chord;
   }
@@ -263,12 +288,13 @@ class Chord {
     // console.log('');
   }
 
-  name({format = 'abreviation', showInversion = true} = {}) {
+  name({ format = 'abreviation', showInversion = true } = {}) {
     const sig = this.signature();
     const inversion = this.inversion();
     if (chordDictionary[sig]) {
       const extension = chordDictionary[sig][format];
-      const inv = (inversion > 0 && showInversion) ? `/${this.noteNames()[inversion]}` : '';
+      const inv =
+        inversion > 0 && showInversion ? `/${this.noteNames()[inversion]}` : '';
       return this.root().name() + extension + inv;
     }
     return `Unknown Chord: ${sig}`;
@@ -281,6 +307,15 @@ class Chord {
   isMajor() {
     const [first, third] = this.noteValues();
     return third - first > 3;
+  }
+
+  triadType() {
+    const [first, third, fifth] = this.noteValues();
+    if (fifth - first === 6) return 'diminished';
+    if (fifth - first === 8) return 'augmented';
+    if (third - first === 3) return 'minor';
+    if (third - first === 4) return 'major';
+    return 'unknown';
   }
 
   chordDefinition() {
@@ -301,7 +336,10 @@ class Chord {
 
   romanNumeralAnalysis() {
     const numeral = romanNumerals[this.get('chord') - 1];
-    return this.chordDefinition().romanNumeralAnalysis(numeral, this.inversion());
+    return this.chordDefinition().romanNumeralAnalysis(
+      numeral,
+      this.inversion(),
+    );
   }
 
   voicing(options) {
@@ -309,11 +347,13 @@ class Chord {
   }
 
   findDistance(lastVoicing, closestNote) {
-    return lastVoicing.map(x => Math.abs(x - closestNote))
+    return lastVoicing.map(x => Math.abs(x - closestNote));
   }
 
   matchVoicingToChord({ lastPlayedChord, method = 'louisMethod' }) {
-    const lowestChord = lastPlayedChord.resetVoicing({ chord: 6 }).shiftOctave(-1);
+    const lowestChord = lastPlayedChord
+      .resetVoicing({ chord: 6 })
+      .shiftOctave(-1);
     const highestChord = lastPlayedChord.resetVoicing({ chord: 7 });
     let c = matchChordVoicings[method](this, lastPlayedChord);
     const firstNote = c.voicing().noteValues()[0];
@@ -333,32 +373,98 @@ class Chord {
 
   setInversion(n) {
     const vals = this.voicing().noteValues();
-    const resetVoice = rotateVoice(vals, vals.length - this.inversion()).map(n => n - 12);
+    const resetVoice = rotateVoice(vals, vals.length - this.inversion()).map(
+      n => n - 12,
+    );
     const newV = rotateVoice(resetVoice, n % vals.length);
-    return this.clone({ voicing: convertNotesToVoicing(this, newV)});
+    return this.clone({ voicing: convertNotesToVoicing(this, newV) });
   }
 
   shiftOctave(diff) {
     const v = this.get('voicing');
     const voicing = Object.keys(v).reduce((acc, i) => {
-      return { ...acc, [i]: v[i].map(n => n + diff)}
+      return { ...acc, [i]: v[i].map(n => n + diff) };
     }, {});
-    return this.clone({ voicing })
+    return this.clone({ voicing });
   }
 
   get decorate() {
     const v = this.get('voicing');
     const vg = this.voicing().noteValues();
-    const newV = [vg[0] - 24, ...vg]
+    const newV = [vg[0] - 24, ...vg];
     return {
       identity: () => this,
-      bassNote: () => this.clone({ voicing: convertNotesToVoicing(this, newV)}),
-      rootNote: () => this.clone({ voicing: { ...v, 1: [ v[1][0]-2, ...v[1]] } }),
-    }
+      bassNote: () =>
+        this.clone({ voicing: convertNotesToVoicing(this, newV) }),
+      rootNote: () => {
+        const chordWithRoot = this.clone({
+          voicing: { ...v, 1: [v[1][0] - 2, ...v[1]] },
+        });
+        chordWithRoot.decorator = 'rootNote';
+        return chordWithRoot;
+      },
+    };
+  }
+
+  nextChords() {
+    const chordNumber = this.get('chord');
+    return chordFunction[chordNumber][this.triadType()];
   }
 
   isGoodNextChord(nextChord) {
-    return false;
+    let inv = '';
+    const nextInv = nextChord.inversion();
+    if (nextInv && !nextChord.decorator) inv = `inversion${nextInv}`;
+    const chordId = `${nextChord.triadType()}${nextChord.get('chord')}${inv}`;
+    // return false;
+    return !!this.nextChords()[chordId];
+  }
+
+  type() {
+    const [first, third, fifth, seventh = 100] = this.noteValues();
+    const thirdI = third - first;
+    const seventhI = seventh - first;
+    const fifthI = fifth - first;
+
+    if (fifthI === 7) {
+      if (thirdI === 4) {
+        if (seventhI === 10) return 'D';
+        if (seventhI === 11) return 'M7';
+        if (seventhI > 50) return 'M';
+      }
+      if (thirdI === 3) {
+        if (seventhI === 10) return 'm7';
+        if (seventhI > 50) return 'm';
+      }
+    }
+
+    if (fifthI === 6) {
+      if (thirdI === 3 && seventhI === 10) return 'hd';
+      if (thirdI === 3) return 'd';
+    }
+
+    return 'unknown';
+  }
+
+  id({chord = this, showInversion } = {}) {
+    const type = this.type();
+    if (type === 'unknown') return type;
+    let interval = this.noteValues()[0] % 12 - chord.get('key');
+    if (interval < 0) interval += 12;
+    const inversion = showInversion ? this.inversion() : 0;
+    return `${interval}${this.type()}${inversion}`;
+  }
+
+  nextChordProbability(nextChord, { showInversion } = {}) {
+    const [thisId, nextId] = [this.id({ showInversion }), nextChord.id({ chord: this, showInversion })];
+    if (
+      thisId === 'unknown' ||
+      nextId === 'unknown' ||
+      !chordProbabilities[thisId] ||
+      !chordProbabilities[thisId][nextId]
+    )
+      return 0;
+    return chordProbabilities[thisId][nextId];
   }
 }
 

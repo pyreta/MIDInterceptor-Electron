@@ -8,6 +8,7 @@ import ModeSelect from './ModeSelect';
 import Buttons from './Buttons';
 import actions from '../../actions';
 import ChordModel from '../../models/Chord';
+
 import Progression from '../../models/Progression';
 import * as Icons from './Icons';
 import DeviceManager from './DeviceManager';

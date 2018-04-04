@@ -26,8 +26,9 @@ const Container = styled.div`
   color: rgb(33, 37, 43);
   user-select: none;
   transition: all 100ms ease;
+  transition: box-shadow 400ms ease;
   background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 2 });
-  ${({ nextChord }) => nextChord && `box-shadow: inset 0px 0px 0px 3px rgb(255, 0, 0);`}
+  ${({ nextChord }) => nextChord ? `box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 0);` : ''}
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -41,6 +42,14 @@ const Container = styled.div`
     background: rgb(216, 0, 0);
   }
 `;
+
+const probabilityStyle = (probability, functional) => {
+  let pixels = Math.floor(probability * 60);
+  if (pixels < 5 && functional) pixels = 7;
+  if (probability > 0 && probability < 0.01) pixels = 1;
+  return { boxShadow: `inset 0px -${pixels * 2}px 0px 0px #3c8aff`}
+}
+
 const allNotes = [...Array(124).keys()];
 const Chord = ({
   chord,
@@ -58,11 +67,12 @@ const Chord = ({
   let voicingDecorator = decorator;
   if (voicingDecorator === 'rootNote' && isInverted)
     voicingDecorator = 'bassNote';
-  const notes = chord.decorate[voicingDecorator]()
-    .voicing()
-    .noteValues();
+  const decoratedChord = chord.decorate[voicingDecorator]();
+  const notes = decoratedChord.voicing().noteValues();
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames())
     .length;
+  const percentNextChord = lastPlayedChord.nextChordProbability(decoratedChord, { showInversion: voicingDecorator !== 'rootNote' });
+  const style = probabilityStyle(percentNextChord, lastPlayedChord.isGoodNextChord(decoratedChord));
   return (
     <Container
       onMouseDown={() => {
@@ -72,7 +82,8 @@ const Chord = ({
       onMouseUp={() => onStop(allNotes)}
       showNotesInCommon={showNotesInCommon}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
-      nextChord={lastPlayedChord.isGoodNextChord(chord)}
+      nextChord={lastPlayedChord.isGoodNextChord(decoratedChord)}
+      style={style}
     >
       {showRomanNumerals && <RomanNumeral
         {...chord.romanNumeralAnalysis()}
