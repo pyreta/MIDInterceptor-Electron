@@ -35,7 +35,7 @@ export const intervals = intervalTypes.reduce((ints, intervalObject) => {
 }, {})
 
 export const romanNumerals = ['i','ii', 'iii', 'iv', 'v', 'vi', 'vii']
-export const notes = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+export const notes = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
 
 export const scales = {
   major: {

@@ -13,6 +13,7 @@ const Container = styled.div`
   flex: 1;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   border-left: 0;
   padding: 5px 0;
   transition: all 0.2s ease;

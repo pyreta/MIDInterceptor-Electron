@@ -13,7 +13,8 @@ export default handleActions(
   {
     [TOGGLE_SCALES]: settings => ({
       ...settings,
-      showScales: !settings.showScales
+      showScales: !settings.showScales,
+      show: !settings.show
     }),
     [TOGGLE_ROMAN_NUMERALS]: settings => ({
       ...settings,

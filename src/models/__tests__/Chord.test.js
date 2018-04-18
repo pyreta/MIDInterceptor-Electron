@@ -17,7 +17,7 @@ describe('Chord', () => {
   it('has a key', () => {
     expect(D_minor_in_C_Dorian.key().name()).toEqual('C');
     expect(D_minor_in_C_Dorian.key().value()).toEqual(0);
-    expect(D_Major_in_Csharp_Phrygian.key().name()).toEqual('C♯');
+    expect(D_Major_in_Csharp_Phrygian.key().name()).toEqual('D♭');
     expect(D_Major_in_Csharp_Phrygian.key().value()).toEqual(1);
   });
 
@@ -29,9 +29,9 @@ describe('Chord', () => {
 
   it('has notes', () => {
     expect(D_minor_in_C_Dorian.noteNames()).toEqual(['D', 'F', 'A']);
-    expect(D_Major_in_Csharp_Phrygian.noteNames()).toEqual(['D', 'F♯', 'A']);
-    expect(DsharpDim_in_Dsharp_Locrian.noteNames()).toEqual(['D♯', 'F♯', 'A']);
-    expect(E7_in_PhrygDom.noteNames()).toEqual(['E', 'G♯', 'B', 'D']);
+    expect(D_Major_in_Csharp_Phrygian.noteNames()).toEqual(['D', 'G♭', 'A']);
+    expect(DsharpDim_in_Dsharp_Locrian.noteNames()).toEqual(['E♭', 'G♭', 'A']);
+    expect(E7_in_PhrygDom.noteNames()).toEqual(['E', 'A♭', 'B', 'D']);
     expect(
       new Chord({
         key: 0,
@@ -43,12 +43,12 @@ describe('Chord', () => {
     ).toEqual(['C', 'E', 'G']);
     expect(AMsus2.noteValues()).toEqual([9, 11, 16]);
     expect(AMsus2.noteNames()).toEqual(['A', 'B', 'E']);
-    expect(FMsus4.noteNames()).toEqual(['F', 'A♯', 'C']);
+    expect(FMsus4.noteNames()).toEqual(['F', 'B♭', 'C']);
   });
 
   it('uses true intervals outside core chord even when outside scale', () => {
-    expect(Em9inC.noteNames()).toEqual(['E', 'G', 'B', 'D', 'F♯']);
-    expect(Esus2inC.noteNames()).toEqual(['E', 'F♯', 'B']);
+    expect(Em9inC.noteNames()).toEqual(['E', 'G', 'B', 'D', 'G♭']);
+    expect(Esus2inC.noteNames()).toEqual(['E', 'G♭', 'B']);
   });
 
   it('has a mode', () => {
@@ -63,7 +63,7 @@ describe('Chord', () => {
     expect(D_minor_in_C_Dorian.root().value()).toEqual(2);
     expect(E7_in_PhrygDom.root().name()).toEqual('E');
     expect(E7_in_PhrygDom.root().value()).toEqual(4);
-    expect(DsharpDim_in_Dsharp_Locrian.root().name()).toEqual('D♯');
+    expect(DsharpDim_in_Dsharp_Locrian.root().name()).toEqual('E♭');
     expect(DsharpDim_in_Dsharp_Locrian.root().value()).toEqual(3);
   });
 
@@ -85,9 +85,9 @@ describe('Chord', () => {
   it('has a name', () => {
     expect(D_minor_in_C_Dorian.name()).toEqual('Dm');
     expect(D_Major_in_Csharp_Phrygian.name()).toEqual('D');
-    expect(DsharpDim_in_Dsharp_Locrian.name()).toEqual('D♯dim');
+    expect(DsharpDim_in_Dsharp_Locrian.name()).toEqual('E♭dim');
     expect(E7_in_PhrygDom.name()).toEqual('E7');
-    expect(Fsharp_minorMajor7_in_HarmonicMinor.name()).toEqual('F♯mM7');
+    expect(Fsharp_minorMajor7_in_HarmonicMinor.name()).toEqual('G♭mM7');
   });
 
   it('can have a note added', () => {
@@ -95,7 +95,7 @@ describe('Chord', () => {
     expect(D_minor_in_C_Dorian.addNote(6).name()).toEqual('Dm6');
     expect(D_minor_in_C_Dorian.addNote(13).name()).toEqual('Dm13');
     expect(D_Major_in_Csharp_Phrygian.addNote(6).name()).toEqual('D6');
-    expect(D_Major_in_Csharp_Phrygian.addNote(6).noteNames()).toEqual(['D', 'F♯', 'A', 'B']);
+    expect(D_Major_in_Csharp_Phrygian.addNote(6).noteNames()).toEqual(['D', 'G♭', 'A', 'B']);
   });
 
   it('can have a note removed', () => {
@@ -125,9 +125,9 @@ describe('Chord', () => {
   });
 
   it('has tritone substitution', () => {
-    expect(G7.tritoneSubstitution().name()).toEqual('C♯7');
-    expect(A7.tritoneSubstitution().name()).toEqual('D♯7');
-    expect(A7.diminishedSubstitution().name()).toEqual('C♯dim7');
+    expect(G7.tritoneSubstitution().name()).toEqual('D♭7');
+    expect(A7.tritoneSubstitution().name()).toEqual('E♭7');
+    expect(A7.diminishedSubstitution().name()).toEqual('D♭dim7');
   });
 
   it('creates a default chord from root', () => {
@@ -145,7 +145,7 @@ describe('Chord', () => {
   });
 
   it('creates a chromatic substitution', () => {
-    expect(G7.chromaticSubstitution()[0].name()).toEqual('G♯7');
+    expect(G7.chromaticSubstitution()[0].name()).toEqual('A♭7');
     expect(G7.chromaticSubstitution()[1].name()).toEqual('G7');
   });
 
@@ -157,7 +157,7 @@ describe('Chord', () => {
   it('creates default triads', () => {
     expect(Chord.fromMinorScale(1).name()).toEqual('Cm');
     expect(Chord.fromMinorScale(2).name()).toEqual('Ddim');
-    expect(Chord.fromMinorScale(3).name()).toEqual('D♯');
+    expect(Chord.fromMinorScale(3).name()).toEqual('E♭');
     expect(Chord.fromMajorScale(1).name()).toEqual('C');
     expect(Chord.fromMajorScale(2).name()).toEqual('Dm');
     expect(Chord.fromMajorScale(3).name()).toEqual('Em');

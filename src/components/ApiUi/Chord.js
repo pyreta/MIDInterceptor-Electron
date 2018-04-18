@@ -28,7 +28,6 @@ const Container = styled.div`
   transition: all 100ms ease;
   transition: box-shadow 400ms ease;
   background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 2 });
-  ${({ nextChord }) => nextChord ? `box-shadow: inset 0px 0px 0px 2px rgb(255, 0, 0);` : ''}
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -50,12 +49,13 @@ const probabilityStyle = (probability, functional) => {
   return { boxShadow: `inset 0px -${pixels * 2}px 0px 0px #3c8aff`}
 }
 
+const empty = {};
+
 const allNotes = [...Array(124).keys()];
 const Chord = ({
   chord,
   onClick,
   onStop,
-  i,
   lastPlayedChord,
   autoVoicing,
   voicingDecorator: decorator,
@@ -72,7 +72,7 @@ const Chord = ({
   const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames())
     .length;
   const percentNextChord = lastPlayedChord.nextChordProbability(decoratedChord, { showInversion: voicingDecorator !== 'rootNote' });
-  const style = probabilityStyle(percentNextChord, lastPlayedChord.isGoodNextChord(decoratedChord));
+  const style = lastPlayedChord ? probabilityStyle(percentNextChord, lastPlayedChord.isGoodNextChord(decoratedChord)) : empty;
   return (
     <Container
       onMouseDown={() => {
@@ -82,7 +82,6 @@ const Chord = ({
       onMouseUp={() => onStop(allNotes)}
       showNotesInCommon={showNotesInCommon}
       notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
-      nextChord={lastPlayedChord.isGoodNextChord(decoratedChord)}
       style={style}
     >
       {showRomanNumerals && <RomanNumeral
@@ -107,9 +106,7 @@ const mapStateToProps = ({
   voicingDecorator,
   settings,
 }) => ({
-  lastPlayedChord: lastPlayedChord.notes
-    ? new ChordModel(lastPlayedChord)
-    : new ChordModel(lastPlayedChord),
+  lastPlayedChord: new ChordModel(lastPlayedChord),
   autoVoicing,
   voicingDecorator,
   showRomanNumerals: settings.showRomanNumerals,
