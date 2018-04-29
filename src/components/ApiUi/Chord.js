@@ -27,7 +27,6 @@ const Container = styled.div`
   user-select: none;
   transition: all 100ms ease;
   transition: box-shadow 400ms ease;
-  background: rgba(43, 123, 245, 0.${({ notesInCommon, showNotesInCommon }) => showNotesInCommon ? notesInCommon : 2 });
   &:hover {
     background: rgb(33, 37, 43);
     color: white;
@@ -63,14 +62,12 @@ const Chord = ({
   showRomanNumerals,
   showNotesInCommon,
 }) => {
-  const lastPlayedNotes = lastPlayedChord.noteNames();
   let voicingDecorator = decorator;
   if (voicingDecorator === 'rootNote' && isInverted)
     voicingDecorator = 'bassNote';
   const decoratedChord = chord.decorate[voicingDecorator]();
   const notes = decoratedChord.voicing().noteValues();
-  const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames())
-    .length;
+  // const notesInCommon = _.intersection(lastPlayedNotes, chord.noteNames()).length;
   const percentNextChord = lastPlayedChord.nextChordProbability(decoratedChord, { showInversion: voicingDecorator !== 'rootNote' });
   const style = lastPlayedChord ? probabilityStyle(percentNextChord, lastPlayedChord.isGoodNextChord(decoratedChord)) : empty;
   return (
@@ -81,7 +78,6 @@ const Chord = ({
       }}
       onMouseUp={() => onStop(allNotes)}
       showNotesInCommon={showNotesInCommon}
-      notesInCommon={notesInCommon > 3 ? 9 : notesInCommon * 3}
       style={style}
     >
       {showRomanNumerals && <RomanNumeral

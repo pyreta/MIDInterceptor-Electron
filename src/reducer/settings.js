@@ -33,5 +33,10 @@ export default handleActions(
       show: !settings.show
     }),
   },
-  true
+  {
+    showRomanNumerals: false,
+    showNotesInCommon: false,
+    showDeviceSetup: false,
+    showScales: false,
+  },
 );

@@ -9,5 +9,5 @@ export default handleActions(
   {
     [PLAY_CHORD]: (state, { payload }) => payload
   },
-  0
+  {}
 );
